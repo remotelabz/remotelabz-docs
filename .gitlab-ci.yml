@@ -1,0 +1,35 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - mkdocs build
+  tags:
+    - deploy
+    - docs
+    - shell
+  only:
+    - master
+
+deploy:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - rm -rf /var/www/remotelabz-docs || true
+  script:
+    - sudo mv site /var/www/remotelabz-docs
+    - sudo chmod -R 755 /var/www/remotelabz-docs
+  dependencies:
+    - build
+  tags:
+    - deploy
+    - docs
+    - shell
+  only:
+    - master
+  environment:
+    name: docs
+    url: https://docs.remotelabz.com/
