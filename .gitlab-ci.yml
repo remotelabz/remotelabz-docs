@@ -5,8 +5,7 @@ stages:
 build:
   stage: build
   script:
-    - . ~/.virtualenvs/mkdocs/bin/activate
-    - mkdocs build
+    - sudo mkdocs build
   tags:
     - deploy
     - docs
