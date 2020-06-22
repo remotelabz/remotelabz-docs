@@ -31,7 +31,6 @@ theme:
         primary: deep purple
         accent: deep orange
     logo: images/logo.png
-    favicon: assets/favicon.ico
 
 markdown_extensions:
     - markdown.extensions.admonition

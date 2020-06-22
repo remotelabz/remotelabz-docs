@@ -15,10 +15,8 @@ build:
 
 deploy:
   stage: deploy
-  variables:
-    GIT_STRATEGY: none
   before_script:
-    - rm -rf /var/www/remotelabz-docs || true
+    - sudo rm -rf /var/www/remotelabz-docs || true
   script:
     - sudo mv site /var/www/remotelabz-docs
     - sudo chmod -R 755 /var/www/remotelabz-docs
