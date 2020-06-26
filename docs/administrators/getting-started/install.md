@@ -3,7 +3,7 @@
 
 ### From outside to RemoteLabz
 - TCP 80, 443 : http(s) pages
-- TCP 8000 : websocket
+- TCP 8000 : WebSocket
 - UDP 1194 : OpenVPN
 
 ### From RemoteLabz to RemoteLabz Worker

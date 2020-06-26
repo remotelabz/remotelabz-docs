@@ -7,15 +7,30 @@ This section guides you through the installation of RemoteLabz and its component
     - This section has only been tested with **Ubuntu 18.04 (LTS)** and **Ubuntu 20.04**.
     - The first steps explains how to install [requirements](#requirements). You may skip these steps if those software are already present on your system and go to [Install RemoteLabz](#install-remotelabz).
 
+## Retrieve the RemoteLabz source
+A remotelabz directory will be create on your home directory.
+```bash
+cd ~
+git clone https://gitlab.remotelabz.com/crestic/remotelabz.git
+```
+
 ## Requirements
 ### PHP
 
 RemoteLabz requires PHP >= 7.3. You can install it manually or via `ppa:ondrej/php` repo, which builds PHP and uploads it to a repo for many Unix systems.
+#### On Ubuntu 18 LTS
 ``` bash
 sudo add-apt-repository ppa:ondrej/php
 sudo apt-get update
 sudo apt install -y curl gnupg php7.3 zip unzip php7.3-bcmath php7.3-curl php7.3-gd php7.3-intl php7.3-mbstring php7.3-mysql php7.3-xml php7.3-zip
 ```
+
+#### On Ubuntu 20.04 LTS
+``` bash
+sudo apt-get update
+sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip
+```
+
 
 ### Composer
 
@@ -26,6 +41,7 @@ sudo chmod 755 /usr/local/bin/composer
 ```
 
 ### Node.js
+The NodeJS's version in Ubuntu 18 and above is too old. We recommand to use version 12 of NodeJS
 ``` bash
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
@@ -34,6 +50,13 @@ sudo apt-get install -y nodejs
 ### Yarn
 ``` bash
 sudo npm install -g yarn
+```
+### MySQL Server
+
+#### Ubuntu 20.04 LTS
+``` bash
+sudo apt-get install mysql-server
+
 ```
 
 ## Install RemoteLabz
