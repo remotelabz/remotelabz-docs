@@ -18,7 +18,7 @@ git clone https://gitlab.remotelabz.com/crestic/remotelabz.git
 ### PHP
 
 RemoteLabz requires PHP >= 7.3. You can install it manually or via `ppa:ondrej/php` repo, which builds PHP and uploads it to a repo for many Unix systems.
-#### On Ubuntu 18 LTS
+#### On Ubuntu 18.04 LTS
 ``` bash
 sudo add-apt-repository ppa:ondrej/php
 sudo apt-get update
@@ -36,7 +36,7 @@ sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl
 
 You may download Composer by following [official documentation](https://getcomposer.org/download/), but RemoteLabz is delivered with a copy of Composer that you can copy in a `bin` folder.
 ``` bash
-sudo cp composer.phar /usr/local/bin/composer
+sudo cp ~/remotelabz/composer.phar /usr/local/bin/composer
 sudo chmod 755 /usr/local/bin/composer
 ```
 
@@ -56,8 +56,15 @@ sudo npm install -g yarn
 #### Ubuntu 20.04 LTS
 ``` bash
 sudo apt-get install mysql-server
-
+sudo mysql_secure_installation
+sudo mysql -u root -p
+CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+CREATE DATABASE 'remotelabz';
+GRANT ALL ON 'remotelabz'.* TO 'user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
 ```
+Choose a secure password to your MySQL server and you have to disable the remote access to your mysql server.
 
 ## Install RemoteLabz
 
@@ -110,7 +117,7 @@ At the root of your RemoteLabz folder:
 mkdir -p config/jwt
 openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
 openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
-chown -R www-data:www-data config/jwt
+sudo chown -R www-data:www-data config/jwt
 ```
 
 Don't forget to edit your `.env` :
