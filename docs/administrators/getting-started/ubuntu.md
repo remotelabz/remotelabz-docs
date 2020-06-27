@@ -22,15 +22,14 @@ RemoteLabz requires PHP >= 7.3. You can install it manually or via `ppa:ondrej/p
 ``` bash
 sudo add-apt-repository ppa:ondrej/php
 sudo apt-get update
-sudo apt install -y curl gnupg php7.3 zip unzip php7.3-bcmath php7.3-curl php7.3-gd php7.3-intl php7.3-mbstring php7.3-mysql php7.3-xml php7.3-zip
+sudo apt install -y curl gnupg php7.3 zip unzip php7.3-bcmath php7.3-curl php7.3-gd php7.3-intl php7.3-mbstring php7.3-mysql php7.3-xml php7.3-zip ntp
 ```
 
 #### On Ubuntu 20.04 LTS
 ``` bash
 sudo apt-get update
-sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip
+sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp
 ```
-
 
 ### Composer
 
@@ -53,7 +52,10 @@ sudo npm install -g yarn
 ```
 ### MySQL Server
 
-#### Ubuntu 20.04 LTS
+#### On Ubuntu 18.04 LTS
+Forthcoming
+
+#### On Ubuntu 20.04 LTS
 ``` bash
 sudo apt-get install mysql-server
 sudo mysql_secure_installation
@@ -65,6 +67,31 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 Choose a secure password to your MySQL server and you have to disable the remote access to your mysql server.
+
+### RabbitMQ
+
+To use RabbitMQ as messaging backend, you need the **php-amqp** extension :
+
+#### On Ubuntu 18.04 LTS
+```bash
+sudo apt-get install rabbitmq-server php7.3-amqp
+```
+
+#### On Ubuntu 20.04 LTS
+```bash
+sudo apt-get install rabbitmq-server php-amqp
+```
+
+#### Configuration of RabbitMQ
+The [worker] needs to connect to the RabbitMQ. We have to create a specific user to the RemoteLabz. Change the password 'password-amqp' in the following command
+```bash
+sudo rabbitmqctl add_user 'remotelabz-amqp' 'password-amqp'
+sudo rabbitmqctl set_permissions -p '/' 'remotelabz-amqp' '.*' '.*' '.*'
+```
+Restart the RabbitMQ server
+```bash
+sudo service rabbitmq-server restart
+```
 
 ## Install RemoteLabz
 
@@ -78,20 +105,12 @@ Then, you should modify the `.env` file according to your environment, including
 
 ``` bash
 sudo cp .env.dist .env
-# Replace 'mysqlpassword' by your actual password
-echo "MYSQL_PASSWORD=mysqlpassword" | sudo tee -a .env
-
-# or edit ENV file directly
 sudo nano .env
+# Replace 'mysqlpassword' by your actual password
+MYSQL_PASSWORD=mysqlpassword
+# you may change the MESSENGER_TRANSPORT_DSN variable with the following and with your credentials and server location
+MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@localhost:5672/%2f/messages
 ```
-
-!!! tip
-
-    If you are using mysql >= 8.0 don't forget to create user with password plugin :
-
-    ``` mysql
-    CREATE USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
-    ```
 
 Run the `remotelabz-ctl` configuration utility to setup your database :
 
@@ -141,30 +160,17 @@ You will also need to start the proxy service to display VNC console :
 
 ```bash
 sudo npm install -g configurable-http-proxy
-# then start it
-configurable-http-proxy
 ```
 
-### RabbitMQ
-
-To use RabbitMQ as messaging backend, you need the **php-amqp** extension :
-
+If we have a certificate on your web site (and it's recommanded), you have to define the certificat configurable-http-proxy must use
 ```bash
-sudo apt-get install -y php7.3-amqp
+sudo configurable-http-proxy --port 8000 --log-level info --ssl-key /etc/ssl/private/remotelabz-private_key.key --ssl-cert /etc/ssl/certs/remotelabz-ssl_certificate.cer
 ```
-
-Then, modify the `.env` file according to your RabbitMQ configuration :
-
+or if you don't use certificate
 ```bash
-# you may change this string for your credentials and server location
-MESSENGER_TRANSPORT_DSN=amqp://guest:guest@localhost:5672/%2f/messages
+configurable-http-proxy --port 8000 --log-level info &
 ```
 
-Don't forget to restart the messenger service :
-
-```bash
-sudo systemctl restart remotelabz
-```
 
 ### Shibboleth (optional)
 

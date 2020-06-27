@@ -18,3 +18,12 @@ git clone https://gitlab.remotelabz.com/crestic/remotelabz-docs.git
 cd remotelabz-docs
 mkdocs build
 ```
+
+To deploy in local your docs to test it
+```bash
+mkdocs serve
+```
+or, if you want to change the listening IP and port
+```bash
+mkdocs serve -a A.B.C.D:8000
+```
