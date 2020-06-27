@@ -1,4 +1,4 @@
-# Ubuntu
+# RemoteLabz's front installation guide
 
 This section guides you through the installation of RemoteLabz and its components on an Ubuntu system.
 
