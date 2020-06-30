@@ -1,0 +1,19 @@
+{
+  "name": "remotelabz-docs",
+  "version": "1.0.0",
+  "description": "Documentation of RemoteLabz",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "serve": "mkdocs serve",
+    "build": "mkdocs build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.remotelabz.com:crestic/remotelabz-docs.git"
+  },
+  "author": "Julien Hubert",
+  "license": "MIT"
+}
