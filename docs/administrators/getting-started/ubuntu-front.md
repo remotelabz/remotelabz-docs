@@ -154,7 +154,8 @@ In order to be able to control instances on [the worker](https://gitlab.remotela
 sudo systemctl start remotelabz
 ```
 
-**Warning :** When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommand you to use a service like `ntp` to keep your machines synchronized.
+!!! warning
+    When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommand you to use a service like `ntp` to keep your machines synchronized.
 
 You will also need to start the proxy service to display VNC console :
 
