@@ -61,8 +61,8 @@ sudo apt-get install mysql-server
 sudo mysql_secure_installation
 sudo mysql -u root -p
 CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
-CREATE DATABASE 'remotelabz';
-GRANT ALL ON 'remotelabz'.* TO 'user'@'localhost';
+CREATE DATABASE remotelabz;
+GRANT ALL ON remotelabz.* TO 'user'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
 ```

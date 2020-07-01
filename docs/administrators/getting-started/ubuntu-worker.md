@@ -12,7 +12,6 @@ A remotelabz directory will be create on your home directory.
 cd ~
 git clone https://gitlab.remotelabz.com/crestic/remotelabz-worker.git
 cd remotelabz-worker
-sudo ./install
 ```
 
 Then, you should modify the `.env` file according to your environment
@@ -27,7 +26,7 @@ DATA_INTERFACE="enp0s8"
 ADM_INTERFACE="enp0s3"
 # you may change the MESSENGER_TRANSPORT_DSN variable with the following, with your credentials, and the RabbitMQ IP or its FQDN
 MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@X.X.X.X:5672/%2f/messages
-
+sudo ./install
 ```
 
 ### Instances
