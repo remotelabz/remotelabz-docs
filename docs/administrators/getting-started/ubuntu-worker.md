@@ -42,5 +42,6 @@ You can check the log of the worker in `~/remotelabz-worker/var/log/prod.log`
 - `-p` Port used by remotelabz-worker
     - Default : `8080`
 
-**Warning :** When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommand you to use a service like `ntp` to keep your machines synchronized.
+!!! warning
+    When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommand you to use a service like `ntp` to keep your machines synchronized.
 
