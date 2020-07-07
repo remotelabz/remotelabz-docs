@@ -57,10 +57,10 @@ Forthcoming
 
 #### On Ubuntu 20.04 LTS
 ``` bash
-sudo apt-get install mysql-server
+sudo apt-get install -y mysql-server
 sudo mysql_secure_installation
 sudo mysql -u root -p
-CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mysql-password';
 CREATE DATABASE remotelabz;
 GRANT ALL ON remotelabz.* TO 'user'@'localhost';
 FLUSH PRIVILEGES;
@@ -68,18 +68,25 @@ EXIT;
 ```
 Choose a secure password to your MySQL server and you have to disable the remote access to your mysql server.
 
+!!! info
+    If you need to activate the remote access to your MySQL, you have to create a user like this :
+    ``` bash
+    CREATE USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'mysql-password';
+    GRANT ALL ON remotelabz.* TO 'user'@'%';
+    FLUSH PRIVILEGES;
+    ```
 ### RabbitMQ
 
 To use RabbitMQ as messaging backend, you need the **php-amqp** extension :
 
 #### On Ubuntu 18.04 LTS
 ```bash
-sudo apt-get install rabbitmq-server php7.3-amqp
+sudo apt-get install -y rabbitmq-server php7.3-amqp
 ```
 
 #### On Ubuntu 20.04 LTS
 ```bash
-sudo apt-get install rabbitmq-server php-amqp
+sudo apt-get install -y rabbitmq-server php-amqp
 ```
 
 #### Configuration of RabbitMQ
@@ -98,16 +105,22 @@ sudo service rabbitmq-server restart
 While you're in RemoteLabz root directory :
 
 ``` bash
+cd ~/remotelabz
 sudo bin/install
 ```
 
 Then, you should modify the `.env` file according to your environment, including SQL database variables with `MYSQL_SERVER`, `MYSQL_USER`, `MYSQL_PASSWORD` and `MYSQL_DATABASE`.
 
 ``` bash
+cd /opt/remotelabz
+# To allow the web server to store the log
+sudo chown -R www-data:www-data var
 sudo cp .env.dist .env
 sudo nano .env
-# Replace 'mysqlpassword' by your actual password
-MYSQL_PASSWORD=mysqlpassword
+# Replace the MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE values to the right value
+MYSQL_USER=user
+MYSQL_PASSWORD=mysql-password
+MYSQL_DATABASE=remotelabz
 # you may change the MESSENGER_TRANSPORT_DSN variable with the following and with your credentials and server location
 MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@localhost:5672/%2f/messages
 ```
@@ -133,9 +146,9 @@ In order for the app to work correctly, you must create a key pair for JWT. You 
 At the root of your RemoteLabz folder:
 
 ```bash
-mkdir -p config/jwt
-openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
+sudo mkdir -p config/jwt
+sudo openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 sudo chown -R www-data:www-data config/jwt
 ```
 
@@ -165,11 +178,11 @@ sudo npm install -g configurable-http-proxy
 
 If we have a certificate on your web site (and it's recommanded), you have to define the certificat configurable-http-proxy must use
 ```bash
-sudo configurable-http-proxy --port 8000 --log-level info --ssl-key /etc/ssl/private/remotelabz-private_key.key --ssl-cert /etc/ssl/certs/remotelabz-ssl_certificate.cer
+sudo nohup configurable-http-proxy --port 8000 --log-level info --ssl-key /etc/ssl/private/remotelabz-private_key.key --ssl-cert /etc/ssl/certs/remotelabz-ssl_certificate.cer
 ```
 or if you don't use certificate
 ```bash
-configurable-http-proxy --port 8000 --log-level info &
+nohup configurable-http-proxy --port 8000 --log-level info &
 ```
 
 
