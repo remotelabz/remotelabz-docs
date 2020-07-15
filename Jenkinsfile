@@ -1,8 +1,8 @@
 pipeline {
   agent {
     docker {
-      image 'squidfunk/mkdocs-material'
-      args '-v ${PWD}:/docs build'
+      image 'squidfunk/mkdocs-material build'
+      args '-v ${PWD}:/docs'
     }
 
   }
