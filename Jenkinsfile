@@ -11,6 +11,7 @@ pipeline {
       }
       steps {
         sh 'mkdocs build'
+        archiveArtifacts 'site/**/*'
       }
     }
 
@@ -26,8 +27,11 @@ pipeline {
       }
       steps {
         sh '''sudo rm -rf /var/www/remotelabz-docs || true
+
 sudo mv site /var/www/remotelabz-docs
+
 sudo chmod -R 755 /var/www/remotelabz-docs
+
 sudo chown -R www-data:www-data /var/www/remotelabz-docs'''
       }
     }
