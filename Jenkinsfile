@@ -10,7 +10,7 @@ pipeline {
     stage('build') {
       steps {
         sh 'mkdocs build'
-        archiveArtifacts 'site'
+        archiveArtifacts './site'
       }
     }
 
