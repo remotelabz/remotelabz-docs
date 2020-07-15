@@ -1,13 +1,14 @@
 pipeline {
-  agent {
-    docker {
-      image 'squidfunk/mkdocs-material'
-      args '--entrypoint=\'\''
-    }
-
-  }
+  agent none
   stages {
     stage('build') {
+      agent {
+        docker {
+          image 'squidfunk/mkdocs-material'
+          args '--entrypoint=\'\''
+        }
+
+      }
       steps {
         sh 'mkdocs build'
         archiveArtifacts 'site/**/*'
@@ -15,12 +16,6 @@ pipeline {
     }
 
     stage('upload') {
-      agent {
-        node {
-          label 'local'
-        }
-
-      }
       environment {
         GITHUB_TOKEN = 'a049a1ab4ef65d3df588b68074c2dd32f9249810'
       }
