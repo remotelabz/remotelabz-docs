@@ -2,6 +2,7 @@ pipeline {
   agent {
     docker {
       image 'squidfunk/mkdocs-material'
+      args '--entrypoint=\'\''
     }
 
   }
