@@ -16,6 +16,12 @@ pipeline {
     }
 
     stage('upload') {
+      agent {
+        node {
+          label 'local'
+        }
+
+      }
       environment {
         GITHUB_TOKEN = 'a049a1ab4ef65d3df588b68074c2dd32f9249810'
       }
