@@ -1,14 +1,14 @@
 pipeline {
   agent {
     docker {
-      image 'squidfunk/mkdocs-material build'
-      args '-v ${PWD}:/docs'
+      image 'squidfunk/mkdocs-material'
     }
 
   }
   stages {
     stage('build') {
       steps {
+        sh 'pwd'
         archiveArtifacts 'site'
       }
     }
