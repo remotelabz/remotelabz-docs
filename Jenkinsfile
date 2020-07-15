@@ -11,7 +11,7 @@ pipeline {
       }
       steps {
         sh 'mkdocs build'
-        archiveArtifacts 'site/**/*'
+        stash(name: 'build', includes: 'site/**/*')
       }
     }
 
@@ -26,13 +26,11 @@ pipeline {
         GITHUB_TOKEN = 'a049a1ab4ef65d3df588b68074c2dd32f9249810'
       }
       steps {
-        sh '''sudo rm -rf /var/www/remotelabz-docs || true
-
-sudo mv site /var/www/remotelabz-docs
-
-sudo chmod -R 755 /var/www/remotelabz-docs
-
-sudo chown -R www-data:www-data /var/www/remotelabz-docs'''
+        unstash 'build'
+        sh 'sudo rm -rf /var/www/remotelabz-docs || true'
+        sh 'sudo mv site /var/www/remotelabz-docs'
+        sh 'sudo chmod -R 755 /var/www/remotelabz-docs'
+        sh 'sudo chown -R www-data:www-data /var/www/remotelabz-docs'
       }
     }
 
