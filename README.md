@@ -1,5 +1,6 @@
 remotelabz-docs
 ===============
+[![Build Status](https://jenkins.remotelabz.com/job/remotelabz-docs/job/master/badge/icon)](https://jenkins.remotelabz.com/blue/organizations/jenkins/remotelabz-docs/activity?branch=master)
 
 Documentation of [RemoteLabz](https://gitlab.remotelabz.com/crestic/remotelabz).
 
