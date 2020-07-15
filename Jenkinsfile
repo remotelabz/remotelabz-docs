@@ -15,7 +15,15 @@ pipeline {
     }
 
     stage('upload') {
-      agent any
+      agent {
+        node {
+          label 'local'
+        }
+
+      }
+      environment {
+        GITHUB_TOKEN = 'a049a1ab4ef65d3df588b68074c2dd32f9249810'
+      }
       steps {
         sh '''echo "Publishing on Github..."
 token=$GITHUB_TOKEN
@@ -36,8 +44,5 @@ curl -XPOST -H "Authorization:token $token" -H "Content-Type:application/octet-s
       }
     }
 
-  }
-  environment {
-    GITHUB_TOKEN = 'a049a1ab4ef65d3df588b68074c2dd32f9249810'
   }
 }
