@@ -109,14 +109,14 @@ cd ~/remotelabz
 sudo bin/install
 ```
 
-Then, you should modify the `.env` file according to your environment, including SQL database variables with `MYSQL_SERVER`, `MYSQL_USER`, `MYSQL_PASSWORD` and `MYSQL_DATABASE`.
+Then, you should create the `.env.local` file and put the correct environment variables from the `.env` according to your environment, including SQL database variables with `MYSQL_SERVER`, `MYSQL_USER`, `MYSQL_PASSWORD` and `MYSQL_DATABASE`.
 
 ``` bash
 cd /opt/remotelabz
 # To allow the web server to store the log
 sudo chown -R www-data:www-data var
-sudo cp .env.dist .env
-sudo nano .env
+sudo cp .env .env.local
+sudo nano .env.local
 # Replace the MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE values to the right value
 MYSQL_USER=user
 MYSQL_PASSWORD=mysql-password
@@ -152,11 +152,11 @@ sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 sudo chown -R www-data:www-data config/jwt
 ```
 
-Don't forget to edit your `.env` :
+Don't forget to edit your `.env.local` :
 
 ```bash
 # Replace 'yourpassphrase' by your actual passphrase
-echo "JWT_PASSPHRASE=yourpassphrase" | sudo tee -a .env
+echo "JWT_PASSPHRASE=yourpassphrase" | sudo tee -a .env.local
 ```
 
 ### Instances
@@ -193,6 +193,6 @@ Follow [this guide](https://www.switch.ch/aai/guides/sp/installation/?os=ubuntu#
 To enable Shibboleth site-wide, you need to change the value of `ENABLE_SHIBBOLETH` environment variable :
 
 ```bash
-# .env
+# .env.local
 ENABLE_SHIBBOLETH=1
 ```
