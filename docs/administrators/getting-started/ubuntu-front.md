@@ -11,7 +11,7 @@ This section guides you through the installation of RemoteLabz and its component
 A remotelabz directory will be create on your home directory.
 ```bash
 cd ~
-git clone https://gitlab.remotelabz.com/crestic/remotelabz.git
+git clone https://github.com/crestic-urca/remotelabz.git
 ```
 
 ## Requirements

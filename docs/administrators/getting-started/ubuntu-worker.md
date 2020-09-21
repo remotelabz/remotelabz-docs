@@ -10,7 +10,7 @@ This section guides you through the installation of RemoteLabz's worker and its 
 A remotelabz directory will be create on your home directory.
 ```bash
 cd ~
-git clone https://gitlab.remotelabz.com/crestic/remotelabz-worker.git
+git clone https://github.com/crestic-urca/remotelabz-worker.git
 cd remotelabz-worker
 ```
 
