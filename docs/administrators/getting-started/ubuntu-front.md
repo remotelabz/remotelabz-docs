@@ -7,6 +7,9 @@ This section guides you through the installation of RemoteLabz and its component
     - This section has only been tested with **Ubuntu 18.04 (LTS)** and **Ubuntu 20.04**.
     - The first steps explains how to install [requirements](#requirements). You may skip these steps if those software are already present on your system and go to [Install RemoteLabz](#install-remotelabz).
 
+!!! warning
+    - From the version 2.2.0 of RemoteLabz, we recommand to use at least Ubuntu 20.04 (LTS)
+
 ## Retrieve the RemoteLabz source
 A remotelabz directory will be create on your home directory.
 ```bash
@@ -28,7 +31,7 @@ sudo apt install -y curl gnupg php7.3 zip unzip php7.3-bcmath php7.3-curl php7.3
 #### On Ubuntu 20.04 LTS
 ``` bash
 sudo apt-get update
-sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp
+sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp openvpn easy-rsa
 ```
 
 ### Composer
@@ -99,6 +102,73 @@ Restart the RabbitMQ server
 ```bash
 sudo service rabbitmq-server restart
 ```
+
+### Configure OpenVPN
+```bash
+cd /usr/share/easy-rsa/
+```
+
+Edit the vars file and add the two following line
+```bash
+#File /usr/share/easy-rsa/vars
+set_var EASYRSA_ALGO "ec"
+set_var EASYRSA_DIGEST "sha512"
+```
+
+We create now the CA of the VPN which will have the name `RemoteLabz-VPNServer`
+```bash
+sudo ./easyrsa init-pki
+sudo ./easyrsa build-ca
+```
+Type a passphrase to secure the CA Key. For example, you can choose passphrase `R3mot3!abz-0penVPN-CA2020` and the Common Name is `RemoteLabz-VPNServer`
+
+```bash
+sudo ./easyrsa gen-req RemoteLabz-VPNServer nopass
+```
+You will have the following output
+```bash
+...
+Common Name (eg: your user, host, or server name) [RemoteLabz-VPNServer]:
+
+Keypair and certificate request completed. Your files are:
+req: /usr/share/easy-rsa/pki/reqs/RemoteLabz-VPNServer.req
+key: /usr/share/easy-rsa/pki/private/RemoteLabz-VPNServer.key
+```
+
+Sign the CA request certificate :
+```bash
+sudo ./easyrsa sign-req server RemoteLabz-VPNServer
+```
+and you have to type again the choosen passphrase of your CA (`R3mot3!abz-0penVPN-CA2020`)
+
+Copy of the previous generated keys in OpenVPN server directory (`/etc/openvpn/server`)
+```bash
+sudo cp pki/private/RemoteLabz-VPNServer.key /etc/openvpn/server
+sudo cp pki/issued/RemoteLabz-VPNServer.crt /etc/openvpn/server
+sudo cp pki/ca.crt /etc/openvpn/server
+```
+
+####Configure a pre-shared key to sign the data
+```bash
+openvpn --genkey --secret ta.key
+sudo cp ta.key /etc/openvpn/server
+```
+
+####Configure Diffie-Hellman
+```bash
+cd /etc/openvpn/server
+sudo openssl dhparam -out dh2048.pem 2048
+```
+
+####Configure OpenVPN server
+Edit the `/etc/openvpn/server/server.conf` file to obtain the same than the following
+```bash
+....
+```
+
+
+
+
 
 ## Install RemoteLabz
 
