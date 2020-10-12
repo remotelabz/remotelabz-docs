@@ -109,11 +109,11 @@ sudo service rabbitmq-server restart
 cd /usr/share/easy-rsa/
 ```
 
-Edit the vars file and add the two following line. You can change the value for your organisation
+Create the `vars` file and add the following lines. You can change the value for your organisation
 ```bash
 #File /usr/share/easy-rsa/vars
-set_var EASYRSA_BATCH          "yes"
-set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer-CA"
+set_var EASYRSA_BATCH           "yes"
+set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer"
 set_var EASYRSA_REQ_COUNTRY    "FR"
 set_var EASYRSA_REQ_PROVINCE   "Grand-Est"
 set_var EASYRSA_REQ_CITY       "Reims"
@@ -122,6 +122,11 @@ set_var EASYRSA_REQ_EMAIL      "contact@remotelabz.com"
 set_var EASYRSA_REQ_OU         "RemoteLabz-VPNServer"
 set_var EASYRSA_ALGO           "ec"
 set_var EASYRSA_DIGEST         "sha512"
+set_var EASYRSA_CURVE          secp384r1
+#5 ans de validité pour le CA
+set_var EASYRSA_CA_EXPIRE      1825
+#5 ans de validité pour les certificats
+set_var EASYRSA_CERT_EXPIRE    1825
 ```
 
 Edit the file `openssl-easyrsa.cnf`
