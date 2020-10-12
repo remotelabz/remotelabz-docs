@@ -112,8 +112,8 @@ cd /usr/share/easy-rsa/
 Edit the vars file and add the two following line. You can change the value for your organisation
 ```bash
 #File /usr/share/easy-rsa/vars
-set_var EASYRSA_BATCH           "yes"
-set_var EASYRSA_REQ_CN          "RemoteLabz-VPNServer"
+set_var EASYRSA_BATCH          "yes"
+set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer-CA"
 set_var EASYRSA_REQ_COUNTRY    "FR"
 set_var EASYRSA_REQ_PROVINCE   "Grand-Est"
 set_var EASYRSA_REQ_CITY       "Reims"
@@ -133,17 +133,29 @@ and comment the line beginning with `RANDFILE`
 #RANDFILE               = $ENV::EASYRSA_PKI/.rnd
 ```
 
-####Build your PKI with CA
-We create now the CA of the VPN which will have the name `RemoteLabz-VPNServer`
+####Generate the CA of your VPN server
+We create now the CA of the VPN which will have the name (Common Name)`RemoteLabz-VPNServer-CA`
 ```bash
 sudo ./easyrsa init-pki
 sudo ./easyrsa build-ca
 ```
-Type a passphrase to secure the CA Key. For example, you can choose passphrase `R3mot3!abz-0penVPN-CA2020` and the Common Name is `RemoteLabz-VPNServer`
+Type a passphrase to secure the CA Key. For example, you can choose passphrase `R3mot3!abz-0penVPN-CA2020`
 
+####Build the certificate for the VPN server
+Change the value of the Common Name (CN) in the vars file
+```bash
+#File /usr/share/easy-rsa/vars
+set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer"
+```
+
+!!! warning
+    If you do not change the CN of your VPN server, you will have an error message on the client because you have generated a self-signed certificate.
+
+Now, we can generate the certificate of your VPN Server
 ```bash
 sudo ./easyrsa gen-req RemoteLabz-VPNServer nopass
 ```
+
 
 Sign the CA request certificate :
 ```bash
