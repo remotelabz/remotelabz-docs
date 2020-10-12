@@ -104,17 +104,36 @@ sudo service rabbitmq-server restart
 ```
 
 ### Configure OpenVPN
+####Prepare configuration files
 ```bash
 cd /usr/share/easy-rsa/
 ```
 
-Edit the vars file and add the two following line
+Edit the vars file and add the two following line. You can change the value for your organisation
 ```bash
 #File /usr/share/easy-rsa/vars
-set_var EASYRSA_ALGO "ec"
-set_var EASYRSA_DIGEST "sha512"
+set_var EASYRSA_BATCH           "yes"
+set_var EASYRSA_REQ_CN          "RemoteLabz-VPNServer"
+set_var EASYRSA_REQ_COUNTRY    "FR"
+set_var EASYRSA_REQ_PROVINCE   "Grand-Est"
+set_var EASYRSA_REQ_CITY       "Reims"
+set_var EASYRSA_REQ_ORG        "RemoteLabz"
+set_var EASYRSA_REQ_EMAIL      "contact@remotelabz.com"
+set_var EASYRSA_REQ_OU         "RemoteLabz-VPNServer"
+set_var EASYRSA_ALGO           "ec"
+set_var EASYRSA_DIGEST         "sha512"
 ```
 
+Edit the file `openssl-easyrsa.cnf`
+```bash
+sudo nano /usr/share/easy-rsa/openssl-easyrsa.cnf
+```
+and comment the line beginning with `RANDFILE`
+```bash
+#RANDFILE               = $ENV::EASYRSA_PKI/.rnd
+```
+
+####Build your PKI with CA
 We create now the CA of the VPN which will have the name `RemoteLabz-VPNServer`
 ```bash
 sudo ./easyrsa init-pki
@@ -125,32 +144,23 @@ Type a passphrase to secure the CA Key. For example, you can choose passphrase `
 ```bash
 sudo ./easyrsa gen-req RemoteLabz-VPNServer nopass
 ```
-You will have the following output
-```bash
-...
-Common Name (eg: your user, host, or server name) [RemoteLabz-VPNServer]:
-
-Keypair and certificate request completed. Your files are:
-req: /usr/share/easy-rsa/pki/reqs/RemoteLabz-VPNServer.req
-key: /usr/share/easy-rsa/pki/private/RemoteLabz-VPNServer.key
-```
 
 Sign the CA request certificate :
 ```bash
 sudo ./easyrsa sign-req server RemoteLabz-VPNServer
 ```
-and you have to type again the choosen passphrase of your CA (`R3mot3!abz-0penVPN-CA2020`)
+and you have to type the choosen passphrase of your CA (`R3mot3!abz-0penVPN-CA2020`)
 
 Copy of the previous generated keys in OpenVPN server directory (`/etc/openvpn/server`)
 ```bash
-sudo cp pki/private/RemoteLabz-VPNServer.key /etc/openvpn/server
 sudo cp pki/issued/RemoteLabz-VPNServer.crt /etc/openvpn/server
+sudo cp pki/private/RemoteLabz-VPNServer.key /etc/openvpn/server
 sudo cp pki/ca.crt /etc/openvpn/server
 ```
 
 ####Configure a pre-shared key to sign the data
 ```bash
-openvpn --genkey --secret ta.key
+sudo openvpn --genkey --secret ta.key
 sudo cp ta.key /etc/openvpn/server
 ```
 
@@ -163,12 +173,31 @@ sudo openssl dhparam -out dh2048.pem 2048
 ####Configure OpenVPN server
 Edit the `/etc/openvpn/server/server.conf` file to obtain the same than the following
 ```bash
-....
+port 1194
+proto udp
+dev tun
+ca ca.crt
+cert RemoteLabz-VPNServer.crt
+key RemoteLabz-VPNServer.key
+dh dh2048.pem
+cipher AES-256-GCM
+tls-auth ta.key 0
+server 10.8.0.0 255.255.255.0
+keepalive 10 120
+persist-key
+persist-tun
+status /var/log/openvpn/openvpn-status.log
+log         /var/log/openvpn/openvpn.log
+comp-lzo
+verb 1
+mute 20
+explicit-exit-notify 1
 ```
+####Enable OpenVPN service on boot
+`sudo systemctl enable openvpn-server@server`
 
-
-
-
+####Start OpenVPN service
+`sudo service openvpn-server@server start`
 
 ## Install RemoteLabz
 
