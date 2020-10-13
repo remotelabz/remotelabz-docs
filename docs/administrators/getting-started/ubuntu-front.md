@@ -113,7 +113,7 @@ Create the `vars` file and add the following lines. You can change the value for
 ```bash
 #File /usr/share/easy-rsa/vars
 set_var EASYRSA_BATCH           "yes"
-set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer"
+set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer-CA"
 set_var EASYRSA_REQ_COUNTRY    "FR"
 set_var EASYRSA_REQ_PROVINCE   "Grand-Est"
 set_var EASYRSA_REQ_CITY       "Reims"
@@ -139,8 +139,8 @@ and comment the line beginning with `RANDFILE`
 ```
 
 ####Generate the CA of your VPN server
-We create now the CA of the VPN which will have the name (Common Name)`RemoteLabz-VPNServer-CA`
 ```bash
+cd /usr/share/easy-rsa/
 sudo ./easyrsa init-pki
 sudo ./easyrsa build-ca
 ```
@@ -158,9 +158,9 @@ set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer"
 
 Now, we can generate the certificate of your VPN Server
 ```bash
+cd /usr/share/easy-rsa/
 sudo ./easyrsa gen-req RemoteLabz-VPNServer nopass
 ```
-
 
 Sign the CA request certificate :
 ```bash
