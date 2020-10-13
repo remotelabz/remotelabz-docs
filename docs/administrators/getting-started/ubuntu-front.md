@@ -173,6 +173,7 @@ Copy of the previous generated keys in OpenVPN server directory (`/etc/openvpn/s
 sudo cp pki/issued/RemoteLabz-VPNServer.crt /etc/openvpn/server
 sudo cp pki/private/RemoteLabz-VPNServer.key /etc/openvpn/server
 sudo cp pki/ca.crt /etc/openvpn/server
+sudo cp pki/private/ca.key /etc/openvpn/server
 ```
 
 ####Configure a pre-shared key to sign the data
