@@ -17,6 +17,14 @@ cd ~
 git clone https://github.com/crestic-urca/remotelabz.git
 ```
 
+You have now a directory `remotelabz` created on your home directory.
+
+!!! warning
+    If you want install only a specific version, you have to do the following instruction, for version 2.2.0 for example.
+    ```bash    
+    git clone https://github.com/crestic-urca/remotelabz.git --branch 2.2.0 --single-branch
+    ```
+
 ## Requirements
 ### PHP
 
@@ -31,7 +39,7 @@ sudo apt install -y curl gnupg php7.3 zip unzip php7.3-bcmath php7.3-curl php7.3
 #### On Ubuntu 20.04 LTS
 ``` bash
 sudo apt-get update
-sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp openvpn easy-rsa
+sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp openvpn
 ```
 
 ### Composer
@@ -104,14 +112,20 @@ sudo service rabbitmq-server restart
 ```
 
 ### Configure OpenVPN
-####Prepare configuration files
+
+####Installation of Easy RSA 3.0
 ```bash
-cd /usr/share/easy-rsa/
+cd ~
+# link to the latest version
+wget https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.8/EasyRSA-3.0.8.tgz
+tar -xzf EasyRSA-3.0.8.tgz
+cd EasyRSA-3.0.8
 ```
 
+####Prepare configuration files
 Create the `vars` file and add the following lines. You can change the value for your organisation
 ```bash
-#File /usr/share/easy-rsa/vars
+#File ~/EasyRSA-3.0.8/vars
 set_var EASYRSA_BATCH           "yes"
 set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer-CA"
 set_var EASYRSA_REQ_COUNTRY    "FR"
@@ -131,7 +145,8 @@ set_var EASYRSA_CERT_EXPIRE    1825
 
 Edit the file `openssl-easyrsa.cnf`
 ```bash
-sudo nano /usr/share/easy-rsa/openssl-easyrsa.cnf
+#File ~/EasyRSA-3.0.8/openssl-easyrsa.cnf
+nano ~/EasyRSA-3.0.8/openssl-easyrsa.cnf
 ```
 and comment the line beginning with `RANDFILE`
 ```bash
@@ -140,16 +155,15 @@ and comment the line beginning with `RANDFILE`
 
 ####Generate the CA of your VPN server
 ```bash
-cd /usr/share/easy-rsa/
-sudo ./easyrsa init-pki
-sudo ./easyrsa build-ca
+./easyrsa init-pki
+./easyrsa build-ca
 ```
 Type a passphrase to secure the CA Key. For example, you can choose passphrase `R3mot3!abz-0penVPN-CA2020`
 
 ####Build the certificate for the VPN server
-Change the value of the Common Name (CN) in the vars file
+Change the value of the Common Name (CN) in the vars file to now create the certificate file for your OpenVPN server
 ```bash
-#File /usr/share/easy-rsa/vars
+#File ~/EasyRSA-3.0.8/vars
 set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer"
 ```
 
@@ -158,13 +172,12 @@ set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer"
 
 Now, we can generate the certificate of your VPN Server
 ```bash
-cd /usr/share/easy-rsa/
-sudo ./easyrsa gen-req RemoteLabz-VPNServer nopass
+./easyrsa gen-req RemoteLabz-VPNServer nopass
 ```
 
 Sign the CA request certificate :
 ```bash
-sudo ./easyrsa sign-req server RemoteLabz-VPNServer
+./easyrsa sign-req server RemoteLabz-VPNServer
 ```
 and you have to type the choosen passphrase of your CA (`R3mot3!abz-0penVPN-CA2020`)
 
