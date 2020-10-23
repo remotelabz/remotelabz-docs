@@ -314,11 +314,72 @@ or if you don't use certificate
 ```bash
 nohup configurable-http-proxy --port 8000 --log-level info &
 ```
+### Secure your Apache configuration
+Modify the following line in file `/etc/apache2/conf-enabled/security.conf`
+```bash
+ServerTokens Minimal
+#ServerTokens OS
+#ServerTokens Full
 
+ServerSignature Off
+#ServerSignature On
+```
+Do not forget to restart Apache service `sudo service apache2 restart`
+
+### Use HTTPS instead of HTTP (Optional but required if you want to use Shibboleth)
+During the installation process, the file `200-remotelabz-ssl.conf` is copy in your `/etc/apache2/sites-available` directory. You have to modify the following lines to insert the right certificate files :
+```bash
+        SSLCertificateFile	/etc/ssl/certs/remotelabz.crt
+        SSLCertificateChainFile /etc/ssl/certs/remotelabz._INTERMEDIATE.cer
+        SSLCertificateKeyFile	/etc/ssl/private/remotelabz.key
+```
+You have now to activate the virtual site and the SSL module
+```bash
+sudo a2enmod ssl
+sudo a2ensite 200-remotelabz-ssl.conf
+sudo service apache2 restart
+```
+Verify your application is now available with HTTPS and if it works fine, you can modify the `/etc/apache2/sites-available/100-remotelabz.conf` to redirect all HTTP request to HTTPS. 
+Activate the rewrite module
+```bash
+sudo a2enmod rewrite
+```
+
+Uncomment the following lines in the file `/etc/apache2/sites-available/100-remotelabz.conf`:
+```bash
+#<IfModule mod_rewrite.c>
+#    RewriteEngine On
+#    RewriteCond %{HTTPS} !=on
+#    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+#</IfModule>
+```
+Now, if you go to the your application's url with http, you should be redirected to HTTTS.
 
 ### Shibboleth (optional)
 
-Follow [this guide](https://www.switch.ch/aai/guides/sp/installation/?os=ubuntu#2) to install Shibboleth on 18.04.
+!!!warning
+    You have to activate HTTPS to use Shibboleth authentification method
+
+```bash
+cd ~
+curl --fail --remote-name https://pkg.switch.ch/switchaai/ubuntu/dists/focal/main/binary-all/misc/switchaai-apt-source_1.0.0~ubuntu20.04.1_all.deb
+sudo apt install ./switchaai-apt-source_1.0.0~ubuntu20.04.1_all.deb
+sudo apt update
+sudo apt install --install-recommends shibboleth
+sudo a2enconf shib
+sudo a2enmod shib
+sudo service apache2 restart
+```
+
+Next step, to finish to configure your Shibboleth Service Provider (SP), you have to modify your `/etc/shibboleth/shibboleth2.xml` file, following the guide from Paragraph 4, depend of your Shibboleth Identity Provider (IdP):
+
+ - [SWITCH Shibboleth Service Provider (SP) 3.1 Configuration Guide](https://www.switch.ch/aai/guides/sp/configuration/){target=_blank}
+ - [RENATER Shibboleth Service Provider (SP) Configuration Guide](https://services.renater.fr/federation/documentation/guides-installation/sp3/chap04){target=_blank}
+
+You can find all the configuration guides on the following site :
+
+- [On Ubuntu 18.04 LTS](https://www.switch.ch/aai/guides/sp/installation/?os=ubuntu18){target=_blank}
+- [On Ubuntu 20.04 LTS](https://www.switch.ch/aai/guides/sp/installation/?os=ubuntu20){target=_blank}
 
 To enable Shibboleth site-wide, you need to change the value of `ENABLE_SHIBBOLETH` environment variable :
 
