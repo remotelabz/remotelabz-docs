@@ -160,6 +160,13 @@ and comment the line beginning with `RANDFILE`
 ```
 Type a passphrase to secure the CA Key. For example, you can choose passphrase `R3mot3!abz-0penVPN-CA2020`
 
+####Edit you .env or .env.local file
+You have to add your passphrase in your `.env` RemoteLabz application
+```bash
+SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
+```
+
+
 ####Build the certificate for the VPN server
 Change the value of the Common Name (CN) in the vars file to now create the certificate file for your OpenVPN server
 ```bash
@@ -199,6 +206,13 @@ sudo cp ta.key /etc/openvpn/server
 ```bash
 cd /etc/openvpn/server
 sudo openssl dhparam -out dh2048.pem 2048
+```
+
+####Affect the right permission to your certificate and key files
+The application needs to access to the certificate and key files to generate the OpenVPN file for the clients.
+```bash
+sudo chgrp remotelabz /etc/openvpn/server -R
+sudo chmod g+rx /etc/openvpn/server -R
 ```
 
 ####Configure OpenVPN server
