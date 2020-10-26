@@ -6,7 +6,7 @@ This section guides you through the installation of RemoteLabz's worker and its 
 
     - This section has only been tested with **Ubuntu Server 20.04 LTS**
 
-## Retrieve the RemoteLabz source
+# Retrieve the RemoteLabz source
 A remotelabz directory will be create on your home directory.
 ```bash
 cd ~
@@ -14,7 +14,8 @@ git clone https://github.com/crestic-urca/remotelabz-worker.git
 cd remotelabz-worker
 ```
 
-Then, you should modify the `.env` file according to your environment
+# Installation
+You should modify the `.env` file according to your environment
 
 ``` bash
 sudo cp .env.dist .env
@@ -27,6 +28,19 @@ ADM_INTERFACE="enp0s3"
 # you may change the MESSENGER_TRANSPORT_DSN variable with the following, with your credentials, and the RabbitMQ IP or its FQDN
 MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@X.X.X.X:5672/%2f/messages
 sudo ./install
+```
+# Configuration
+### Activate the forward between the interface
+In the file `/etc/sysctl.conf`, looking for the line `#net.ipv4.ip_forward=1` and uncomment it. Then, reload this `/etc/sysctl.conf` file
+```bash
+sudo sysctl --system
+```
+
+### Configure the route from the worker to the front for the VM's network
+We assume you have configure now all variables in your .env which was modified after a copy of the .env.dist
+```bash
+source /opt/remotelabz/.env
+sudo ip route add $VPN_NETWORK/$VPN_NETWORK_NETMASK via $FRONT_IP_ADDRESS
 ```
 
 ### Instances

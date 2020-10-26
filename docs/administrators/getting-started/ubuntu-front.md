@@ -232,17 +232,25 @@ keepalive 10 120
 persist-key
 persist-tun
 status /var/log/openvpn/openvpn-status.log
-log         /var/log/openvpn/openvpn.log
+log /var/log/openvpn/openvpn.log
 comp-lzo
 verb 1
 mute 20
 explicit-exit-notify 1
+push "route 10.10.10.0 255.255.255.0"
 ```
+
 ####Enable OpenVPN service on boot
 `sudo systemctl enable openvpn-server@server`
 
 ####Start OpenVPN service
 `sudo service openvpn-server@server start`
+
+####Activate the forward between the interface
+In the file `/etc/sysctl.conf`, looking for the line `#net.ipv4.ip_forward=1` and uncomment it. Then, reload this sysctl file
+```bash
+sudo sysctl --system
+```
 
 ## Install RemoteLabz
 
@@ -303,6 +311,13 @@ Don't forget to edit your `.env.local` :
 echo "JWT_PASSPHRASE=yourpassphrase" | sudo tee -a .env.local
 ```
 
+### Configure the route from the front to the worker VM's network
+We assume you have configure now all variables in your .env.local which was modified after a copy of the .env
+```bash
+source /opt/remotelabz/.env.local
+sudo ip route add $BASE_NETWORK/$BASE_NETWORK_NETMASK via $WORKER_SERVER
+```
+
 ### Instances
 
 In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/crestic/remotelabz-worker), you need to start **Symfony Messenger** :
@@ -328,7 +343,7 @@ or if you don't use certificate
 ```bash
 nohup configurable-http-proxy --port 8000 --log-level info &
 ```
-### Secure your Apache configuration
+## Secure your Apache configuration (recommanded)
 Modify the following line in file `/etc/apache2/conf-enabled/security.conf`
 ```bash
 ServerTokens Minimal
@@ -340,7 +355,7 @@ ServerSignature Off
 ```
 Do not forget to restart Apache service `sudo service apache2 restart`
 
-### Use HTTPS instead of HTTP (Optional but required if you want to use Shibboleth)
+## Use HTTPS instead of HTTP (Optional but required if you want to use Shibboleth)
 During the installation process, the file `200-remotelabz-ssl.conf` is copy in your `/etc/apache2/sites-available` directory. You have to modify the following lines to insert the right certificate files :
 ```bash
         SSLCertificateFile	/etc/ssl/certs/remotelabz.crt
@@ -369,7 +384,7 @@ Uncomment the following lines in the file `/etc/apache2/sites-available/100-remo
 ```
 Now, if you go to the your application's url with http, you should be redirected to HTTTS.
 
-### Shibboleth (optional)
+## Shibboleth (optional)
 
 !!!warning
     You have to activate HTTPS to use Shibboleth authentification method
