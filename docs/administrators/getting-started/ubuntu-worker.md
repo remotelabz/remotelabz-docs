@@ -39,7 +39,7 @@ sudo sysctl --system
 ### Configure the route from the worker to the front for the VM's network
 We assume you have configure now all variables in your .env which was modified after a copy of the .env.dist
 ```bash
-source /opt/remotelabz/.env
+source /opt/remotelabz-worker/.env
 sudo ip route add $VPN_NETWORK/$VPN_NETWORK_NETMASK via $FRONT_IP_ADDRESS
 ```
 
