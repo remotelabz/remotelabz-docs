@@ -14,8 +14,16 @@ edit_uri: ""
 copyright: Developped by Julien Hubert &amp; Florent Nolot 2018 - 2020
 
 nav:
-    - Home: home.md
-    - 'For Administrators':
+    - Home: index.md
+    - 'For users':
+        - 'Getting started':
+            - My first lab: users/getting-started/first-lab.md
+        - 'Administration':
+            - User : users/administration/user.md
+            - Group : users/administration/group.md
+            - Laboratory : users/administration/laboratory.md
+    - 'For administrators':
+        
         - 'Getting started':
             - Installation: administrators/getting-started/install.md
             - 'RemoteLabz Front':
@@ -25,7 +33,7 @@ nav:
             - 'Vagrant (deprecated)': administrators/getting-started/vagrant.md
             - 'Commonly Asked Questions': administrators/getting-started/commonly-asked-questions.md
             - Troubleshooting: administrators/getting-started/troubleshooting.md
-    - 'For Developers':
+    - 'For developers':
         - 'Getting started':
             - 'Visual Studio Code': developers/vscode.md
 
