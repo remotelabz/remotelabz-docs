@@ -355,7 +355,7 @@ ServerSignature Off
 ```
 Do not forget to restart Apache service `sudo service apache2 restart`
 
-## Secure your server from web intrusion
+## Secure your server from web intrusion (recommanded)
 To avoid the scan url, you can use fail2ban to ban IP they scan the web access.
 ### On Ubuntu 20.04 LTS Server
 ```bash
