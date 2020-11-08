@@ -19,11 +19,11 @@ nav:
         - 'Getting started':
             - My first lab: users/getting-started/first-lab.md
         - 'Administration':
-            - User : users/administration/user.md
-            - Group : users/administration/group.md
-            - Laboratory : users/administration/laboratory.md
-    - 'For administrators':
-        
+            - General: users/administration/general.md
+            - User: users/administration/user.md
+            - Group: users/administration/group.md
+            - Laboratory: users/administration/laboratory.md
+    - 'For sys admin':
         - 'Getting started':
             - Installation: administrators/getting-started/install.md
             - 'RemoteLabz Front':

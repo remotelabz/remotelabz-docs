@@ -355,6 +355,58 @@ ServerSignature Off
 ```
 Do not forget to restart Apache service `sudo service apache2 restart`
 
+## Secure your server from web intrusion
+To avoid the scan url, you can use fail2ban to ban IP they scan the web access.
+### On Ubuntu 20.04 LTS Server
+```bash
+sudo apt-get update
+sudo apt-get install fail2ban
+sudo service fail2ban restart
+```
+
+1. At the end of the file `/etc/fail2ban/jail.conf`, add the following
+```bash
+[apache-404]
+enabled = true
+port = http,https
+logpath = /var/log/apache2/access*.log
+#If find 3 404 errors during the findtime
+maxretry = 3
+#Ban for 1h
+bantime = 3600
+#In 600 seconds
+findtime = 600
+```
+
+2. Create the file `/etc/fail2ban/filter.d/apache-404.conf` with this following content
+```bash
+[Definition]
+failregex = ^<HOST> - .* "(GET|POST|HEAD).*HTTP.*" 404 .*$
+ignoreregex =.*(robots.txt|favicon.ico|jpg|png)
+```
+
+3. Restart the fail2ban service
+```bash
+sudo service fail2ban restart
+```
+
+4. Verify your fail2ban is up
+```bash
+sudo service fail2ban status
+```
+
+You will find in the log file `/var/log/fail2ban.log` all the rules you applied, banned IPs or restored access to a previously banned IP.
+
+If you want to reinforce the security of the access to your server, you can modify the default value of fail2ban. For example, in file `/etc/fail2ban/jail.conf`, you can uncomment the following line in the [DEFAULT] section.
+```bash
+bantime.increment = true
+```
+and change the default value of `bantime` and `findtime` to 1 hour instead of 10 minutes
+```bash
+bantime  = 1h
+findtime  = 1h
+```
+
 ## Use HTTPS instead of HTTP (Optional but required if you want to use Shibboleth)
 During the installation process, the file `200-remotelabz-ssl.conf` is copy in your `/etc/apache2/sites-available` directory. You have to modify the following lines to insert the right certificate files :
 ```bash
