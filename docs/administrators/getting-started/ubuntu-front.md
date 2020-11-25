@@ -33,7 +33,7 @@ RemoteLabz requires PHP >= 7.3. You can install it manually or via `ppa:ondrej/p
 ``` bash
 sudo add-apt-repository ppa:ondrej/php
 sudo apt-get update
-sudo apt install -y curl gnupg php7.3 zip unzip php7.3-bcmath php7.3-curl php7.3-gd php7.3-intl php7.3-mbstring php7.3-mysql php7.3-xml php7.3-zip ntp
+sudo apt install -y curl gnupg php7.3 zip unzip php7.3-bcmath php7.3-curl php7.3-gd php7.3-intl php7.3-mbstring php7.3-mysql php7.3-xml php7.3-zip ntp openvpn
 ```
 
 #### On Ubuntu 20.04 LTS
@@ -111,6 +111,12 @@ Restart the RabbitMQ server
 sudo service rabbitmq-server restart
 ```
 
+!!! Tips
+    If you want to change the password of an existing user `username` of your RabbitMQ, you have to type the following command :
+    ```
+    sudo rabbitmqctl change_password 'username' 'new_password'
+    ```
+
 ### Configure OpenVPN
 
 ####Installation of Easy RSA 3.0
@@ -165,7 +171,6 @@ You have to add your passphrase in your `.env` RemoteLabz application
 ```bash
 SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
 ```
-
 
 ####Build the certificate for the VPN server
 Change the value of the Common Name (CN) in the vars file to now create the certificate file for your OpenVPN server
@@ -253,6 +258,8 @@ sudo sysctl --system
 ```
 
 ## Install RemoteLabz
+
+The install process will create the directory `/opt/remotelabz`. You can create a link to your home with the command `sudo ln -s ~/remotelabz /opt/remotelabz`
 
 While you're in RemoteLabz root directory :
 
