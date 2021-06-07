@@ -1,7 +1,7 @@
 # Project information
 site_name: RemoteLabz Docs
 site_url: https://remotelabz.com/
-site_author: Julien Hubert
+site_author: Julien HUBERT &amp; Florent NOLOT
 site_description: >-
     Education software to provide VMs and networks as-a-service.
 
@@ -11,7 +11,7 @@ repo_url: https://github.com/crestic-urca/remotelabz
 edit_uri: ""
 
 # Copyright
-copyright: Developped by Julien Hubert &amp; Florent Nolot 2018 - 2020
+copyright: Developped by Julien Hubert &amp; Florent Nolot 2018 - 2021
 
 nav:
     - Home: index.md
@@ -29,13 +29,18 @@ nav:
             - 'RemoteLabz Front':
                 - Installation: administrators/getting-started/ubuntu-front.md
                 - Update: administrators/getting-started/ubuntu-front-update.md
-            - RemoteLabz Worker: administrators/getting-started/ubuntu-worker.md
+            - 'RemoteLabz Worker':
+                - Installation: administrators/getting-started/ubuntu-worker.md
+                - Update: administrators/getting-started/ubuntu-worker-update.md
             - 'Vagrant (deprecated)': administrators/getting-started/vagrant.md
             - 'Commonly Asked Questions': administrators/getting-started/commonly-asked-questions.md
             - Troubleshooting: administrators/getting-started/troubleshooting.md
     - 'For developers':
         - 'Getting started':
             - 'Visual Studio Code': developers/vscode.md
+            - 'Code': developers/front/code.md
+            - 'Documentation': developers/mkdocs.md
+
 
 theme:
     name: material

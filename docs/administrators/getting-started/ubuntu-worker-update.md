@@ -28,9 +28,6 @@ Compare `.env.dist` to be sure we have all variables in your `.env` or `.env.loc
 
 ```bash
 sudo composer install
-sudo yarn install
-sudo yarn encore prod
-sudo php bin/console doctrine:migrations:migrate
 sudo php bin/console cache:clear
 sudo chown remotelabz:www-data * -R
 sudo chmod g+w /opt/remotelabz/var/cache * -R
