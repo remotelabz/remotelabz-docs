@@ -43,6 +43,12 @@ source /opt/remotelabz-worker/.env
 sudo ip route add $VPN_NETWORK/$VPN_NETWORK_NETMASK via $FRONT_IP_ADDRESS
 ```
 
+### Internet access (vesion 2.3.0 and before)
+For testing the Internet access on RemoteLabz version 2.3.0, you have to enable the NAT with the command
+```bash
+sudo iptables -t nat -A POSTROUTING -o $ADM_INTERFACE -s $LAB_NETWORK -j MASQUERADE
+```
+
 ### Instances
 
 ```bash
