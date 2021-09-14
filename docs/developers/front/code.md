@@ -1,12 +1,12 @@
-### Bundle
+# Bundle
 The remotelabz is divided in 4 parts :
 
-- remotelabz for the frontend
-- remotelabz-worker for the server which execute all VMs, called the backend
+- `remotelabz` for the frontend
+- `remotelabz-worker` for the server which execute all VMs, called the backend
 - `remotelabz-message-bundle` uses by both remotelabz and remotelabz-worker to manage the message exchanged between the frontend and the backend
-- network-bundle uses by both frontend and backend
+- `network-bundle` uses by both frontend and backend
 
-### Certificates generation for local development
+# Certificates generation for local development
 
 To develop on own machine, we need to build certificate to support both http and https protocols :
 
@@ -35,13 +35,13 @@ Sign the certificate of the server: (do not forget to give the IP of your web se
 openssl x509 -req -in server-dev-rlz.csr -out server-dev-rlz.crt -CA server-dev-rlz-ca.crt -CAkey server-dev-rlz-ca.key -CAcreateserial -CAserial server-dev-rlz-ca-serial.srl
 ```
 
-### Code organisation
+# Code organisation
 The front's code is on ```templates``` directory.
 
 The web page of a lab is on file ```view.html.twig``` and the lab is managed by a react component ```{{ react_component('InstanceManager', {'props': props}) }}``` defined in ```assets/js/components/Instances/```
 
 When a user starts a lab, a message (json) is sent to the worker and analyzed by ```MessageHandler/InstanceActionMessageHandler.php```. The instance, which is a started lab, is managed by the Instance Manager service in ```Service/Instance/InstanceManager.php```
 
-### Versionning
+# Semantic Versioning
 
 https://semver.org/

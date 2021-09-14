@@ -37,9 +37,11 @@ nav:
             - Troubleshooting: administrators/getting-started/troubleshooting.md
     - 'For developers':
         - 'Getting started':
-            - 'Visual Studio Code': developers/vscode.md
-            - 'Code': developers/front/code.md
-            - 'Documentation': developers/mkdocs.md
+            - Visual Studio Code: developers/vscode.md
+            - Documentation: developers/mkdocs.md
+        - 'Code':
+            - Getting started: developers/front/code.md
+            - Device sandbox: developers/front/sandbox.md
 
 
 theme:
