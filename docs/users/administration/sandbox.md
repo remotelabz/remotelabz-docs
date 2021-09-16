@@ -1,0 +1,1 @@
+To modify the template of a device, we have the "Device Sandbox" menu. As soon as you choose to modify a template, a new lab Sandbox is created. When you have finish, so you have exported the template and so create a new template, you can delete this sandbox lab in the lab menu
