@@ -23,6 +23,7 @@ nav:
             - User: users/administration/user.md
             - Group: users/administration/group.md
             - Laboratory: users/administration/laboratory.md
+            - Sandbox: users/administration/sandbox.md
     - 'For sys admin':
         - 'Getting started':
             - Installation: administrators/getting-started/install.md
