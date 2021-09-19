@@ -28,3 +28,15 @@
 21. Expand the ext3 file system in the logical volume : `sudo resize2fs /dev/[volgroup]/[volume]`
  * Example: `sudo resize2fs /dev/ubuntu-vg/root`
 22. You can now run the df command to very that you have more space `df -h`
+
+## How to modify the image of the device
+To avoid a teacher or an user include a corrupted image, only the administrator can modify an existing default image. With the menu `Device Sandbox`, a new lab is created and after the export button is click, a new device template and new Operating Systems are created. To make an export, you have to :
+1. Click on `Device Sandbox`
+2. Click on the Modify button of the device whose image you wants to modify
+3. Start the device
+4. Make your modification
+5. Stopped the device
+6. Click on Export and choose a name for you new device template
+7. Leave the lab
+
+If you have finish with your modification, you have to go lab and delete the new lab created from the sandbox.
