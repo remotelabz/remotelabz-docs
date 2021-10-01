@@ -41,8 +41,13 @@ nav:
             - Visual Studio Code: developers/vscode.md
             - Documentation: developers/mkdocs.md
         - 'Code':
-            - Getting started: developers/front/code.md
-            - Device sandbox: developers/front/sandbox.md
+            - 'Front':
+                - Getting started: developers/front/code.md
+                - Device sandbox: developers/front/sandbox.md
+            - 'Worker':
+                - Getting started: developers/worker/code.md
+            - 'Messenger':
+                - Getting started: developers/messenger/code.md
 
 
 theme:
