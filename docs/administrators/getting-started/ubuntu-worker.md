@@ -37,16 +37,21 @@ sudo sysctl --system
 ```
 
 ### Configure the route from the worker to the front for the VM's network
-We assume you have configure now all variables in your .env which was modified after a copy of the .env.dist
+We assume you have configured now all variables in your .env.local, according the .env.local of your front, which was modified after a copy of the .env.dist
 ```bash
-source /opt/remotelabz-worker/.env
+source /opt/remotelabz-worker/.env.local
 sudo ip route add $VPN_NETWORK/$VPN_NETWORK_NETMASK via $FRONT_IP_ADDRESS
 ```
 
-### Internet access (vesion 2.3.0 and before)
-For testing the Internet access on RemoteLabz version 2.3.0, you have to enable the NAT with the command
+### Internet access (From Version 2.3.0 and after)
+For testing the Internet access on RemoteLabz Version 2.3.0 and after, you have to enable the NAT with the command
 ```bash
 sudo iptables -t nat -A POSTROUTING -o $ADM_INTERFACE -s $LAB_NETWORK -j MASQUERADE
+```
+
+In the next version (2.5.0), Internet connection will be configurable from the graphical interface and the NAT will be like that :
+```bash
+sudo iptables -t nat -A POSTROUTING -o $BRIDGE_INT -s $LAB_NETWORK -j MASQUERADE
 ```
 
 ### Instances
@@ -65,3 +70,14 @@ You can check the log of the worker in `~/remotelabz-worker/var/log/prod.log`
 !!! warning
     When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommand you to use a service like `ntp` to keep your machines synchronized.
 
+## In progress (in next version 2.4.1)
+
+To install and test a service container :
+Last Debian stable (16 Nov. 2021) Linux Install
+```
+sudo lxc-create -t download -n Container_Name -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com
+```
+Edit the config of the container:
+```
+sudo nano /var/lib/lxc/Container_Name/config
+```

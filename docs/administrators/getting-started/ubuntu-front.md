@@ -330,6 +330,7 @@ sudo ip route add $BASE_NETWORK/$BASE_NETWORK_NETMASK via $WORKER_SERVER
 In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/crestic/remotelabz-worker), you need to start **Symfony Messenger** :
 
 ```bash
+sudo systemctl enable remotelabz
 sudo systemctl start remotelabz
 ```
 
@@ -353,7 +354,7 @@ nohup configurable-http-proxy --port 8000 --log-level info &
 ## Secure your Apache configuration (recommanded)
 Modify the following line in file `/etc/apache2/conf-enabled/security.conf`
 ```bash
-ServerTokens Minimal
+ServerTokens Prod
 #ServerTokens OS
 #ServerTokens Full
 
@@ -362,42 +363,45 @@ ServerSignature Off
 ```
 Do not forget to restart Apache service `sudo service apache2 restart`
 
-## Secure your server from web intrusion (recommanded)
-To avoid the scan url, you can use fail2ban to ban IP they scan the web access.
+## Secure your server from web intrusion (recommended)
+To avoid the scan url, you can use fail2ban to ban IP they scan the ssh or web access.
+
 ### On Ubuntu 20.04 LTS Server
+
 ```bash
 sudo apt-get update
 sudo apt-get install fail2ban
 sudo service fail2ban restart
 ```
 
-1. At the end of the file `/etc/fail2ban/jail.conf`, add the following
-```bash
-[apache-404]
-enabled = true
-port = http,https
-logpath = /var/log/apache2/access*.log
-#If find 3 404 errors during the findtime
-maxretry = 3
-#Ban for 1h
-bantime = 3600
-#In 600 seconds
-findtime = 600
-```
+!!! info
+    This configuration can blocked your access because some request response stay in 404 when the device is not started. The following configuration is not yet recommended.
 
-2. Create the file `/etc/fail2ban/filter.d/apache-404.conf` with this following content
-```bash
-[Definition]
-failregex = ^<HOST> - .* "(GET|POST|HEAD).*HTTP.*" 404 .*$
-ignoreregex =.*(robots.txt|favicon.ico|jpg|png)
-```
+    1. At the end of the file `/etc/fail2ban/jail.conf`, add the following
+    ```bash
+    [apache-404]
+    enabled = true
+    port = http,https
+    logpath = /var/log/apache2/access*.log
+    #If find 3 404 errors during the findtime
+    maxretry = 3
+    #Ban for 1h
+    bantime = 3600
+    #In 600 seconds
+    findtime = 600
+    ```
+    2. Create the file `/etc/fail2ban/filter.d/apache-404.conf` with this following content
+    ```bash
+    [Definition]
+    failregex = ^<HOST> - .* "(GET|POST|HEAD).*HTTP.*" 404 .*$
+    ignoreregex =.*(robots.txt|favicon.ico|jpg|png)
+    ```
+    3. Restart the fail2ban service
+    ```bash
+    sudo service fail2ban restart
+    ```
 
-3. Restart the fail2ban service
-```bash
-sudo service fail2ban restart
-```
-
-4. Verify your fail2ban is up
+Verify your fail2ban is up
 ```bash
 sudo service fail2ban status
 ```
