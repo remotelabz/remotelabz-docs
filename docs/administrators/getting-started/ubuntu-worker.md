@@ -81,3 +81,31 @@ Edit the config of the container:
 ```
 sudo nano /var/lib/lxc/Container_Name/config
 ```
+
+## LXD In progress (in next version 2.4.1)
+```
+sudo lxd init
+```
+
+Answer to all questions
+```
+Would you like to use LXD clustering? (yes/no) [default=no]: 
+Do you want to configure a new storage pool? (yes/no) [default=yes]: 
+Name of the new storage pool [default=default]: 
+Name of the storage backend to use (dir, lvm, zfs, ceph, btrfs) [default=zfs]: 
+Create a new ZFS pool? (yes/no) [default=yes]: 
+Would you like to use an existing empty block device (e.g. a disk or partition)? (yes/no) [default=no]: 
+Size in GB of the new loop device (1GB minimum) [default=15GB]: 
+Would you like to connect to a MAAS server? (yes/no) [default=no]: 
+Would you like to create a new local network bridge? (yes/no) [default=yes]: no
+Would you like to configure LXD to use an existing bridge or host interface? (yes/no) [default=no]: 
+Would you like the LXD server to be available over the network? (yes/no) [default=no]: 
+Would you like stale cached images to be updated automatically? (yes/no) [default=yes] 
+Would you like a YAML "lxd init" preseed to be printed? (yes/no) [default=no]: 
+```
+
+To list available image to install :
+```
+lxc image list ubuntu:20.04
+```
+
