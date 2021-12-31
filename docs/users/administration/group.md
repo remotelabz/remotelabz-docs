@@ -16,5 +16,6 @@ The group has a "visibility" property. It can be
 - private
 - internal
 
-All public groups and so, their associated activities, also called labs, can be view by all users of the RemoteLabz. Internal groups can be view only by the member of the groups and the private groups can be view only by its owner. The administrator of RemoteLabz show all groups and so, all activities.
-The private group can be used to test and develop activities and as soon as the activities are ready, either the owner or the administrator of the group change the "visibility" property or add the activities in the public or internal groups.
+All public groups and so, their associated activities, also called labs, can be view by all users of the RemoteLabz.
+Internal groups can be view only by the member of the groups and the private groups can be view only by its owner. The administrator of RemoteLabz shows all groups and so, all activities.
+The private group can be used to test and develop activities and as soon as the activities are ready, either the owner or the administrator of the group can change the "visibility" property to add the activities in a public or internal groups.

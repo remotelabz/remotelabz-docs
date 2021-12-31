@@ -109,3 +109,74 @@ To list available image to install :
 lxc image list ubuntu:20.04
 ```
 
+Install the Service LXC container
+```
+lxc launch ubuntu:20.10 Service
+```
+
+Create the bridge 
+```
+sudo ovs-vsctl add-br test
+```
+Create a tap
+```
+sudo ip tuntap add tap1 mode tap
+```
+
+Affect a key to a profile
+lxc profile device get RemoteLabz eth0 parent
+lxc profile device set RemoteLabz eth0 parent test
+
+---
+Modify the config of a container named 'Service'
+
+lxc config device add Service eth0 nic nictype=routed
+
+
+lxc config device add Service eth0 nic nictype=bridged parent=test
+lxc config device remove Service eth0
+
+lxc network create test2 --type=bridge ipv4.address=10.10.10.0/24 ipv6.address=none
+lxc network attach testbr Service eth0 eth0
+lxc config device set Service eth0 ipv4.address 10.10.10.2
+
+lxc config device unset Service eth0 ipv4.address
+----
+Créer le bridge
+sudo ovs-vsctl add-br test-br
+lxc copy Service New-lxc
+lxc config device add New-lxc eth0 nic nictype=bridged parent=test-br
+lxc start New-lxc
+lxc exec New-lxc ip addr add 10.10.10.2/24 dev eth0
+
+--
+Config par defaut de Service:
+ lxc config show Service
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: ubuntu 20.10 amd64 (release) (20210720)
+  image.label: release
+  image.os: ubuntu
+  image.release: groovy
+  image.serial: "20210720"
+  image.type: squashfs
+  image.version: "20.10"
+  volatile.base_image: 96234c60d65202ed8ce934f05311f3ec41db78fae4d5662c05ea390bedddcc62
+  volatile.idmap.base: "0"
+  volatile.idmap.current: '[{"Isuid":true,"Isgid":false,"Hostid":1000000,"Nsid":0,"Maprange":1000000000},{"Isuid":false,"Isgid":true,"Hostid":1000000,"Nsid":0,"Maprange":1000000000}]'
+  volatile.idmap.next: '[{"Isuid":true,"Isgid":false,"Hostid":1000000,"Nsid":0,"Maprange":1000000000},{"Isuid":false,"Isgid":true,"Hostid":1000000,"Nsid":0,"Maprange":1000000000}]'
+  volatile.last_state.idmap: '[{"Isuid":true,"Isgid":false,"Hostid":1000000,"Nsid":0,"Maprange":1000000000},{"Isuid":false,"Isgid":true,"Hostid":1000000,"Nsid":0,"Maprange":1000000000}]'
+  volatile.last_state.power: STOPPED
+  volatile.uuid: f169c376-a653-496c-a923-02275f0785ea
+devices:
+  root:
+    path: /
+    pool: default
+    type: disk
+ephemeral: false
+profiles: []
+stateful: false
+description: ""
+
+https://linuxcontainers.org/lxd/getting-started-cli/

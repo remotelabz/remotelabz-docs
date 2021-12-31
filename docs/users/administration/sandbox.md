@@ -1,1 +1,4 @@
-To modify the template of a device, we have the "Device Sandbox" menu. As soon as you choose to modify a template, a new lab Sandbox is created. When you have finish, so you have exported the template and so create a new template, you can delete this sandbox lab in the lab menu
+To modify the template of a device, we have the "Device Sandbox" menu. As soon as you choose to modify a template, a new lab Sandbox is created. When you have finish, so you have to export the template and so, a new device template is created.
+
+!!! info
+    It's recommended to process a manual shutdown of your device to be sure that the writing cache disk is flushed.
