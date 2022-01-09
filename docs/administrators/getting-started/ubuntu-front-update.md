@@ -38,9 +38,15 @@ sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
 
-!!! info
-    To update from 2.3 to 2.4, you can add default image to all labs with the following command :
+!!! warning
+    To update from 2.3 to 2.4.0, you can add default image to all labs with the following command :
     ```bash
     sudo find /opt/remotelabz/public/uploads/lab/banner/* -type d -exec cp /opt/remotelabz/public/build/images/logo/nopic.jpg {}/nopic.jpg \;
     ```
     You also have to add all user in the default group if you want they can execute some basic labs
+
+!!! warning
+    To update from 2.4.0 to 2.4.1, on the worker, you have to :
+    ```bash
+    sudo lxc-create -t download -n Service -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com
+    ```
