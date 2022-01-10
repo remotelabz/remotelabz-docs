@@ -38,15 +38,44 @@ sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
 
-!!! warning
-    To update from 2.3 to 2.4.0, you can add default image to all labs with the following command :
-    ```bash
-    sudo find /opt/remotelabz/public/uploads/lab/banner/* -type d -exec cp /opt/remotelabz/public/build/images/logo/nopic.jpg {}/nopic.jpg \;
-    ```
-    You also have to add all user in the default group if you want they can execute some basic labs
+##Migration from 2.3 to 2.4.0
+To update from 2.3 to 2.4.0, you can add default image to all labs with the following command :
+```bash
+sudo find /opt/remotelabz/public/uploads/lab/banner/* -type d -exec cp /opt/remotelabz/public/build/images/logo/nopic.jpg {}/nopic.jpg \;
+```
+You also have to add all user in the default group if you want they can execute some basic labs
 
-!!! warning
-    To update from 2.4.0 to 2.4.1, on the worker, you have to :
-    ```bash
-    sudo lxc-create -t download -n Service -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com
-    ```
+##Migration from 2.4.0 to 2.4.1
+
+To update from 2.4.0 to 2.4.1, on the worker, you have to :
+```bash
+sudo lxc-create -t download -n Migration -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com
+```
+Create a new device like in the following image :
+![Screenshot](/images/Migration/Migration.jpg)
+In the Device Sandbox menu, click on the button "Modify" of the device "Migration" and start it (with button play). On the worker, a new container is created and started with an uuid name. You can find the uuid under the device name "Migration", like in the following image.
+![Screenshot](/images/Migration/Migration-Sandbox.jpg)
+In this example, the uuid is`a18d566a-6023-43df-a16e-4367065c5ecf` and on the worker, with the command `lxc-ls -f`, we can see this container.
+![Screenshot](/images/Migration/Migration-Console.jpg)
+
+Install in this container a dhcp server. The following example used the previous uuid.
+```bash
+sudo lxc-attach -n "a18d566a-6023-43df-a16e-4367065c5ecf"
+echo "nameserver 1.1.1.3" > /etc/resolv.conf
+apt-get update
+apt-get upgrade
+apt-get install dnsmasq
+```
+After, you can stop the container from the RemoteLabz interface and you have to export this modified device with the name "Service"
+![Screenshot](/images/Migration/Migration-Export.jpg)
+
+A new device is created with the name "service_" following a date. You have to rename this LXC to "Service"
+
+```bash
+sudo lxc-copy -n "service_" -N "Service"
+sudo lxc-destroy -n "service_"
+```
+
+ it can be used to have a DHCP server on your future lab.
+![Screenshot](/images/Migration/Migration-End.jpg)
+
