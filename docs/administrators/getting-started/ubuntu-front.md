@@ -42,6 +42,18 @@ sudo apt-get update
 sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp openvpn
 ```
 
+### Configure PHP
+You have to configure the php.ini of your apache2 (/etc/php/7.4/apache2/php.ini) with the following parameters :
+``` bash
+upload_max_filesize = 3G
+post_max_size = 3G
+```
+
+and perhaps, change the `max_execution_time` if the upload is too long
+``` bash
+max_execution_time
+```
+
 ### Composer
 
 You may download Composer by following [official documentation](https://getcomposer.org/download/), but RemoteLabz is delivered with a copy of Composer that you can copy in a `bin` folder.
