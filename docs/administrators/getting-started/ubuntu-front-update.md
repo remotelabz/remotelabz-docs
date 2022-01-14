@@ -45,9 +45,9 @@ sudo find /opt/remotelabz/public/uploads/lab/banner/* -type d -exec cp /opt/remo
 ```
 You also have to add all user in the default group if you want they can execute some basic labs
 
-##Migration from 2.4.0 to 2.4.1
+##Migration from 2.4.0 to 2.4.1.1
 
-To update from 2.4.0 to 2.4.1, on the worker, you have to :
+To update from 2.4.0 to 2.4.1.1, on the worker, you have to :
 ```bash
 sudo lxc-create -t download -n Migration -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com
 ```
@@ -69,13 +69,8 @@ apt-get install dnsmasq
 After, you can stop the container from the RemoteLabz interface and you have to export this modified device with the name "Service"
 ![Screenshot](/images/Migration/Migration-Export.jpg)
 
-A new device is created with the name "service_" following a date. You have to rename this LXC to "Service"
+A new device is created with the name "service_" following a date. You have to edit the Operating System called "Service" with the Edit button. Change the image filename "service_" to "Service"
+Now, you can create a new deivec called Service and add this device to your lab to offer IPv4 to all your device, with the DHCP server installed in this container.
 
-```bash
-sudo lxc-copy -n "service_" -N "Service"
-sudo lxc-destroy -n "service_"
-```
-
- it can be used to have a DHCP server on your future lab.
 ![Screenshot](/images/Migration/Migration-End.jpg)
 
