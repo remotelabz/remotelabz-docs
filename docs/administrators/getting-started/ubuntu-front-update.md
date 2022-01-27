@@ -65,12 +65,18 @@ echo "nameserver 1.1.1.3" > /etc/resolv.conf
 apt-get update
 apt-get upgrade
 apt-get install dnsmasq
+echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
 ```
 After, you can stop the container from the RemoteLabz interface and you have to export this modified device with the name "Service"
 ![Screenshot](/images/Migration/Migration-Export.jpg)
 
-A new device is created with the name "service_" following a date. You have to edit the Operating System called "Service" with the Edit button. Change the image filename "service_" to "Service"
-Now, you can create a new deivec called Service and add this device to your lab to offer IPv4 to all your device, with the DHCP server installed in this container.
+A new operating system and device is created with the name "Service" but the name of the image of the operating system is wrong. It's "service_" following a date. You have to edit the Operating System called "Service" with the Edit button. 
+![Screenshot](/images/Migration/Migration-OS-image.jpg)
+
+Change the image filename "service_" to "Service"
+![Screenshot](/images/Migration/Migration-OS-changed.jpg)
+
+Now, you can create a new lab with this device to offer IPv4 addresses to all other device, with the DHCP server installed in this container. The IPv4 of the DHCP will be the (last IPv4 - 1). The last IP is always the gateway of your laboratory.
 
 ![Screenshot](/images/Migration/Migration-End.jpg)
 
