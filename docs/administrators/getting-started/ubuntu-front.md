@@ -4,7 +4,7 @@ This section guides you through the installation of RemoteLabz and its component
 
 !!! note "Foreword"
 
-    - This section has only been tested with **Ubuntu 18.04 (LTS)** and **Ubuntu 20.04**.
+    - This section has only been tested with **Ubuntu 20.04**.
     - The first steps explains how to install [requirements](#requirements). You may skip these steps if those software are already present on your system and go to [Install RemoteLabz](#install-remotelabz).
 
 !!! warning
@@ -28,18 +28,12 @@ You have now a directory `remotelabz` created on your home directory.
 ## Requirements
 ### PHP
 
-RemoteLabz requires PHP >= 7.3. You can install it manually or via `ppa:ondrej/php` repo, which builds PHP and uploads it to a repo for many Unix systems.
-#### On Ubuntu 18.04 LTS
-``` bash
-sudo add-apt-repository ppa:ondrej/php
-sudo apt-get update
-sudo apt install -y curl gnupg php7.3 zip unzip php7.3-bcmath php7.3-curl php7.3-gd php7.3-intl php7.3-mbstring php7.3-mysql php7.3-xml php7.3-zip ntp openvpn
-```
-
+RemoteLabz requires PHP >= 7.4. You can install it manually or via `ppa:ondrej/php` repo, which builds PHP and uploads it to a repo for many Unix systems.
 #### On Ubuntu 20.04 LTS
 ``` bash
 sudo apt-get update
 sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp openvpn
+sudo addgroup remotelabz
 ```
 
 ### Configure PHP
@@ -101,11 +95,6 @@ Choose a secure password to your MySQL server and you have to disable the remote
 ### RabbitMQ
 
 To use RabbitMQ as messaging backend, you need the **php-amqp** extension :
-
-#### On Ubuntu 18.04 LTS
-```bash
-sudo apt-get install -y rabbitmq-server php7.3-amqp
-```
 
 #### On Ubuntu 20.04 LTS
 ```bash
@@ -225,13 +214,6 @@ cd /etc/openvpn/server
 sudo openssl dhparam -out dh2048.pem 2048
 ```
 
-####Affect the right permission to your certificate and key files
-The application needs to access to the certificate and key files to generate the OpenVPN file for the clients.
-```bash
-sudo chgrp remotelabz /etc/openvpn/server -R
-sudo chmod g+rx /etc/openvpn/server -R
-```
-
 ####Configure OpenVPN server
 Edit the `/etc/openvpn/server/server.conf` file to obtain the same than the following
 ```bash
@@ -279,6 +261,15 @@ While you're in RemoteLabz root directory :
 cd ~/remotelabz
 sudo bin/install
 ```
+The install process can take 5 minutes
+
+##Affect the right permission to your certificate and key files for OpenVPN
+The application needs to access to the certificate and key files to generate the OpenVPN file for the clients.
+```bash
+sudo chgrp remotelabz /etc/openvpn/server -R
+sudo chmod g+rx /etc/openvpn/server -R
+```
+
 
 Then, you should create the `.env.local` file and put the correct environment variables from the `.env` according to your environment, including SQL database variables with `MYSQL_SERVER`, `MYSQL_USER`, `MYSQL_PASSWORD` and `MYSQL_DATABASE`.
 
@@ -355,13 +346,9 @@ You will also need to start the proxy service to display VNC console :
 sudo npm install -g configurable-http-proxy
 ```
 
-If we have a certificate on your web site (and it's recommanded), you have to define the certificat configurable-http-proxy must use
 ```bash
-sudo nohup configurable-http-proxy --port 8000 --log-level info --ssl-key /etc/ssl/private/remotelabz-private_key.key --ssl-cert /etc/ssl/certs/remotelabz-ssl_certificate.cer
-```
-or if you don't use certificate
-```bash
-nohup configurable-http-proxy --port 8000 --log-level info &
+sudo service enable remotelabz-proxy
+sudo service start remotelabz-proxy
 ```
 ## Secure your Apache configuration (recommanded)
 Modify the following line in file `/etc/apache2/conf-enabled/security.conf`
@@ -386,7 +373,7 @@ sudo apt-get install fail2ban
 sudo service fail2ban restart
 ```
 
-!!! info
+!!! warning
     This configuration can blocked your access because some request response stay in 404 when the device is not started. The following configuration is not yet recommended.
 
     1. At the end of the file `/etc/fail2ban/jail.conf`, add the following
@@ -482,12 +469,12 @@ Next step, to finish to configure your Shibboleth Service Provider (SP), you hav
 
 You can find all the configuration guides on the following site :
 
-- [On Ubuntu 18.04 LTS](https://www.switch.ch/aai/guides/sp/installation/?os=ubuntu18){target=_blank}
 - [On Ubuntu 20.04 LTS](https://www.switch.ch/aai/guides/sp/installation/?os=ubuntu20){target=_blank}
 
 To enable Shibboleth site-wide, you need to change the value of `ENABLE_SHIBBOLETH` environment variable :
 
 ```bash
 # .env.local
+ENABLE_SHIBBOLETH=1
 ENABLE_SHIBBOLETH=1
 ```
