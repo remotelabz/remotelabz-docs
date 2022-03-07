@@ -39,4 +39,11 @@ To avoid a teacher or an user include a corrupted image, only the administrator 
 6. Click on Export and choose a name for you new device template
 7. Leave the lab
 
+## Change password of phpmyadmin
+```bash
+sudo mysql -h localhost -u root -p
+CREATE USER 'phpmyadmin'@'localhost' IDENTIFIED BY '<New-Password-Here>';
+GRANT ALL PRIVILEGES ON *.* TO 'phpmyadmin'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+```
 If you have finish with your modification, you have to go lab and delete the new lab created from the sandbox.

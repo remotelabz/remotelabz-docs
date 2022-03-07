@@ -50,10 +50,10 @@ max_execution_time
 
 ### Composer
 
-You may download Composer by following [official documentation](https://getcomposer.org/download/), but RemoteLabz is delivered with a copy of Composer that you can copy in a `bin` folder.
+You may download Composer by following [official documentation](https://getcomposer.org/download/), but RemoteLabz is delivered with a copy of Composer 2.2.6 that you can copy in a `bin` folder.
 ``` bash
-sudo cp ~/remotelabz/composer.phar /usr/local/bin/composer
-sudo chmod 755 /usr/local/bin/composer
+php -r "copy('https://getcomposer.org/download/2.2.6/composer.phar', 'composer.phar');"
+sudo cp composer.phar /usr/local/bin/composer
 ```
 
 ### Node.js
@@ -69,15 +69,85 @@ sudo npm install -g yarn
 ```
 ### MySQL Server
 
-#### On Ubuntu 18.04 LTS
-Forthcoming
-
 #### On Ubuntu 20.04 LTS
 ``` bash
 sudo apt-get install -y mysql-server
 sudo mysql_secure_installation
+```
+We recommand to answer as follow :
+```bash
+Securing the MySQL server deployment.
+
+Connecting to MySQL using a blank password.
+
+VALIDATE PASSWORD COMPONENT can be used to test passwords
+and improve security. It checks the strength of password
+and allows the users to set only those passwords which are
+secure enough. Would you like to setup VALIDATE PASSWORD component?
+
+Press y|Y for Yes, any other key for No: Y
+
+There are three levels of password validation policy:
+
+LOW    Length >= 8
+MEDIUM Length >= 8, numeric, mixed case, and special characters
+STRONG Length >= 8, numeric, mixed case, special characters and dictionary                  file
+
+Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG: 2
+Please set the password for root here.
+
+New password: RemoteLabz-2022$
+
+Re-enter new password: RemoteLabz-2022$
+
+Estimated strength of the password: 100 
+Do you wish to continue with the password provided?(Press y|Y for Yes, any other key for No) : Y
+By default, a MySQL installation has an anonymous user,
+allowing anyone to log into MySQL without having to have
+a user account created for them. This is intended only for
+testing, and to make the installation go a bit smoother.
+You should remove them before moving into a production
+environment.
+
+Remove anonymous users? (Press y|Y for Yes, any other key for No) : Y
+Success.
+
+
+Normally, root should only be allowed to connect from
+'localhost'. This ensures that someone cannot guess at
+the root password from the network.
+
+Disallow root login remotely? (Press y|Y for Yes, any other key for No) : Y
+Success.
+
+By default, MySQL comes with a database named 'test' that
+anyone can access. This is also intended only for testing,
+and should be removed before moving into a production
+environment.
+
+
+Remove test database and access to it? (Press y|Y for Yes, any other key for No) : Y
+ - Dropping test database...
+Success.
+
+ - Removing privileges on test database...
+Success.
+
+Reloading the privilege tables will ensure that all changes
+made so far will take effect immediately.
+
+Reload privilege tables now? (Press y|Y for Yes, any other key for No) : Y
+Success.
+
+All done!
+
+```
+
+
+
+``` bash
 sudo mysql -u root -p
-CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mysql-password';
+CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Mysql-Pa33wrd$';
 CREATE DATABASE remotelabz;
 GRANT ALL ON remotelabz.* TO 'user'@'localhost';
 FLUSH PRIVILEGES;
@@ -88,7 +158,7 @@ Choose a secure password to your MySQL server and you have to disable the remote
 !!! info
     If you need to activate the remote access to your MySQL, you have to create a user like this :
     ``` bash
-    CREATE USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'mysql-password';
+    CREATE USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'Mysql-Pa33wrd$';
     GRANT ALL ON remotelabz.* TO 'user'@'%';
     FLUSH PRIVILEGES;
     ```
@@ -167,8 +237,8 @@ and comment the line beginning with `RANDFILE`
 ```
 Type a passphrase to secure the CA Key. For example, you can choose passphrase `R3mot3!abz-0penVPN-CA2020`
 
-####Edit you .env or .env.local file
-You have to add your passphrase in your `.env` RemoteLabz application
+####Edit the .env file
+You have to add your passphrase in your `.env` RemoteLabz application. In the default `.env`, you already have the following line.
 ```bash
 SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
 ```
@@ -281,7 +351,7 @@ sudo cp .env .env.local
 sudo nano .env.local
 # Replace the MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE values to the right value
 MYSQL_USER=user
-MYSQL_PASSWORD=mysql-password
+MYSQL_PASSWORD="Mysql-Pa33wrd$"
 MYSQL_DATABASE=remotelabz
 # you may change the MESSENGER_TRANSPORT_DSN variable with the following and with your credentials and server location
 MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@localhost:5672/%2f/messages
@@ -475,6 +545,5 @@ To enable Shibboleth site-wide, you need to change the value of `ENABLE_SHIBBOLE
 
 ```bash
 # .env.local
-ENABLE_SHIBBOLETH=1
 ENABLE_SHIBBOLETH=1
 ```
