@@ -54,6 +54,7 @@ You may download Composer by following [official documentation](https://getcompo
 ``` bash
 php -r "copy('https://getcomposer.org/download/2.2.6/composer.phar', 'composer.phar');"
 sudo cp composer.phar /usr/local/bin/composer
+sudo chmod a+x /usr/local/bin/composer
 ```
 
 ### Node.js
