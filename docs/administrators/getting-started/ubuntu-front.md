@@ -26,13 +26,11 @@ You have now a directory `remotelabz` created on your home directory.
     ```
 
 ## Requirements
-### PHP
 
-RemoteLabz requires PHP >= 7.4. You can install it manually or via `ppa:ondrej/php` repo, which builds PHP and uploads it to a repo for many Unix systems.
 #### On Ubuntu 20.04 LTS
 ``` bash
 sudo apt-get update
-sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp openvpn
+sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp openvpn libapache2-mod-php7.4
 sudo addgroup remotelabz
 ```
 
@@ -418,10 +416,10 @@ sudo npm install -g configurable-http-proxy
 ```
 
 ```bash
-sudo service enable remotelabz-proxy
-sudo service start remotelabz-proxy
+sudo systemctl enable remotelabz-proxy
+sudo service remotelabz-proxy start
 ```
-## Secure your Apache configuration (recommanded)
+## Secure your Apache configuration (recommended)
 Modify the following line in file `/etc/apache2/conf-enabled/security.conf`
 ```bash
 ServerTokens Prod
