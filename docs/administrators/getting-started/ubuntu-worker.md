@@ -18,8 +18,7 @@ cd remotelabz-worker
 You should modify the `.env` file according to your environment
 
 ``` bash
-sudo cp .env.dist .env
-sudo nano .env
+nano .env
 # you may change the network interface name
 # DATA_INTERFACE will be used by the virtual machine
 # ADM_INTERFACE will be used by the RemoteLabz's front and the RabbitMQ to communicate with the worker. This interface is also used to ssh connexion

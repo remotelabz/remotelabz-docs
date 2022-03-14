@@ -236,15 +236,16 @@ and comment the line beginning with `RANDFILE`
 ```
 Type a passphrase to secure the CA Key. For example, you can choose passphrase `R3mot3!abz-0penVPN-CA2020`
 
-####Edit the .env file
+####Edit the ~/remotelabz/.env file
 You have to add your passphrase in your `.env` RemoteLabz application. In the default `.env`, you already have the following line.
 ```bash
 SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
 ```
 
 ####Build the certificate for the VPN server
-Change the value of the Common Name (CN) in the vars file to now create the certificate file for your OpenVPN server
+Change the value of the Common Name (CN) in the vars file of the directory EasyRSA to now create the certificate file for your OpenVPN server
 ```bash
+cd ~/EasyRSA-3.0.8
 #File ~/EasyRSA-3.0.8/vars
 set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer"
 ```
@@ -286,6 +287,7 @@ sudo openssl dhparam -out dh2048.pem 2048
 ####Configure OpenVPN server
 Edit the `/etc/openvpn/server/server.conf` file to obtain the same than the following
 ```bash
+#File /etc/openvpn/server/server.conf
 port 1194
 proto udp
 dev tun
@@ -346,12 +348,11 @@ Then, you should create the `.env.local` file and put the correct environment va
 cd /opt/remotelabz
 # To allow the web server to store the log
 sudo chown -R www-data:www-data var
-sudo cp .env .env.local
 sudo nano .env.local
-# Replace the MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE values to the right value
-MYSQL_USER=user
+# Replace the MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE values to the right value (refer to the MySQL configuration part above)
+MYSQL_USER="user"
 MYSQL_PASSWORD="Mysql-Pa33wrd$"
-MYSQL_DATABASE=remotelabz
+MYSQL_DATABASE="remotelabz"
 # you may change the MESSENGER_TRANSPORT_DSN variable with the following and with your credentials and server location
 MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@localhost:5672/%2f/messages
 ```
@@ -377,8 +378,10 @@ In order for the app to work correctly, you must create a key pair for JWT. You 
 At the root of your RemoteLabz folder:
 
 ```bash
+cd /opt/remotelabz
 sudo mkdir -p config/jwt
 sudo openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+#Your can use as passphrase "RemoteJWT$Tok3n"
 sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 sudo chown -R www-data:www-data config/jwt
 ```
@@ -387,7 +390,7 @@ Don't forget to edit your `.env.local` :
 
 ```bash
 # Replace 'yourpassphrase' by your actual passphrase
-echo "JWT_PASSPHRASE=yourpassphrase" | sudo tee -a .env.local
+echo "JWT_PASSPHRASE=\"RemoteJWT$Tok3n\"" | sudo tee -a .env.local
 ```
 
 ### Configure the route from the front to the worker VM's network
