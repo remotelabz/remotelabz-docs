@@ -15,10 +15,10 @@ cd remotelabz-worker
 ```
 
 # Installation
-You should modify the `.env` file according to your environment
+You should modify the `.env.local` file according to your environment
 
 ``` bash
-nano .env
+nano .env.local
 # you may change the network interface name
 # DATA_INTERFACE will be used by the virtual machine
 # ADM_INTERFACE will be used by the RemoteLabz's front and the RabbitMQ to communicate with the worker. This interface is also used to ssh connexion
@@ -39,7 +39,20 @@ sudo sysctl --system
 We assume you have configured now all variables in your .env.local, according the .env.local of your front, which was modified after a copy of the .env.dist
 ```bash
 source /opt/remotelabz-worker/.env.local
-sudo ip route add $VPN_NETWORK/$VPN_NETWORK_NETMASK via $FRONT_IP_ADDRESS
+sudo ip route add $VPN_NETWORK/$VPN_NETWORK_NETMASK via $FRONT_DATA_IP
+```
+
+### Configure WSS
+If you have configured the front with HTTPS, you have to do the following steps:
+```bash
+cp ~/RemoteLabz-WebServer.* /opt/remotelabz-worker/config/certs/
+```
+Modify your `.env.local` to have the next line :
+```bash
+REMOTELABZ_PROXY_USE_WSS=1
+REMOTELABZ_PROXY_SSL_KEY="/opt/remotelabz-worker/config/certs/RemoteLabz-WebServer.key"
+#If intermediate certificate exist, you have to paste the cert and the intermediate in the same .pem file
+REMOTELABZ_PROXY_SSL_CERT="/opt/remotelabz-worker/config/certs/RemoteLabz-WebServer.crt"
 ```
 
 ### Internet access (From Version 2.3.0 and after)

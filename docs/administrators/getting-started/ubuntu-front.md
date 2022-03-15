@@ -195,13 +195,14 @@ cd ~
 # link to the latest version
 wget https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.8/EasyRSA-3.0.8.tgz
 tar -xzf EasyRSA-3.0.8.tgz
-cd EasyRSA-3.0.8
+ln -s EasyRSA-3.0.8 EasyRSA
+cd EasyRSA
 ```
 
 ####Prepare configuration files
 Create the `vars` file and add the following lines. You can change the value for your organisation
 ```bash
-#File ~/EasyRSA-3.0.8/vars
+#File ~/EasyRSA/vars
 set_var EASYRSA_BATCH           "yes"
 set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer-CA"
 set_var EASYRSA_REQ_COUNTRY    "FR"
@@ -221,8 +222,8 @@ set_var EASYRSA_CERT_EXPIRE    1825
 
 Edit the file `openssl-easyrsa.cnf`
 ```bash
-#File ~/EasyRSA-3.0.8/openssl-easyrsa.cnf
-nano ~/EasyRSA-3.0.8/openssl-easyrsa.cnf
+#File ~/EasyRSA/openssl-easyrsa.cnf
+nano ~/EasyRSA/openssl-easyrsa.cnf
 ```
 and comment the line beginning with `RANDFILE`
 ```bash
@@ -245,8 +246,8 @@ SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
 ####Build the certificate for the VPN server
 Change the value of the Common Name (CN) in the vars file of the directory EasyRSA to now create the certificate file for your OpenVPN server
 ```bash
-cd ~/EasyRSA-3.0.8
-#File ~/EasyRSA-3.0.8/vars
+cd ~/EasyRSA
+#File ~/EasyRSA/vars
 set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer"
 ```
 
@@ -492,10 +493,54 @@ findtime  = 1h
 ## Use HTTPS instead of HTTP (Optional but required if you want to use Shibboleth)
 During the installation process, the file `200-remotelabz-ssl.conf` is copy in your `/etc/apache2/sites-available` directory. You have to modify the following lines to insert the right certificate files :
 ```bash
-        SSLCertificateFile	/etc/ssl/certs/remotelabz.crt
-        SSLCertificateChainFile /etc/ssl/certs/remotelabz._INTERMEDIATE.cer
-        SSLCertificateKeyFile	/etc/ssl/private/remotelabz.key
+        SSLCertificateFile	/etc/apache2/RemoteLabz-WebServer.crt
+        #SSLCertificateChainFile /etc/ssl/certs/remotelabz._INTERMEDIATE.cer
+        SSLCertificateKeyFile /etc/apache2/RemoteLabz-WebServer.key
 ```
+### Official certificate
+
+You have just to import your certificate on your the front and on the worker
+
+### My own certificate
+
+To generate a self-signed certificate for your webserver, you have to follow the next steps :
+
+```bash
+cd ~/EasyRSA
+cp ~/remotelabz/config/apache/cert.cnf .
+```
+Edit the `~/remotelabz/config/apache/cert.cnf` file and modify the value of variable `commonName` and `IP.1` with your domain and IP of your web server, respectively.
+```bash
+#File ~/remotelabz/config/apache/cert.cnf
+[req]
+default_bits  = 2048
+distinguished_name = req_distinguished_name
+req_extensions = req_ext
+x509_extensions = v3_req
+prompt = no
+[req_distinguished_name]
+countryName = FR
+stateOrProvinceName = Marne
+localityName = Reims
+organizationName = RemoteLabz
+commonName = 192.168.11.131
+#commonName = mydomain.com
+[req_ext]
+subjectAltName = @alt_names
+[v3_req]
+subjectAltName = @alt_names
+[alt_names]
+IP.1 = 192.168.11.131
+```
+
+You can now use `openssl` to generate your self-signed certificate.
+```bash
+cd ~/EasyRSA
+openssl req -x509 -nodes -days 365 -sha512 -newkey rsa:2048 -keyout RemoteLabz-WebServer.key -out RemoteLabz-WebServer.crt -config ~/remotelabz/config/apache/cert.cnf
+sudo cp /home/florent/EasyRSA/RemoteLabz-WebServer.crt /etc/apache2/
+sudo cp /home/florent/EasyRSA/RemoteLabz-WebServer.key /etc/apache2/
+```
+
 You have now to activate the virtual site and the SSL module
 ```bash
 sudo a2enmod ssl
@@ -518,10 +563,26 @@ Uncomment the following lines in the file `/etc/apache2/sites-available/100-remo
 ```
 Now, if you go to the your application's url with http, you should be redirected to HTTTS.
 
+You can verify your certificate with the following command : 
+```openssl x509 -noout -text -in RemoteLabz-WebServer.crt```
+
+If you use only https, you need to also use WSS for all websocket connection. So, in your .env.local, you have to change the value of `REMOTELABZ_PROXY_USE_WSS=1` and copy the two files 
+`home/florent/EasyRSA/RemoteLabz-WebServer.crt` and `home/florent/EasyRSA/RemoteLabz-WebServer.key` on the worker. **On the worker**, you also have to modify the `.env.local`
+
+### Copy certificate files to the worker
+We assume your `.env.local` is well configured. Change the `user` login in the following command.
+```
+cd /opt/remotelabz
+source .env.local
+scp ~/EasyRSA/RemoteLabz-WebServer.crt user@${WORKER_SERVER}:~/
+scp ~/EasyRSA/RemoteLabz-WebServer.key user@${WORKER_SERVER}:~/
+```
+
+
 ## Shibboleth (optional)
 
 !!!warning
-    You have to activate HTTPS to use Shibboleth authentification method
+    You have to activate HTTPS to use Shibboleth authentication method
 
 ```bash
 cd ~
