@@ -45,3 +45,20 @@ When a user starts a lab, a message (json) is sent to the worker and analyzed by
 # Semantic Versioning
 
 https://semver.org/
+
+# Use of ttyd and configurable-http-proxy
+
+We assume the following.
+On the front :
+```bash
+configurable-http-proxy --port 8000 --api-port 8001 --log-level info --ssl-key /etc/apache2/RemoteLabz-WebServer.key --ssl-cert /etc/apache2/RemoteLabz-WebServer.crt --insecure 1 --proxy-timeout 3600 --ip 0.0.0.0 --api-ip 0.0.0.0
+```
+The `insecure` is used for self-signed certificate.
+
+On the front, if you add a route to `configurable-http-proxy` with 
+```bash
+curl -X POST http://localhost:8001/api/routes/test12 -d '{"target":"http://192.168.11.132:35422"}'
+```
+on the worker, we receive a request to `/test12` So, with ttyd, we have to `ttyd -b /test12 -p 35422 command`.
+
+If you add a route to https and use ttyd with cert, it's doesn't work.
