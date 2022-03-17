@@ -149,6 +149,7 @@ sudo mysql -u root -p
 CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Mysql-Pa33wrd$';
 CREATE DATABASE remotelabz;
 GRANT ALL ON remotelabz.* TO 'user'@'localhost';
+INSERT INTO operating_system (name,image_url,image_filename) VALUES ('Migration',NULL,'lxc://Migration');
 FLUSH PRIVILEGES;
 EXIT;
 ```
