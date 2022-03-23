@@ -312,6 +312,14 @@ explicit-exit-notify 1
 push "route 10.10.10.0 255.255.255.0"
 ```
 
+!!! warning
+    The last line `push "route 10.10.10.0 255.255.255.0"` must be modify. You have to use your network define in your .env.local, by the two lines 
+    ```BASE_NETWORK=10.0.0.0
+    BASE_NETWORK_NETMASK=255.0.0.0```
+    For instance, with this parameter in your .env.local, the last line must be `push "route 10.0.0.0 255.0.0.0"`
+`
+
+
 ####Enable OpenVPN service on boot
 `sudo systemctl enable openvpn-server@server`
 
