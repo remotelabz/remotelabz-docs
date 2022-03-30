@@ -149,7 +149,6 @@ sudo mysql -u root -p
 CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Mysql-Pa33wrd$';
 CREATE DATABASE remotelabz;
 GRANT ALL ON remotelabz.* TO 'user'@'localhost';
-INSERT INTO operating_system (name,image_url,image_filename) VALUES ('Migration',NULL,'lxc://Migration');
 FLUSH PRIVILEGES;
 EXIT;
 ```
@@ -451,7 +450,7 @@ To avoid the scan url, you can use fail2ban to ban IP they scan the ssh or web a
 
 ```bash
 sudo apt-get update
-sudo apt-get install fail2ban
+sudo apt-get install -y fail2ban
 sudo service fail2ban restart
 ```
 
