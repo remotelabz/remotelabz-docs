@@ -14,19 +14,38 @@ git clone https://github.com/crestic-urca/remotelabz-worker.git
 cd remotelabz-worker
 ```
 
+!!! warning
+    If you want install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
+    ```bash    
+    git clone https://github.com/crestic-urca/remotelabz-worker.git --branch 2.4.1 --single-branch
+    ```
+    ou
+    ```bash    
+    git clone https://github.com/crestic-urca/remotelabz-worker.git --branch dev
+    ```
+
 # Installation
-You should modify the `.env.local` file according to your environment
+You should modify the `.env` file according to your environment
 
 ``` bash
-nano .env.local
+nano .env
 # you may change the network interface name
 # DATA_INTERFACE will be used by the virtual machine
 # ADM_INTERFACE will be used by the RemoteLabz's front and the RabbitMQ to communicate with the worker. This interface is also used to ssh connexion
-DATA_INTERFACE="enp0s8"
-ADM_INTERFACE="enp0s3"
-# you may change the MESSENGER_TRANSPORT_DSN variable with the following, with your credentials, and the RabbitMQ IP or its FQDN
+DATA_INTERFACE="enpX"
+ADM_INTERFACE="enpY"
+#The DATA_INTERFACE will be bridge, during the install phase, with the br-worker-data interface (which will be an OVS)
+#Must be equal to the BASE_NETWORK of your .env.local on your front
+LAB_NETWORK=10.0.0.0/8
+
+# you may change the MESSENGER_TRANSPORT_DSN variable with the following, with your credentials, and the RabbitMQ IP or its FQDN. If the RabbitMQ is on your front, you have to use the adm network 
 MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@X.X.X.X:5672/%2f/messages
+#Must be equal to the value of the parameter server in your /etc/openvpn/server/server.conf on your Front
+VPN_NETWORK=X.X.X.X
+VPN_NETWORK_NETMASK=255.255.255.0
+
 sudo ./install
+sudo cp .env /opt/remotelabz-worker/.env.local
 ```
 # Configuration
 ### Activate the forward between the interface

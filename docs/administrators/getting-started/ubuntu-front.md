@@ -20,9 +20,13 @@ git clone https://github.com/crestic-urca/remotelabz.git
 You have now a directory `remotelabz` created on your home directory.
 
 !!! warning
-    If you want install only a specific version, you have to do the following instruction, for version 2.2.0 for example.
+    If you want install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
     ```bash    
-    git clone https://github.com/crestic-urca/remotelabz.git --branch 2.2.0 --single-branch
+    git clone https://github.com/crestic-urca/remotelabz.git --branch 2.4.1 --single-branch
+    ```
+    ou
+    ```bash    
+    git clone https://github.com/crestic-urca/remotelabz.git --branch dev
     ```
 
 ## Requirements
