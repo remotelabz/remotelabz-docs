@@ -15,7 +15,7 @@ cd remotelabz-worker
 ```
 
 !!! warning
-    If you want install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
+    If you want to install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
     ```bash    
     git clone https://github.com/crestic-urca/remotelabz-worker.git --branch 2.4.1 --single-branch
     ```
@@ -43,6 +43,8 @@ MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@X.X.X.X:5672/%2f/me
 #Must be equal to the value of the parameter server in your /etc/openvpn/server/server.conf on your Front
 VPN_NETWORK=X.X.X.X
 VPN_NETWORK_NETMASK=255.255.255.0
+#The FRONT_DATA must be equal to the IP of the PUBLIC_ADDRESS parameter of the .env.local from the Front 
+FRONT_DATA_IP=Y.Y.Y.Y
 
 sudo ./install
 sudo cp .env /opt/remotelabz-worker/.env.local
@@ -74,11 +76,17 @@ REMOTELABZ_PROXY_SSL_KEY="/opt/remotelabz-worker/config/certs/RemoteLabz-WebServ
 REMOTELABZ_PROXY_SSL_CERT="/opt/remotelabz-worker/config/certs/RemoteLabz-WebServer.crt"
 ```
 
-### Internet access (From Version 2.3.0 and after)
-For testing the Internet access on RemoteLabz Version 2.3.0 and after, you have to enable the NAT with the command
+!!! warning
+    You need to use the same certification between your front and this worker. Don't forget to copy them and to change it automatically when your certificate expired.
+
+
+
+### Internet access (From Version 2.3.0 and before 2.4.0)
+For testing the Internet access on RemoteLabz Version 2.3.0 to 2.4.0, you have to enable the NAT with the command
 ```bash
 sudo iptables -t nat -A POSTROUTING -o $ADM_INTERFACE -s $LAB_NETWORK -j MASQUERADE
 ```
+From version 2.4.0, this command is executed with the remotelabz-worker service. The admin network interface is used to nat the network because we assume the admin network is connected to Internet. For security reason, we recommand to use the data network to route and nat the data VM. So, your data network need to be connect to internet.
 
 In the next version (2.5.0), Internet connection will be configurable from the graphical interface and the NAT will be like that :
 ```bash
