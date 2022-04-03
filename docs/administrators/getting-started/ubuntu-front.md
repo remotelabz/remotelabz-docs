@@ -435,6 +435,25 @@ sudo npm install -g configurable-http-proxy
 sudo systemctl enable remotelabz-proxy
 sudo service remotelabz-proxy start
 ```
+
+!!! warning
+    Now you have to finish to install your worker before to continue
+
+### Configure your container
+In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab your will build.
+
+First : in the sandbox, start the "Migration" device. In the console, configure the network of the device and next, type the following command :
+```bash
+echo "nameserver 1.1.1.3" > /etc/resolv.conf
+apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq
+echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
+echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
+systemctl enable dnsmasq
+```
+
+Your "Service" container is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
+On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
+
 ## Secure your Apache configuration (recommended)
 Modify the following line in file `/etc/apache2/conf-enabled/security.conf`
 ```bash
