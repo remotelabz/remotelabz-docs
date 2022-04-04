@@ -442,10 +442,9 @@ sudo service remotelabz-proxy start
 ### Configure your container
 In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab your will build.
 
-First : in the sandbox, start the "Migration" device. In the console, configure the network of the device and next, type the following command :
+First : in the sandbox, start the "Migration" device. In the console, configure the network of the device (show the log to know it) and next, type the following command :
 ```bash
-echo "nameserver 1.1.1.3" > /etc/resolv.conf
-apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq
+apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
 echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
 systemctl enable dnsmasq
