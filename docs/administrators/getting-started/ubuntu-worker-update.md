@@ -34,3 +34,16 @@ sudo chmod g+w /opt/remotelabz-worker/var -R
 sudo systemctl daemon-reload
 sudo service remotelabz-worker restart
 ```
+
+## From 2.4.1.2 and above to version 2.4.1.3
+
+You have to install ttyd package
+
+```bash
+sudo apt-get install -y screen build-essential cmake git libjson-c-dev libwebsockets-dev
+cd ~
+git clone https://github.com/tsl0922/ttyd.git
+cd ttyd && mkdir build && cd build
+cmake ..
+make && sudo make install
+```
