@@ -440,7 +440,7 @@ sudo service remotelabz-proxy start
     Now you have to finish to install your worker before to continue
 
 ### Configure your container
-In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab your will build.
+In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
 
 First : in the sandbox, start the "Migration" device. In the console, configure the network of the device (show the log to know it) and next, type the following command :
 ```bash

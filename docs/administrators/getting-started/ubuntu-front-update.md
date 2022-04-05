@@ -38,12 +38,17 @@ sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
 
-##Migration from 2.3 to 2.4.0
-To update from 2.3 to 2.4.0, you can add default image to all labs with the following command :
+##Migration from 2.4.1.1 to 2.4.1.3
+In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
+
+First : in the sandbox, start the "Migration" device. In the console, configure the network of the device (show the log to know it) and next, type the following command :
 ```bash
-sudo find /opt/remotelabz/public/uploads/lab/banner/* -type d -exec cp /opt/remotelabz/public/build/images/logo/nopic.jpg {}/nopic.jpg \;
+apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
+echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf;
+echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf;
+sync;
+systemctl enable dnsmasq;
 ```
-You also have to add all user in the default group if you want they can execute some basic labs
 
 ##Migration from 2.4.0 to 2.4.1.1
 
@@ -79,4 +84,13 @@ Change the image filename "service_" to "Service"
 Now, you can create a new lab with this device to offer IPv4 addresses to all other device, with the DHCP server installed in this container. The IPv4 of the DHCP will be the (last IPv4 - 1). The last IP is always the gateway of your laboratory.
 
 ![Screenshot](/images/Migration/Migration-End.jpg)
+
+
+##Migration from 2.3 to 2.4.0
+To update from 2.3 to 2.4.0, you can add default image to all labs with the following command :
+```bash
+sudo find /opt/remotelabz/public/uploads/lab/banner/* -type d -exec cp /opt/remotelabz/public/build/images/logo/nopic.jpg {}/nopic.jpg \;
+```
+You also have to add all user in the default group if you want they can execute some basic labs
+
 
