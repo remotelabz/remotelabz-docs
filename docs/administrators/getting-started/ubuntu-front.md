@@ -463,6 +463,14 @@ ServerTokens Prod
 ServerSignature Off
 #ServerSignature On
 ```
+
+Add these lines in file `/etc/apache2/apache2.conf`
+```bash
+<FilesMatch "^\.git">
+        Require all denied
+</FilesMatch>
+```
+
 Do not forget to restart Apache service `sudo service apache2 restart`
 
 ## Secure your server from web intrusion (recommended)
