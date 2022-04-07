@@ -6,6 +6,7 @@ If you don't have a .env.local, save your .env to .env.local
 ```bash
 sudo -u remotelabz cp .env .env.local
 ```
+Check your server.conf of your openvpn. Some deprecated parameters can be replaced.
 
 ###Update the code
 ```bash
