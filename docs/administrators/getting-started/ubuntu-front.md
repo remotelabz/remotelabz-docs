@@ -308,10 +308,12 @@ persist-key
 persist-tun
 status /var/log/openvpn/openvpn-status.log
 log /var/log/openvpn/openvpn.log
-comp-lzo
+#comp-lzo Deprecated
+compress lz4
 verb 1
 mute 20
 explicit-exit-notify 1
+duplicate-cn
 push "route 10.10.10.0 255.255.255.0"
 ```
 
