@@ -337,6 +337,23 @@ In the file `/etc/sysctl.conf`, looking for the line `#net.ipv4.ip_forward=1` an
 sudo sysctl --system
 ```
 
+### Configure the mail (Exim4)
+1. Configure the /etc/aliases to redirect all mail to root to an existing user of your OS
+2. Check the aliases with the command `exim -brw root`
+3. Edit the file `/etc/exim4/exim4.conf.template` and locate the part "Rewrite configuration" to have, for example, the following lines :
+```bash
+######################################################################
+#                      REWRITE CONFIGURATION                         #
+######################################################################
+
+begin rewrite
+
+user@* myemail@domain.com FfrsTtcb
+root@* myemail@domain.com FfrsTtcb
+```
+4. Update your exim configuration with command `sudo update-exim4.conf`, following the command `sudo service exim4 restart`
+5. Check all addresses are rewritten with the command `exim -brw root`
+
 ## Install RemoteLabz
 
 The install process will create the directory `/opt/remotelabz`. You can create a link to your home with the command `sudo ln -s ~/remotelabz /opt/remotelabz`
