@@ -50,6 +50,12 @@ echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf;
 sync;
 systemctl enable dnsmasq;
 ```
+Modify your /etc/sudoers file to add, at the end, the two following lines: 
+```bash
+Cmnd_Alias REMOTELABZ_CMDS = /bin/systemctl start remotelabz*, /bin/systemctl stop remotelabz*, /bin/systemctl status remotelabz*
+
+%www-data ALL=(ALL) NOPASSWD: REMOTELABZ_CMDS
+```
 
 ##Migration from 2.4.0 to 2.4.1.1
 
