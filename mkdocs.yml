@@ -51,7 +51,7 @@ nav:
 
 
 theme:
-    name: mkdocs
+    name: cinder
     features:
         - tabs
     palette:
