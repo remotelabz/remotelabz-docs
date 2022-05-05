@@ -413,7 +413,7 @@ At the root of your RemoteLabz folder:
 cd /opt/remotelabz
 sudo mkdir -p config/jwt
 sudo openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-#Your can use as passphrase "RemoteJWT$Tok3n"
+#Your can use as passphrase "JWTTok3n"
 sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 sudo chown -R www-data:www-data config/jwt
 ```
@@ -422,8 +422,11 @@ Don't forget to edit your `.env.local` :
 
 ```bash
 # Replace 'yourpassphrase' by your actual passphrase
-echo "JWT_PASSPHRASE=\"RemoteJWT$Tok3n\"" | sudo tee -a .env.local
+echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
 ```
+!!! warning
+    Avoid special character in the JWT, otherwise you will have some errors
+
 
 ### Configure the route from the front to the worker VM's network
 We assume you have configure now all variables in your .env.local which was modified after a copy of the .env
