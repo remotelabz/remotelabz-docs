@@ -67,6 +67,4 @@ exit;
 ```bash
 echo "%remotelabz-worker     ALL = (ALL) NOPASSWD: $(which ip), $(which iptables), $(which ovs-vsctl), $(which systemctl) start remotelabz*, $(which systemctl) stop remotelabz*, $(which systemctl) restart remotelabz*, $(which systemctl) status remotelabz*" | sudo tee /etc/sudoers.d/remotelabz-worker
 echo "%www-data     ALL = (ALL) NOPASSWD: $(which ip), $(which iptables), $(which ovs-vsctl), $(which systemctl) start remotelabz*, $(which systemctl) stop remotelabz*, $(which systemctl) restart remotelabz*, $(which systemctl) status remotelabz*" | sudo tee -a /etc/sudoers.d/remotelabz-worker
-sudo cp /opt/remotelabz/bin/remotelabz.service /etc/systemd/system
-sudo systemctl daemon-reload
 ```
