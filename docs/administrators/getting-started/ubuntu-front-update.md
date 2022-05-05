@@ -49,8 +49,6 @@ echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf;
 echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf;
 sync;
 systemctl enable dnsmasq;
-sudo cp /opt/remotelabz/bin/remotelabz.service /etc/systemd/system
-sudo systemctl daemon-reload
 ```
 Modify your /etc/sudoers file to add, at the end, the two following lines: 
 ```bash
