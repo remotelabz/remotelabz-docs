@@ -56,8 +56,6 @@ Cmnd_Alias REMOTELABZ_CMDS = /bin/systemctl start remotelabz*, /bin/systemctl st
 
 %www-data ALL=(ALL) NOPASSWD: REMOTELABZ_CMDS
 ```
-Delete the two lines in your 
-
 
 ##Migration from 2.4.0 to 2.4.1.1
 
