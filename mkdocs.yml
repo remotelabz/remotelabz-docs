@@ -51,7 +51,7 @@ nav:
 
 
 theme:
-    name: cinder
+    name: material
     features:
         - tabs
     palette:
