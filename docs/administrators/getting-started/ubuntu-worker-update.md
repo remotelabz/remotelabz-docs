@@ -34,10 +34,6 @@ sudo chmod g+w /opt/remotelabz-worker/var -R
 sudo systemctl daemon-reload
 sudo service remotelabz-worker restart
 ```
-## From 2.4.1.5 to 2.4.1.5.1
-Delete in your OpenVPN configuration the line :
-comp-lzo
-
 
 ## From 2.4.1.2 and above to version 2.4.1.3
 

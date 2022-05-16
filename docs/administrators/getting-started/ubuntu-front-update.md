@@ -40,6 +40,11 @@ sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
 
+##Migration from 2.4.1.5 to 2.4.1.5.1
+Delete in your OpenVPN configuration the line :
+comp-lzo
+
+
 ##Migration from 2.4.1.1 to 2.4.1.3
 In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
 
