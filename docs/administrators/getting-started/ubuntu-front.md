@@ -308,8 +308,6 @@ persist-key
 persist-tun
 status /var/log/openvpn/openvpn-status.log
 log /var/log/openvpn/openvpn.log
-#comp-lzo Deprecated
-compress lz4
 verb 1
 mute 20
 explicit-exit-notify 1

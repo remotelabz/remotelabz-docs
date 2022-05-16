@@ -34,6 +34,7 @@ sudo php bin/console doctrine:migrations:migrate
 sudo php bin/console cache:clear
 sudo chown remotelabz:www-data * -R
 sudo chmod g+w /opt/remotelabz/var -R
+sudo chmod g+w /opt/remotelabz/public/uploads -R
 sudo chmod g+r config/jwt/private.pem
 sudo systemctl daemon-reload
 sudo service remotelabz restart
