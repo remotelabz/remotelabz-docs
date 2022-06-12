@@ -49,38 +49,14 @@ FRONT_DATA_IP=Y.Y.Y.Y
 Next, type 
 ```bash
 sudo ./install
-sudo cp .env /opt/remotelabz-worker/.env.local
 ```
 # Configuration
-### Activate the forward between the interface
-In the file `/etc/sysctl.conf`, looking for the line `#net.ipv4.ip_forward=1` and uncomment it. Then, reload this `/etc/sysctl.conf` file
-```bash
-sudo sysctl --system
-```
-
-### Configure the route from the worker to the front for VM's networks
-We assume you have configured now all variables in your .env.local, according the .env.local of your front, which was modified after a copy of the .env.dist
-```bash
-source /opt/remotelabz-worker/.env.local
-sudo ip route add $VPN_NETWORK/$VPN_NETWORK_NETMASK via $FRONT_DATA_IP
-```
-
 ### Configure WSS
-If you have configured the front with HTTPS, you have to do the following steps:
-```bash
-cp ~/RemoteLabz-WebServer.* /opt/remotelabz-worker/config/certs/
-```
-
-Modify your `.env.local` to have the next line :
-```bash
-REMOTELABZ_PROXY_USE_WSS=1
-REMOTELABZ_PROXY_SSL_KEY="/opt/remotelabz-worker/config/certs/RemoteLabz-WebServer.key"
-#If intermediate certificate exist, you have to paste the cert and the intermediate in the same .pem file
-REMOTELABZ_PROXY_SSL_CERT="/opt/remotelabz-worker/config/certs/RemoteLabz-WebServer.crt"
-```
+If you have configured the front with HTTPS, you have to copy your certificate to the `/opt/remotelabz-worker/config/certs/` directory, regarding the two parameters in your .env.local
+`REMOTELABZ_PROXY_SSL_KEY` and `REMOTELABZ_PROXY_SSL_CERT`
 
 !!! warning
-    You need to use the same certification between your front and this worker. Don't forget to copy them and to change it automatically when your certificate expired.
+    You need to use the same certificate between your front and this worker. Don't forget to copy them and to change it automatically when your certificate expired.
 
 ### Internet access (From Version 2.3.0 and before 2.4.0)
 For testing the Internet access on RemoteLabz Version 2.3.0 to 2.4.0, you have to enable the NAT with the command
