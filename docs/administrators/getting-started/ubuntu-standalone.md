@@ -1,338 +1,76 @@
-# RemoteLabz's front installation guide
-
-This section guides you through the installation of RemoteLabz and its components on an Ubuntu system. We assume you have already installed an Ubuntu Server 20.04 LTS.
-
-!!! note "Foreword"
-
-    - This section has only been tested with **Ubuntu 20.04**.
-    - The first steps explains how to install [requirements](#requirements). You may skip these steps if those software are already present on your system and go to [Install RemoteLabz](#install-remotelabz).
+# RemoteLabz's installation guide
 
 !!! warning
-    - From the version 2.2.0 of RemoteLabz, we recommand to use at least Ubuntu 20.04 (LTS)
+    This section is in case you want to install RemoteLabz on one 1 computer.
 
-## Retrieve the RemoteLabz source
+This section guides you through the installation of RemoteLabz and its components on an Ubuntu system. We assume you have already installed an Ubuntu Server 20.04 LTS. We support only this Ubuntu version.
+
+## Installation of the requirements
+The first step is to install Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso
+
+### Retrieve the RemoteLabz source
 A remotelabz directory will be create on your home directory.
 ```bash
 cd ~
-git clone https://github.com/crestic-urca/remotelabz.git
+git clone https://github.com/crestic-urca/remotelabz.git --branch master
 ```
 
 You have now a directory `remotelabz` created on your home directory.
 
 !!! warning
-    If you want install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
+    If you want to install a specific version, you have to do the following instructions. For version 2.4.1 for example.
     ```bash    
     git clone https://github.com/crestic-urca/remotelabz.git --branch 2.4.1 --single-branch
     ```
-    ou
+    ou for development version
     ```bash    
     git clone https://github.com/crestic-urca/remotelabz.git --branch dev
     ```
 
-## Requirements
-
-#### On Ubuntu 20.04 LTS
-``` bash
-sudo apt-get update
-sudo apt install -y curl gnupg php zip unzip php-bcmath php-curl php-gd php-intl php-mbstring php-mysql php-xml php-zip ntp openvpn libapache2-mod-php7.4
-```
-
-### Configure PHP
-You have to configure the php.ini of your apache2 (/etc/php/7.4/apache2/php.ini) with the following parameters :
-``` bash
-upload_max_filesize = 3G
-post_max_size = 3G
-```
-
-and perhaps, change the `max_execution_time` if the upload is too long
-``` bash
-max_execution_time
-```
-
-### Composer
-
-You may download Composer by following [official documentation](https://getcomposer.org/download/), but RemoteLabz is delivered with a copy of Composer 2.2.6 that you can copy in a `bin` folder.
-``` bash
-php -r "copy('https://getcomposer.org/download/2.2.6/composer.phar', 'composer.phar');"
-sudo cp composer.phar /usr/local/bin/composer
-sudo chmod a+x /usr/local/bin/composer
-```
-
-### Node.js
-The NodeJS's version in Ubuntu 18 and above is too old. We recommand to use version 12 of NodeJS
-``` bash
-curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
-
-### Yarn
-``` bash
-sudo npm install -g yarn
-```
-### MySQL Server
-
-#### On Ubuntu 20.04 LTS
-``` bash
-sudo apt-get install -y mysql-server
-sudo mysql_secure_installation
-```
-We recommand to answer as follow :
+### Install the requirements
 ```bash
-Securing the MySQL server deployment.
-
-Connecting to MySQL using a blank password.
-
-VALIDATE PASSWORD COMPONENT can be used to test passwords
-and improve security. It checks the strength of password
-and allows the users to set only those passwords which are
-secure enough. Would you like to setup VALIDATE PASSWORD component?
-
-Press y|Y for Yes, any other key for No: Y
-
-There are three levels of password validation policy:
-
-LOW    Length >= 8
-MEDIUM Length >= 8, numeric, mixed case, and special characters
-STRONG Length >= 8, numeric, mixed case, special characters and dictionary                  file
-
-Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG: 2
-Please set the password for root here.
-
-New password: RemoteLabz-2022$
-
-Re-enter new password: RemoteLabz-2022$
-
-Estimated strength of the password: 100 
-Do you wish to continue with the password provided?(Press y|Y for Yes, any other key for No) : Y
-By default, a MySQL installation has an anonymous user,
-allowing anyone to log into MySQL without having to have
-a user account created for them. This is intended only for
-testing, and to make the installation go a bit smoother.
-You should remove them before moving into a production
-environment.
-
-Remove anonymous users? (Press y|Y for Yes, any other key for No) : Y
-Success.
-
-
-Normally, root should only be allowed to connect from
-'localhost'. This ensures that someone cannot guess at
-the root password from the network.
-
-Disallow root login remotely? (Press y|Y for Yes, any other key for No) : Y
-Success.
-
-By default, MySQL comes with a database named 'test' that
-anyone can access. This is also intended only for testing,
-and should be removed before moving into a production
-environment.
-
-
-Remove test database and access to it? (Press y|Y for Yes, any other key for No) : Y
- - Dropping test database...
-Success.
-
- - Removing privileges on test database...
-Success.
-
-Reloading the privilege tables will ensure that all changes
-made so far will take effect immediately.
-
-Reload privilege tables now? (Press y|Y for Yes, any other key for No) : Y
-Success.
-
-All done!
-
+cd remotelabz
+sudo ./install_requirement.sh
 ```
 
+After this process, you have to understand the following informations :
 
-
-``` bash
-sudo mysql -u root -p
-CREATE USER 'user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Mysql-Pa33wrd$';
-CREATE DATABASE remotelabz;
-GRANT ALL ON remotelabz.* TO 'user'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
-```
-Choose a secure password to your MySQL server and you have to disable the remote access to your mysql server.
-
-!!! info
-    If you need to activate the remote access to your MySQL, you have to create a user like this :
-    ``` bash
-    CREATE USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'Mysql-Pa33wrd$';
-    GRANT ALL ON remotelabz.* TO 'user'@'%';
-    FLUSH PRIVILEGES;
-    ```
-### RabbitMQ
-
-To use RabbitMQ as messaging backend, you need the **php-amqp** extension :
-
-#### On Ubuntu 20.04 LTS
-```bash
-sudo apt-get install -y rabbitmq-server php-amqp
-```
-
-#### Configuration of RabbitMQ
-The [worker] needs to connect to the RabbitMQ. We have to create a specific user to the RemoteLabz. Change the password 'password-amqp' in the following command
-```bash
-sudo rabbitmqctl add_user 'remotelabz-amqp' 'password-amqp'
-sudo rabbitmqctl set_permissions -p '/' 'remotelabz-amqp' '.*' '.*' '.*'
-```
-Restart the RabbitMQ server
-```bash
-sudo service rabbitmq-server restart
-```
+#### RabbitMQ and MySQL pre-configurations
+The MySQL is configured with the root password : "RemoteLabz-2022$", and a user "user" is created with password "Mysql-Pa33wrd$". It is recommend to change it after your RemoteLabz works fine.
 
 !!! Tips
-    If you want to change the password of an existing user `username` of your RabbitMQ, you have to type the following command :
+    During the `install_requirement.sh` process, a `remotelabz-amqp` user is created in RabbitMQ with the password `password-amqp`. If you want to change the password of an existing user `remotelabz-amqp` of your RabbitMQ, you have to type the following command :
     ```
-    sudo rabbitmqctl change_password 'username' 'new_password'
+    sudo rabbitmqctl change_password 'remotelabz-amqp' 'new_password'
+    ```
+    For MySQL, to modify your root password
+    ```
+    sudo mysql -u root -h localhost
+    ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY 'new_password';
+    FLUSH PRIVILEGES;
+    EXITS;
+    ```
+    and to modify the remotelabz user password 
+    ```
+    ALTER USER IF EXISTS 'user'@'localhost' IDENTIFIED BY 'new_password';
+    FLUSH PRIVILEGES;
+    EXITS;
     ```
 
-### Configure OpenVPN
+#### Configure OpenVPN
+The default passphrase used in the `install_requirement.sh` is `R3mot3!abz-0penVPN-CA2020`. You can find this value in your `.env` file
 
-####Installation of Easy RSA 3.0
-```bash
-cd ~
-# link to the latest version
-wget https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.8/EasyRSA-3.0.8.tgz
-tar -xzf EasyRSA-3.0.8.tgz
-ln -s EasyRSA-3.0.8 EasyRSA
-cd EasyRSA
-```
-
-####Prepare configuration files
-Create the `vars` file and add the following lines. You can change the value for your organisation
-```bash
-#File ~/EasyRSA/vars
-set_var EASYRSA_BATCH           "yes"
-set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer-CA"
-set_var EASYRSA_REQ_COUNTRY    "FR"
-set_var EASYRSA_REQ_PROVINCE   "Grand-Est"
-set_var EASYRSA_REQ_CITY       "Reims"
-set_var EASYRSA_REQ_ORG        "RemoteLabz"
-set_var EASYRSA_REQ_EMAIL      "contact@remotelabz.com"
-set_var EASYRSA_REQ_OU         "RemoteLabz-VPNServer"
-set_var EASYRSA_ALGO           "ec"
-set_var EASYRSA_DIGEST         "sha512"
-set_var EASYRSA_CURVE          secp384r1
-#5 ans de validité pour le CA
-set_var EASYRSA_CA_EXPIRE      1825
-#5 ans de validité pour les certificats
-set_var EASYRSA_CERT_EXPIRE    1825
-```
-
-Edit the file `openssl-easyrsa.cnf`
-```bash
-#File ~/EasyRSA/openssl-easyrsa.cnf
-nano ~/EasyRSA/openssl-easyrsa.cnf
-```
-and comment the line beginning with `RANDFILE`
-```bash
-#RANDFILE               = $ENV::EASYRSA_PKI/.rnd
-```
-
-####Generate the CA of your VPN server
-```bash
-./easyrsa init-pki
-./easyrsa build-ca
-```
-Type a passphrase to secure the CA Key. For example, you can choose passphrase `R3mot3!abz-0penVPN-CA2020`
-
-####Edit the ~/remotelabz/.env file
-You have to add your passphrase in your `.env` RemoteLabz application. In the default `.env`, you already have the following line.
 ```bash
 SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
 ```
-
-####Build the certificate for the VPN server
-Change the value of the Common Name (CN) in the vars file of the directory EasyRSA to now create the certificate file for your OpenVPN server
-```bash
-cd ~/EasyRSA
-#File ~/EasyRSA/vars
-set_var EASYRSA_REQ_CN         "RemoteLabz-VPNServer"
-```
+If you decide to change it, don't forget to change it in the `.env`.
 
 !!! warning
-    If you do not change the CN of your VPN server, you will have an error message on the client because you have generated a self-signed certificate.
-
-Now, we can generate the certificate of your VPN Server
-```bash
-./easyrsa gen-req RemoteLabz-VPNServer nopass
-```
-
-Sign the CA request certificate :
-```bash
-./easyrsa sign-req server RemoteLabz-VPNServer
-```
-and you have to type the choosen passphrase of your CA (`R3mot3!abz-0penVPN-CA2020`)
-
-Copy of the previous generated keys in OpenVPN server directory (`/etc/openvpn/server`)
-```bash
-sudo cp pki/issued/RemoteLabz-VPNServer.crt /etc/openvpn/server
-sudo cp pki/private/RemoteLabz-VPNServer.key /etc/openvpn/server
-sudo cp pki/ca.crt /etc/openvpn/server
-sudo cp pki/private/ca.key /etc/openvpn/server
-```
-
-####Configure a pre-shared key to sign the data
-```bash
-sudo openvpn --genkey --secret ta.key
-sudo cp ta.key /etc/openvpn/server
-```
-
-####Configure Diffie-Hellman
-```bash
-cd /etc/openvpn/server
-sudo openssl dhparam -out dh2048.pem 2048
-```
-
-####Configure OpenVPN server
-Edit the `/etc/openvpn/server/server.conf` file to obtain the same than the following
-```bash
-#File /etc/openvpn/server/server.conf
-port 1194
-proto udp
-dev tun
-ca ca.crt
-cert RemoteLabz-VPNServer.crt
-key RemoteLabz-VPNServer.key
-dh dh2048.pem
-cipher AES-256-GCM
-tls-auth ta.key 0
-server 10.8.0.0 255.255.255.0
-keepalive 10 120
-persist-key
-persist-tun
-status /var/log/openvpn/openvpn-status.log
-log /var/log/openvpn/openvpn.log
-verb 1
-mute 20
-explicit-exit-notify 1
-duplicate-cn
-push "route 10.10.10.0 255.255.255.0"
-```
-
-!!! warning
-    The last line `push "route 10.10.10.0 255.255.255.0"` must be modify. You have to use your network define in your .env.local, by the two lines 
-    ```BASE_NETWORK=10.0.0.0
-    BASE_NETWORK_NETMASK=255.0.0.0```
-    For instance, with this parameter in your .env.local, the last line must be `push "route 10.0.0.0 255.0.0.0"`
+    The last line `push "route 10.11.0.0 255.255.0.0"` in your `/etc/openvpn/server/server.conf` must be modified if you modifies, in your `.env.local` file, the parameters of the two next lines 
+    ```BASE_NETWORK=10.11.0.0
+    BASE_NETWORK_NETMASK=255.255.0.0```
+    This network will be the network used for your laboratory. Your user must have a route on its workstation to join, via his VPN, his laboratory. Be careful, this network must have to be different of the user network at home.
 `
-
-
-####Enable OpenVPN service on boot
-`sudo systemctl enable openvpn-server@server`
-
-####Start OpenVPN service
-`sudo service openvpn-server@server start`
-
-####Activate the forward between the interface
-In the file `/etc/sysctl.conf`, looking for the line `#net.ipv4.ip_forward=1` and uncomment it. Then, reload this sysctl file
-```bash
-sudo sysctl --system
-```
 
 ### Configure the mail (Exim4)
 1. Configure the /etc/aliases to redirect all mail to root to an existing user of your OS
@@ -363,7 +101,7 @@ sudo bin/install
 ```
 The install process can take 5 minutes
 
-##Affect the right permission to your certificate and key files for OpenVPN
+## Affect the right permission to your certificate and key files for OpenVPN
 The application needs to access to the certificate and key files to generate the OpenVPN file for the clients.
 ```bash
 sudo chgrp remotelabz /etc/openvpn/server -R
@@ -426,13 +164,6 @@ echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
     Avoid special character in the JWT, otherwise you will have some errors
 
 
-### Configure the route from the front to the worker VM's network
-We assume you have configure now all variables in your .env.local which was modified after a copy of the .env
-```bash
-source /opt/remotelabz/.env.local
-sudo ip route add $BASE_NETWORK/$BASE_NETWORK_NETMASK via $WORKER_SERVER
-```
-
 ### Instances
 
 In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/crestic/remotelabz-worker), you need to start **Symfony Messenger** :
@@ -445,27 +176,99 @@ sudo systemctl start remotelabz
 !!! warning
     When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommand you to use a service like `ntp` to keep your machines synchronized.
 
-You will also need to start the proxy service to display VNC console :
+!!! warning
+    Now you have to install RemoteLabz Worker
 
+# Retrieve the RemoteLabz Worker source
+A remotelabz directory will be create on your home directory.
 ```bash
-sudo npm install -g configurable-http-proxy
-```
-
-```bash
-sudo systemctl enable remotelabz-proxy
-sudo service remotelabz-proxy start
+cd ~
+git clone https://github.com/crestic-urca/remotelabz-worker.git --branch master
+cd remotelabz-worker
 ```
 
 !!! warning
-    Now you have to finish to install your worker before to continue
+    If you want to install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
+    ```bash    
+    git clone https://github.com/crestic-urca/remotelabz-worker.git --branch 2.4.1 --single-branch
+    ```
+    ou
+    ```bash    
+    git clone https://github.com/crestic-urca/remotelabz-worker.git --branch dev
+    ```
 
-## Post configuration when RemoteLabz Worker is installed
+# Installation
+You should modify the `.env` file according to your environment
+
+``` bash
+nano .env
+# you may change the network interface name
+# DATA_INTERFACE will be used by the virtual machine
+# ADM_INTERFACE will be used by the RemoteLabz's front and the RabbitMQ to communicate with the worker. This interface is also used to ssh connexion
+DATA_INTERFACE="enpX"
+ADM_INTERFACE="enpY"
+#The DATA_INTERFACE will be bridge, during the install phase, with the br-worker-data interface (which will be an OVS)
+#Must be equal to the BASE_NETWORK of your .env.local on your front
+LAB_NETWORK=10.0.0.0/8
+
+# you may change the MESSENGER_TRANSPORT_DSN variable with the following, with your credentials, and the RabbitMQ IP or its FQDN. If the RabbitMQ is on your front, you have to use the adm network 
+MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@X.X.X.X:5672/%2f/messages
+#Must be equal to the value of the parameter server in your /etc/openvpn/server/server.conf on your Front
+VPN_NETWORK=X.X.X.X
+VPN_NETWORK_NETMASK=255.255.255.0
+#The FRONT_DATA must be equal to the IP of the PUBLIC_ADDRESS parameter of the .env.local from the Front 
+FRONT_DATA_IP=Y.Y.Y.Y
+```
+Next, type 
+```bash
+sudo ./install
+```
+# Configuration
+### Configure WSS
+If you have configured the front with HTTPS, you have to copy your certificate to the `/opt/remotelabz-worker/config/certs/` directory, regarding the two parameters in your .env.local
+`REMOTELABZ_PROXY_SSL_KEY` and `REMOTELABZ_PROXY_SSL_CERT`
+
 !!! warning
-    This part can only be done when you RemoteLabz application works fine. So, you have to install the Remotelabz Worker before.
+    You need to use the same certificate between your front and this worker. Don't forget to copy them and to change it automatically when your certificate expired.
 
+### Instances
+```bash
+sudo systemctl enable remotelabz-worker
+sudo systemctl start remotelabz-worker
+```
+
+You can check the log of the worker in `/opt/remotelabz-worker/var/log/prod.log`
+
+!!! warning
+    When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommand you to use a service like `ntp` to keep your machines synchronized.
+
+The installation is finish and RemoteLabz application must be works. You have now to change the parameter in the /opt/remotelabz/.env.local to have the following
+
+```bash
+APP_MAINTENANCE=0
+```
+
+If you let the value 1, nobody can use the application.
+
+
+## Configure your logrotate
+Add the following file `/etc/logrotate.d/remotelabz-worker`
+
+```bash
+/opt/remotelabz-worker/var/log/*.log {
+        daily
+        missingok
+        rotate 52
+        size 100M
+        compress
+        notifempty
+        create 664 remotelabz-worker www-data
+        su remotelabz-worker www-data
+}
+```
 
 ### Configure your container
-In the device list of the RemoteLabz, when you are connected as root, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
+In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
 
 First : in the sandbox, start the "Migration" device. In the console, configure the network of the device (show the log to know it) and next, type the following command :
 ```bash
