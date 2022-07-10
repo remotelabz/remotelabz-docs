@@ -59,8 +59,8 @@ The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user
     EXITS;
     ```
 
-#### Configure OpenVPN
-The default passphrase used in the `install_requirement.sh` is `R3mot3!abz-0penVPN-CA2020`. You can find this value in your `.env` file
+#### OpenVPN pre-configuration
+The default passphrase used during the `install_requirement.sh` process is `R3mot3!abz-0penVPN-CA2020`. You can find this value in your `.env` file
 
 ```bash
 SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
@@ -74,7 +74,7 @@ If you decide to change it, don't forget to change it in the `.env`.
     This network will be the network used for your laboratory. Your user must have a route on its workstation to join, via his VPN, his laboratory. Be careful, this network must have to be different of the user network at home.
 `
 
-### Configure the mail (Exim4)
+### (Optionnal) Configure the mail (Exim4)
 1. Configure the /etc/aliases to redirect all mail to root to an existing user of your OS
 2. Check the aliases with the command `exim -brw root`
 3. Edit the file `/etc/exim4/exim4.conf.template` and locate the part "Rewrite configuration" to have, for example, the following lines :
@@ -91,7 +91,7 @@ root@* myemail@domain.com FfrsTtcb
 4. Update your exim configuration with command `sudo update-exim4.conf`, following the command `sudo service exim4 restart`
 5. Check all addresses are rewritten with the command `exim -brw root`
 
-## Install RemoteLabz
+### Install RemoteLabz application
 
 The install process will create the directory `/opt/remotelabz`.
 
@@ -103,13 +103,13 @@ sudo ./bin/install
 ```
 The install process can take 5 minutes
 
-## Affect the right permission to your certificate and key files for OpenVPN
+#### Set the right permission to your certificate and key files for OpenVPN
 The application needs to access to the certificate and key files to generate the OpenVPN file for the clients.
 ```bash
 sudo chgrp remotelabz /etc/openvpn/server -R
 sudo chmod g+rx /etc/openvpn/server -R
 ```
-## Configure you RemoteLabz database
+#### Configure you RemoteLabz database
 Run the `remotelabz-ctl` configuration utility to setup your database :
 
 ```bash
@@ -141,6 +141,10 @@ sudo chown -R www-data:www-data config/jwt
 
 Don't forget to edit your `.env.local` :
 
+!!! warning
+    Don't forget to modify the line `PUBLIC_ADDRESS="your-url-or-ip-of-your-front"`
+
+
 ```bash
 # Replace 'yourpassphrase' by your actual passphrase
 echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
@@ -150,7 +154,7 @@ echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
     Avoid special character in the JWT, otherwise you will have some errors
 
 
-### Instances
+#### Start the RemoteLabz Front
 
 In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/crestic/remotelabz-worker), you need to start **Symfony Messenger** :
 
@@ -167,7 +171,8 @@ sudo systemctl start remotelabz-proxy
 !!! warning
     Now you have to install RemoteLabz Worker
 
-# Retrieve the RemoteLabz Worker source
+## Installation of the Worker
+### Retrieve the RemoteLabz Worker source 
 A remotelabz directory will be create on your home directory.
 ```bash
 cd ~
@@ -175,7 +180,7 @@ git clone https://github.com/crestic-urca/remotelabz-worker.git --branch master
 cd remotelabz-worker
 ```
 
-!!! warning
+!!! tips
     If you want to install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
     ```bash    
     git clone https://github.com/crestic-urca/remotelabz-worker.git --branch 2.4.1 --single-branch
@@ -185,7 +190,7 @@ cd remotelabz-worker
     git clone https://github.com/crestic-urca/remotelabz-worker.git --branch dev
     ```
 
-# Installation
+### Installation of the RemoteLabz worker application
 You should modify the `.env` file according to your environment
 
 ``` bash
@@ -209,13 +214,13 @@ APP_ENV=dev
 APP_SECRET=89080404df40bd0ed77c9ef887165cc4
 
 # ADM_INTERFACE will be used to administrate the worker
-ADM_INTERFACE="ensY"
+ADM_INTERFACE="ens33"
 
 ### For data connexion of all VM
 # Define your data network interface
 # Your worker server must have 2 network card to isolate administrative network and data network of all VM
 # DATA_INTERFACE will be used to communicate on the data network
-DATA_INTERFACE="ensX"
+DATA_INTERFACE=$ADM_INTERFACE
 
 # To avoid exchange between device, IPTables is used to authorize communication only between the bridge interface of the laboratory and the Internet interface
 # The internet access must be on the DATA_INTERFACE for the device but, sometimes, the VPN and Internet access are on the ADM_INTERFACE of the Worker.
@@ -261,15 +266,16 @@ Next, type
 ```bash
 sudo ./bin/install
 ```
-# Configuration
-### Configure WSS
-If you have configured the front with HTTPS, you have to copy your certificate to the `/opt/remotelabz-worker/config/certs/` directory, regarding the two parameters in your .env.local
+### Configuration of the worker
+
+#### (Optional) Configure WSS
+If you have configured the RemoteLabz front with HTTPS in Apache2, you have to copy your Apache2 certificate to the `/opt/remotelabz-worker/config/certs/` directory, regarding the two parameters in your .env.local
 `REMOTELABZ_PROXY_SSL_KEY` and `REMOTELABZ_PROXY_SSL_CERT`
 
 !!! warning
     You need to use the same certificate between your front and this worker. Don't forget to copy them and to change it automatically when your certificate expired.
 
-### Instances
+#### Start your RemoteLabz Worker service
 ```bash
 sudo systemctl enable remotelabz-worker
 sudo systemctl start remotelabz-worker
@@ -285,11 +291,31 @@ The installation is finish and RemoteLabz application must be works. You have no
 ```bash
 APP_MAINTENANCE=0
 ```
-
 If you let the value 1, nobody can use the application.
 
+If you have an error 500, do the following :
+```bash
+cd /opt/remotelabz
+sudo chown -R www-data:www-data config/jwt
+sudo chown -R www-data:www-data var
+```
 
-## Configure your logrotate
+### Configure the DHCP Service container
+In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
+
+First : in the sandbox, start the "Migration" device. In the console, configure the network of the device (show the log to know it) and next, type the following command :
+```bash
+apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
+echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
+echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
+systemctl enable dnsmasq
+```
+
+Your "Service" container is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
+On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
+
+## Other tasks for production environment
+### Configure your logrotate
 Add the following file `/etc/logrotate.d/remotelabz-worker`
 
 ```bash
@@ -305,21 +331,7 @@ Add the following file `/etc/logrotate.d/remotelabz-worker`
 }
 ```
 
-### Configure your container
-In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
-
-First : in the sandbox, start the "Migration" device. In the console, configure the network of the device (show the log to know it) and next, type the following command :
-```bash
-apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
-echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
-echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
-systemctl enable dnsmasq
-```
-
-Your "Service" container is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
-On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
-
-## Secure your Apache configuration (recommended)
+### Secure your Apache configuration (recommended)
 Modify the following line in file `/etc/apache2/conf-enabled/security.conf`
 ```bash
 ServerTokens Prod
@@ -339,10 +351,8 @@ Add these lines in file `/etc/apache2/apache2.conf`
 
 Do not forget to restart Apache service `sudo service apache2 restart`
 
-## Secure your server from web intrusion (recommended)
+### Secure your server from web intrusion (recommended)
 To avoid the scan url, you can use fail2ban to ban IP they scan the ssh or web access.
-
-### On Ubuntu 20.04 LTS Server
 
 ```bash
 sudo apt-get update
@@ -394,7 +404,7 @@ bantime  = 1h
 findtime  = 1h
 ```
 
-## Use HTTPS instead of HTTP (Optional but required if you want to use Shibboleth)
+### Use HTTPS instead of HTTP (Optional but required if you want to use Shibboleth)
 During the installation process, the file `200-remotelabz-ssl.conf` is copy in your `/etc/apache2/sites-available` directory. You have to modify the following lines to insert the right certificate files :
 ```bash
         SSLCertificateFile	/etc/apache2/RemoteLabz-WebServer.crt
