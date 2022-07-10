@@ -107,23 +107,7 @@ The application needs to access to the certificate and key files to generate the
 sudo chgrp remotelabz /etc/openvpn/server -R
 sudo chmod g+rx /etc/openvpn/server -R
 ```
-
-
-Then, you should create the `.env.local` file and put the correct environment variables from the `.env` according to your environment, including SQL database variables with `MYSQL_SERVER`, `MYSQL_USER`, `MYSQL_PASSWORD` and `MYSQL_DATABASE`.
-
-``` bash
-cd /opt/remotelabz
-# To allow the web server to store the log
-sudo chown -R www-data:www-data var
-sudo nano .env.local
-# Replace the MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE values to the right value (refer to the MySQL configuration part above)
-MYSQL_USER="user"
-MYSQL_PASSWORD="Mysql-Pa33wrd$"
-MYSQL_DATABASE="remotelabz"
-# you may change the MESSENGER_TRANSPORT_DSN variable with the following and with your credentials and server location
-MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@localhost:5672/%2f/messages
-```
-
+## Configure you RemoteLabz database
 Run the `remotelabz-ctl` configuration utility to setup your database :
 
 ```bash
@@ -131,7 +115,7 @@ sudo remotelabz-ctl reconfigure database
 ```
 
 !!! info
-    With the loaded fixtures, default credentials are :
+    The default credentials are :
 
     - Username : `root@localhost`
     - Password : `admin`
