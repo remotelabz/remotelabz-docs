@@ -30,13 +30,13 @@ You have now a directory `remotelabz` created on your home directory.
 ### Install the requirements
 ```bash
 cd remotelabz
-sudo ./install_requirement.sh
+sudo ./bin/install_requirement.sh
 ```
 
-After this process, you have to understand the following informations :
+After this process, you have to understand the following information :
 
 #### RabbitMQ and MySQL pre-configurations
-The MySQL is configured with the root password : "RemoteLabz-2022$", and a user "user" is created with password "Mysql-Pa33wrd$". It is recommend to change it after your RemoteLabz works fine.
+The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user "user" is created with password "Mysql-Pa33wrd\$". It is recommend to change it after your RemoteLabz works fine.
 
 !!! Tips
     During the `install_requirement.sh` process, a `remotelabz-amqp` user is created in RabbitMQ with the password `password-amqp`. If you want to change the password of an existing user `remotelabz-amqp` of your RabbitMQ, you have to type the following command :
@@ -91,13 +91,13 @@ root@* myemail@domain.com FfrsTtcb
 
 ## Install RemoteLabz
 
-The install process will create the directory `/opt/remotelabz`. You can create a link to your home with the command `sudo ln -s ~/remotelabz /opt/remotelabz`
+The install process will create the directory `/opt/remotelabz`.
 
 While you're in RemoteLabz root directory :
 
 ``` bash
 cd ~/remotelabz
-sudo bin/install
+sudo ./bin/install
 ```
 The install process can take 5 minutes
 
@@ -154,7 +154,9 @@ In order to be able to control instances on [the worker](https://gitlab.remotela
 
 ```bash
 sudo systemctl enable remotelabz
+sudo systemctl enable remotelabz-proxy
 sudo systemctl start remotelabz
+sudo systemctl start remotelabz-proxy
 ```
 
 !!! warning
@@ -185,27 +187,77 @@ cd remotelabz-worker
 You should modify the `.env` file according to your environment
 
 ``` bash
-nano .env
-# you may change the network interface name
-# DATA_INTERFACE will be used by the virtual machine
-# ADM_INTERFACE will be used by the RemoteLabz's front and the RabbitMQ to communicate with the worker. This interface is also used to ssh connexion
-DATA_INTERFACE="enpX"
-ADM_INTERFACE="enpY"
-#The DATA_INTERFACE will be bridge, during the install phase, with the br-worker-data interface (which will be an OVS)
-#Must be equal to the BASE_NETWORK of your .env.local on your front
-LAB_NETWORK=10.0.0.0/8
+# In all environments, the following files are loaded if they exist,
+# the later taking precedence over the former:
+#
+#  * .env                contains default values for the environment variables needed by the app
+#  * .env.local          uncommitted file with local overrides
+#  * .env.$APP_ENV       committed environment-specific defaults
+#  * .env.$APP_ENV.local uncommitted environment-specific overrides
+#
+# Real environment variables win over .env files.
+#
+# DO NOT DEFINE PRODUCTION SECRETS IN THIS FILE NOR IN ANY OTHER COMMITTED FILES.
+#
+# Run "composer dump-env prod" to compile .env files for production use (requires symfony/flex >=1.2).
+# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 
-# you may change the MESSENGER_TRANSPORT_DSN variable with the following, with your credentials, and the RabbitMQ IP or its FQDN. If the RabbitMQ is on your front, you have to use the adm network 
-MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@X.X.X.X:5672/%2f/messages
-#Must be equal to the value of the parameter server in your /etc/openvpn/server/server.conf on your Front
-VPN_NETWORK=X.X.X.X
+###> symfony/framework-bundle ###
+APP_ENV=dev
+APP_SECRET=89080404df40bd0ed77c9ef887165cc4
+
+# ADM_INTERFACE will be used to administrate the worker
+ADM_INTERFACE="ensY"
+
+### For data connexion of all VM
+# Define your data network interface
+# Your worker server must have 2 network card to isolate administrative network and data network of all VM
+# DATA_INTERFACE will be used to communicate on the data network
+DATA_INTERFACE="ensX"
+
+# To avoid exchange between device, IPTables is used to authorize communication only between the bridge interface of the laboratory and the Internet interface
+# The internet access must be on the DATA_INTERFACE for the device but, sometimes, the VPN and Internet access are on the ADM_INTERFACE of the Worker.
+INTERNET_INTERFACE_ACCESS=$DATA_INTERFACE
+
+DATA_NETWORK=10.22.128.0/24
+DATA_INT_IP_ADDRESS=10.22.128.2/24
+DATA_INT_GW=10.22.128.254
+
+LAB_NETWORK=172.16.16.0/24
+USE_SUDO_FOR_SYSTEM_COMMANDS=1
+
+###> symfony/messenger ###
+# Choose one of the transports below
+# MESSENGER_TRANSPORT_DSN=amqp://guest:guest@localhost:5672/%2f/messages
+MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@127.0.0.1:5672/%2f/messages
+# MESSENGER_TRANSPORT_DSN=redis://localhost:6379/messages
+###< symfony/messenger ###
+
+# Network configuration
+# Must be equal to the parameter of the variable "server" in the file /etc/openvpn/server/server.conf
+# server 10.8.0.0 255.255.255.0
+VPN_NETWORK=10.8.0.0
 VPN_NETWORK_NETMASK=255.255.255.0
-#The FRONT_DATA must be equal to the IP of the PUBLIC_ADDRESS parameter of the .env.local from the Front 
-FRONT_DATA_IP=Y.Y.Y.Y
+
+# If the VPN is on the worker then the parameter VPN_CONCENTRATOR_IP must be equal to "localhost" else it must be equal to the IP
+# VPN_CONCENTRATOR_IP is used to define the route from the worker and laboratories to the VPN users
+# VPN_CONCENTRATOR_INTERFACE defines the interface which is used to join the VPN users from the worker
+
+VPN_CONCENTRATOR_IP="localhost"
+VPN_CONCENTRATOR_INTERFACE="localhost"
+# VPN_CONCENTRATOR_IP="10.22.128.1"
+# VPN_CONCENTRATOR_INTERFACE=$DATA_INTERFACE
+
+# Use secured websocket between client and VM
+REMOTELABZ_PROXY_USE_WSS=0
+REMOTELABZ_PROXY_SSL_KEY="/opt/remotelabz-worker/config/certs/RemoteLabz-WebServer.key"
+#If intermediate certificate exist, you have to paste the cert and the intermediaire in the same .pem file
+REMOTELABZ_PROXY_SSL_CERT="/opt/remotelabz-worker/config/certs/RemoteLabz-WebServer.crt"
 ```
+
 Next, type 
 ```bash
-sudo ./install
+sudo ./bin/install
 ```
 # Configuration
 ### Configure WSS
