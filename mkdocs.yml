@@ -27,14 +27,13 @@ nav:
     - 'For sys admin':
         - 'Getting started':
             - Installation: administrators/getting-started/install.md
+            - 'RemoteLabz':
+                - Installation: administrators/getting-started/ubuntu-standalone.md
             - 'RemoteLabz Front':
-                - Installation: administrators/getting-started/ubuntu-front.md
                 - Update: administrators/getting-started/ubuntu-front-update.md
             - 'RemoteLabz Worker':
-                - Installation: administrators/getting-started/ubuntu-worker.md
                 - Update: administrators/getting-started/ubuntu-worker-update.md
-            - 'RemoteLabz Standalone':
-                - Installation: administrators/getting-started/ubuntu-standalone.md
+            
             - 'Commonly Asked Questions': administrators/getting-started/commonly-asked-questions.md
             - Troubleshooting: administrators/getting-started/troubleshooting.md
     - 'For developers':

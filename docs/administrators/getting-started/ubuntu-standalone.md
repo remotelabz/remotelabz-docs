@@ -1,14 +1,16 @@
 # RemoteLabz's installation guide
 
-!!! warning
-    This section is in case you want to install RemoteLabz on one 1 computer.
-
 This section guides you through the installation of RemoteLabz and its components on an Ubuntu system. We assume you have already installed an Ubuntu Server 20.04 LTS. We support only this Ubuntu version.
 
 ## Installation of the requirements
-The first step is to install Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso
+The first step is to install Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso on
 
-### Retrieve the RemoteLabz source
+- only one computer if you want to use the Front and the Worker on the same server
+- one 2 computers if you want to separate your Front and your Worker.
+
+## Installation of the front
+
+### Retrieve the RemoteLabz Front source
 A remotelabz directory will be create on your home directory.
 ```bash
 cd ~
