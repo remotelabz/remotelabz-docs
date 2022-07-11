@@ -137,6 +137,7 @@ sudo openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt
 #Your can use as passphrase "JWTTok3n"
 sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 sudo chown -R www-data:www-data config/jwt
+sudo chown -R www-data:www-data var
 ```
 
 Don't forget to edit your `.env.local` :
