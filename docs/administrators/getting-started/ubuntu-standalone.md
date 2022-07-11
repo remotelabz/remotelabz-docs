@@ -264,7 +264,7 @@ REMOTELABZ_PROXY_SSL_CERT="/opt/remotelabz-worker/config/certs/RemoteLabz-WebSer
 
 Next, type 
 ```bash
-sudo ./bin/install
+sudo ./install
 ```
 ### Configuration of the worker
 
