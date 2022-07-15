@@ -45,14 +45,14 @@ The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user
     ```
     sudo rabbitmqctl change_password 'remotelabz-amqp' 'new_password'
     ```
-    For MySQL, to modify your root password
+    For MySQL, to set the root password to `new_password`
     ```
     sudo mysql -u root -h localhost
     ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY 'new_password';
     FLUSH PRIVILEGES;
     EXITS;
     ```
-    and to modify the remotelabz user password 
+    The remotelabz default user is `user` and its password `Mysql-Pa33wrd\$`. If you want to change to `new_password` for example, you have to do the following:
     ```
     ALTER USER IF EXISTS 'user'@'localhost' IDENTIFIED BY 'new_password';
     FLUSH PRIVILEGES;
@@ -103,13 +103,15 @@ sudo ./bin/install
 ```
 The install process can take 5 minutes
 
-#### Set the right permission to your certificate and key files for OpenVPN
-The application needs to access to the certificate and key files to generate the OpenVPN file for the clients.
-```bash
-sudo chgrp remotelabz /etc/openvpn/server -R
-sudo chmod g+rx /etc/openvpn/server -R
-```
-#### Configure you RemoteLabz database
+!!! info
+    During the installation, many action is done on the directory permission :
+    `chgrp remotelabz /etc/openvpn/server -R`
+    `chmod g+rx /etc/openvpn/server -R`
+    In order for the app to work correctly, a key pair is created for JWT. You can find detailed configuration in [the LexikJWTAuthenticationBundle doc](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#generate-the-ssh-keys).
+    `chown -R www-data:www-data /opt/remotelabz/config/jwt`
+    `chown -R www-data:www-data /opt/remotelabz/var`
+
+#### Configure the RemoteLabz database
 Run the `remotelabz-ctl` configuration utility to setup your database :
 
 ```bash
@@ -123,22 +125,6 @@ sudo remotelabz-ctl reconfigure database
     - Password : `admin`
 
     You may change those values by using the web interface.
-
-#### Generate API keys
-
-In order for the app to work correctly, you must create a key pair for JWT. You can find detailed configuration in [the LexikJWTAuthenticationBundle doc](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#generate-the-ssh-keys).
-
-At the root of your RemoteLabz folder:
-
-```bash
-cd /opt/remotelabz
-sudo mkdir -p config/jwt
-sudo openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-#Your can use as passphrase "JWTTok3n"
-sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
-sudo chown -R www-data:www-data config/jwt
-sudo chown -R www-data:www-data var
-```
 
 Don't forget to edit your `.env.local` :
 
