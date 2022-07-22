@@ -24,7 +24,8 @@ If you have an official certificate, you have to copy it in your `/etc/apache2` 
 ### Self-signed certificate
 Execute the script 
 ```bash
-sudo ~/remotelabz/bin/install_ssl.sh
+cd ~
+sudo remotelabz/bin/install_ssl.sh
 ```
 
 Verify your application is now available with HTTPS and if it works fine, you can modify the `/etc/apache2/sites-available/100-remotelabz.conf` to redirect all HTTP request to HTTPS. 
@@ -43,27 +44,30 @@ Uncomment the following lines in the file `/etc/apache2/sites-available/100-remo
 ```
 Now, if you go to the your application's url with http, you should be redirected to HTTTS.
 
-You can verify your certificate with the following command : 
-```openssl x509 -noout -text -in /etc/apache2/RemoteLabz-WebServer.crt```
-
-If you use only https, you need to also use WSS for all websocket connection. So, in your .env.local, you have to change the value of `REMOTELABZ_PROXY_USE_WSS=1` and copy the two files 
-`home/florent/EasyRSA/RemoteLabz-WebServer.crt` and `home/florent/EasyRSA/RemoteLabz-WebServer.key` on the worker. **On the worker**, you also have to modify the `.env.local`
+!!! tips
+    You can verify your certificate with the following command : 
+    ```openssl x509 -noout -text -in /etc/apache2/RemoteLabz-WebServer.crt```
 
 ### Copy certificate files to the worker
-We assume your `.env.local` is well configured. Change the `user` login in the following command.
-```
-cd /opt/remotelabz
-source .env.local
-scp ~/EasyRSA/RemoteLabz-WebServer.crt user@${WORKER_SERVER}:~/
-scp ~/EasyRSA/RemoteLabz-WebServer.key user@${WORKER_SERVER}:~/
+Copy the two files `~/EasyRSA/RemoteLabz-WebServer.crt` and `~/EasyRSA/RemoteLabz-WebServer.key` to your **worker** in directory `/opt/remotelabz-worker/config/certs`
+
+```bash
+cd ~/EasyRSA
+source /opt/remotelabz/.env.local
+scp ~/EasyRSA/RemoteLabz-WebServer.crt user@${WORKER_SERVER}:~
+scp ~/EasyRSA/RemoteLabz-WebServer.key user@${WORKER_SERVER}:~
 ```
 
-### Configure WSS
-If you have configured the RemoteLabz front with HTTPS in Apache2, you have to copy your Apache2 certificate to the `/opt/remotelabz-worker/config/certs/` directory, regarding the two parameters in your .env.local
-`REMOTELABZ_PROXY_SSL_KEY` and `REMOTELABZ_PROXY_SSL_CERT`
+On the **worker**
+```bash
+cd ~
+sudo mv RemoteLabz-WebServer.* /opt/remotelabz-worker/config/certs/
+sudo sed -i "s/REMOTELABZ_PROXY_USE_WSS=0/REMOTELABZ_PROXY_USE_WSS=1/g" /opt/remotelabz-worker/.env.local
+
+```
 
 !!! warning
-    You need to use the same certificate between your front and this worker. Don't forget to copy them and to change it automatically when your certificate expired.
+    You need to use the same certificate between your front and the worker. Don't forget to copy them and to change it automatically if your certificate expired.
 
 ### Secure your Apache configuration
 Add these lines in file `/etc/apache2/apache2.conf`
@@ -72,7 +76,6 @@ Add these lines in file `/etc/apache2/apache2.conf`
         Require all denied
 </FilesMatch>
 ```
-
 Do not forget to restart Apache service `sudo service apache2 restart`
 
 ### Secure your server from web intrusion
@@ -100,9 +103,6 @@ and change the default value of `bantime` and `findtime` to 1 hour instead of 10
 bantime  = 1h
 findtime  = 1h
 ```
-
-
-
 
 ## Shibboleth (optional)
 
