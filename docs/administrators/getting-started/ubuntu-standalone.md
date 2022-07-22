@@ -118,28 +118,27 @@ Run the `remotelabz-ctl` configuration utility to setup your database :
 sudo remotelabz-ctl reconfigure database
 ```
 
-!!! info
-    The default credentials are :
-
-    - Username : `root@localhost`
-    - Password : `admin`
-
-    You may change those values by using the web interface.
-
 Don't forget to edit your `.env.local` :
 
 !!! warning
     Don't forget to modify the line `PUBLIC_ADDRESS="your-url-or-ip-of-your-front"`
 
+### Generate API keys
+At the root of your RemoteLabz folder:
 
 ```bash
+cd /opt/remotelabz
+sudo mkdir -p config/jwt
+sudo openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+#Your can use as passphrase "JWTTok3n"
+sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
+sudo chown -R www-data:www-data config/jwt
 # Replace 'yourpassphrase' by your actual passphrase
 echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
 ```
 
 !!! warning
     Avoid special character in the JWT, otherwise you will have some errors
-
 
 #### Start the RemoteLabz Front
 
@@ -151,6 +150,17 @@ sudo systemctl enable remotelabz-proxy
 sudo systemctl start remotelabz
 sudo systemctl start remotelabz-proxy
 ```
+
+You can now test your RemoteLabz front with your internet navigator but you will just make connection until the worker is not installed.
+
+!!! info
+    The default credentials are :
+
+    - Username : `root@localhost`
+    - Password : `admin`
+
+    You may change those values by using the web interface.
+
 
 !!! warning
     When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommand you to use a service like `ntp` to keep your machines synchronized.
