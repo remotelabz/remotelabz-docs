@@ -123,7 +123,7 @@ Don't forget to edit your `.env.local` :
 !!! warning
     Don't forget to modify the line `PUBLIC_ADDRESS="your-url-or-ip-of-your-front"`
 
-### Generate API keys
+#### Generate API keys
 At the root of your RemoteLabz folder:
 
 ```bash
