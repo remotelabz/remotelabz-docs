@@ -29,9 +29,10 @@ nav:
             - Installation: administrators/getting-started/install.md
             - 'RemoteLabz':
                 - Installation: administrators/getting-started/ubuntu-standalone.md
-            - 'RemoteLabz Front':
+                - SSL: administrators/getting-started/ubuntu-secure.md
+            - 'Update Front':
                 - Update: administrators/getting-started/ubuntu-front-update.md
-            - 'RemoteLabz Worker':
+            - 'Update Worker':
                 - Update: administrators/getting-started/ubuntu-worker-update.md
             
             - 'Commonly Asked Questions': administrators/getting-started/commonly-asked-questions.md
