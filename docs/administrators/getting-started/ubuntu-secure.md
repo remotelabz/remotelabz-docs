@@ -3,7 +3,7 @@
 This section guides you through the configuration of SSL between all service of the RemoteLabz.
 
 ## Requirement
-You Remotelabz must work fine before to configure the SSL
+Your Remotelabz must work fine before to configure the SSL
 
 - You must connect to a device of type QEMU
 - You must connect to a device of type LXC
