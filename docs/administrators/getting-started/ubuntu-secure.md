@@ -31,8 +31,6 @@ Execute the script
 ```bash
 cd ~
 sudo remotelabz/bin/install_ssl.sh
-sudo a2ensite 200-remotelabz-ssl.conf
-sudo service apache2 reload
 ```
 
 Verify your application is now available with HTTPS and if it works fine, you can modify the `/etc/apache2/sites-available/100-remotelabz.conf` to redirect all HTTP request to HTTPS. 
