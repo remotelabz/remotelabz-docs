@@ -8,6 +8,19 @@ The first step is to install Ubuntu Server 20.04 LTS https://releases.ubuntu.com
 - only one computer if you want to use the Front and the Worker on the same server
 - one 2 computers if you want to separate your Front and your Worker.
 
+To install both the Front and the Worker on the same device, the minimum requirement is 
+
+- a hard disk of at least 30 Go.
+- 2 Go of RAM
+- 1 CPU
+
+Depend of the number of VMs, containers, and, operating system used, you want to run simultaneously. At the end of the installation, 4 devices will be installed and configured :
+
+- 3 containers with Debian 11.4, Alpine 3.15, Ubuntu Server 20.04 LTS
+- 1 VM Alpine 3.10
+
+The 5th device, called "Migration" is another Alpine have to configure, at the end of the installation, a 6th container to configure a DHCP service.
+
 ## Installation of the front
 
 ### Retrieve the RemoteLabz Front source
@@ -294,10 +307,11 @@ sudo chown -R www-data:www-data config/jwt
 sudo chown -R www-data:www-data var
 ```
 
-### Configure the DHCP Service container
-In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
+## Configure your RemoteLabz
+### Add a DHCP Service for your laboratory
+In the device list, you will find a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to your laboratory.
 
-First : in the sandbox, start the "Migration" device. In the console, configure the network of the device (show the log to know it) and next, type the following command :
+First : go to the sandbox menu and start the "Migration" device. Next, in the console of the started device, configure the network of the device (show the log, with "Show logs" button to know it) and type the following command :
 ```bash
 apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
@@ -305,27 +319,8 @@ echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
 systemctl enable dnsmasq
 ```
 
-Your "Service" container is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
+Your "Service" device, which is a container, is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
 On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
 
-## Other tasks for production environment
-
-### Configure your logrotate on worker
-On the front, this task is done during installation process.
-
-Add the following file `/etc/logrotate.d/remotelabz-worker`
-```bash
-/opt/remotelabz-worker/var/log/*.log {
-        daily
-        missingok
-        rotate 52
-        size 100M
-        compress
-        notifempty
-        create 664 remotelabz-worker www-data
-        su remotelabz-worker www-data
-}
-```
-
-### Secure the communication
+## Secure the communication
 If you want to secure all communication between the client, the Remotelabz front and the Remotelabz Worker, you have to follow the instruction of [page SSL](ubuntu-secure.md) 
