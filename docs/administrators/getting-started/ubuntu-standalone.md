@@ -309,9 +309,17 @@ sudo chown -R www-data:www-data var
 
 ## Configure your RemoteLabz
 ### Add a DHCP Service for your laboratory
-In the device list, you will find a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to your laboratory.
+In the device list, you will find a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to your laboratory. Each laboratory has its DHCP service and its network so the RemoteLabz needs to configure this generic container to offer IP on the right network. For each lab, if you add the DHCP service container, it will be configured with the IP : IP_Gateway - 1. For example, if your attributed network if 10.10.10.0/27, your gateway will be 10.10.10.30 and you DHCP service container will have the IP 10.10.10.29 .
 
-First : go to the sandbox menu and start the "Migration" device. Next, in the console of the started device, configure the network of the device (show the log, with "Show logs" button to know it) and type the following command :
+First : go to the sandbox menu and start the "Migration" device. Next, in the console of the started device, configure the network of the device (show the log, with "Show logs" button to know it) 
+!!! tips
+    Add an IP address `ip addr add X.X.X.X/M dev eth0`
+
+    Add the default route `ip route add default via X.X.X.X`
+
+    Add a DNS Server `echo "nameserver 1.1.1.1" > /etc/resolv.conf`
+
+Next, type the following command :
 ```bash
 apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
