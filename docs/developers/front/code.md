@@ -62,3 +62,11 @@ curl -X POST http://localhost:8001/api/routes/test12 -d '{"target":"http://192.1
 on the worker, we receive a request to `/test12` So, with ttyd, we have to `ttyd -b /test12 -p 35422 command`.
 
 If you add a route to https and use ttyd with cert, it's doesn't work.
+
+# Yarn 
+
+Each time you modify Javascript or ReactJS, you need to do a `yarn encore dev` All JS code is in the asset directory.
+
+# ReactJS
+
+Version 16.8 minimum because some script uses Hooks (https://fr.reactjs.org/docs/hooks-state.html). All codes are not translate to use Hooks.
