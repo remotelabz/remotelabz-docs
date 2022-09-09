@@ -324,6 +324,8 @@ Next, type the following command :
 apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
 echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
+systemctl stop systemd-resolved
+systemctl disable systemd-resolved
 systemctl enable dnsmasq
 ```
 
