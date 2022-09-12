@@ -23,6 +23,7 @@ Two case, either you have an official certificate or you have to generate your o
 If you have an official certificate, you have to copy it in your `/etc/apache2` directory and rename it to `RemoteLabz-WebServer.crt` and `RemoteLabz-WebServer.key`. Next, you have to activate this site:
 ```bash
 sudo a2ensite 200-remotelabz-ssl.conf
+sudo a2enmod ssl
 sudo service apache2 reload
 ```
 
@@ -33,6 +34,7 @@ cd ~
 sudo remotelabz/bin/install_ssl.sh
 ```
 
+## Redirection to https
 Verify your application is now available with HTTPS and if it works fine, you can modify the `/etc/apache2/sites-available/100-remotelabz.conf` to redirect all HTTP request to HTTPS. 
 Activate the rewrite module
 ```bash
