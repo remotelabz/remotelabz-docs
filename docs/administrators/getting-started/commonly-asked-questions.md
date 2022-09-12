@@ -16,7 +16,6 @@ To list the number of message in each queues
 sudo rabbitmqctl list_queues
 ```
 
-
 ## How to modify the image of the device
 To avoid a teacher or an user include a corrupted image, only the administrator can modify an existing default image. With the menu `Device Sandbox`, a new lab is created and after the export button is click, a new device template and new Operating Systems are created. To make an export, you have to :
 
@@ -56,3 +55,14 @@ To avoid a teacher or an user include a corrupted image, only the administrator 
 21. Expand the ext3 file system in the logical volume : `sudo resize2fs /dev/[volgroup]/[volume]`
  * Example: `sudo resize2fs /dev/ubuntu-vg/root`
 22. You can now run the df command to very that you have more space `df -h`
+
+## How to import a new image from an OVA
+We assume your image has the name `import_vm.ova` in OVF format and in your home directory.
+```bash
+cd ~
+mkdir new_image
+cd new_image
+tar xvf ../import_vm.ova new_image.img -O qcow2
+sudo mv Rocky_Linux.img /opt/remotelabz-worker/images/
+```
+As root, in operating system (OS), add a new operating system and in the Image filename parameter, give the name of your new image file. For our example, you have to type "new_image.img". finally, Create a new device which use this OS.
