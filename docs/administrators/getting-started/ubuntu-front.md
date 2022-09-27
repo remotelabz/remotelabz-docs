@@ -475,7 +475,10 @@ echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
 systemctl stop systemd-resolved
 systemctl disable systemd-resolved
 systemctl enable dnsmasq
+systemctl disable systemd-networkd
 ```
+
+
 
 Your "Service" container is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
 On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.

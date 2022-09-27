@@ -40,11 +40,13 @@ sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
 
-##Migration from 2.4.1.5 to 2.4.1.5.1
-Delete in your OpenVPN configuration the line :
-```bash
-comp-lzo
-```
+##Migration from 2.4.1.5 to 2.4.2.4
+A new feature is introduce to define with protocol can be used to access to the console of the device : `vnc`, `serial` or `login`. So we have to add this protocol to each device. You can have many procotol to the same device. For example, we can use vnc to a qemu vm and a serial to do telnet on the serial line of the VM is the OS is configured.
+
+The main usage is : 
+- `vnc` for qemu VM
+- `login` for container lxc
+- `serial` for network device like firewalls, switchs, routers, ...
 
 ##Migration from 2.4.1.1 to 2.4.1.3
 In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
