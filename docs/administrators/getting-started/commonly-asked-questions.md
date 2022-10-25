@@ -51,7 +51,8 @@ To avoid a teacher or an user include a corrupted image, only the administrator 
  * Example: `sudo vgextend ubuntu-vg /dev/sda3`
 19. Find the amount of free space available : `sudo vgdisplay [volume group] | grep "Free"`
 20. Expand the logical volume : `sudo lvextend -L+[freespace]G /dev/[volgroup]/[volume]`
- * Example: `sudo lvextend -L+64G /dev/ubuntu-vg/root`
+ * Example 1: `sudo lvextend -L+64G /dev/ubuntu-vg/root`
+ * Example 2: `sudo lvextend -l 100%FREE /dev/ubuntu-vg/ubuntu`
 21. Expand the ext3 file system in the logical volume : `sudo resize2fs /dev/[volgroup]/[volume]`
  * Example: `sudo resize2fs /dev/ubuntu-vg/root`
 22. You can now run the df command to very that you have more space `df -h`
