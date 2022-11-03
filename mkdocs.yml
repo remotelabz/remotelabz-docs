@@ -6,8 +6,8 @@ site_description: >-
     Education software to provide VMs and networks as-a-service.
 
 # Repository
-repo_name: crestic-urca/remotelabz
-repo_url: https://github.com/crestic-urca/remotelabz
+repo_name: remotelabz/remotelabz
+repo_url: https://github.com/remotelabz/remotelabz
 edit_uri: ""
 
 # Copyright

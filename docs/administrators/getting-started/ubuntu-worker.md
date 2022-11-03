@@ -10,18 +10,18 @@ This section guides you through the installation of RemoteLabz's worker and its 
 A remotelabz directory will be create on your home directory.
 ```bash
 cd ~
-git clone https://github.com/crestic-urca/remotelabz-worker.git
+git clone https://github.com/remotelabz/remotelabz-worker.git
 cd remotelabz-worker
 ```
 
 !!! warning
     If you want to install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
     ```bash    
-    git clone https://github.com/crestic-urca/remotelabz-worker.git --branch 2.4.1 --single-branch
+    git clone https://github.com/remotelabz/remotelabz-worker.git --branch 2.4.1 --single-branch
     ```
     ou
     ```bash    
-    git clone https://github.com/crestic-urca/remotelabz-worker.git --branch dev
+    git clone https://github.com/remotelabz/remotelabz-worker.git --branch dev
     ```
 
 # Installation

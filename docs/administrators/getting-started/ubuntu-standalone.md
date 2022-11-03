@@ -27,7 +27,7 @@ The 5th device, called "Migration" is another Alpine to use to configure, at the
 A remotelabz directory will be create on your home directory.
 ```bash
 cd ~
-git clone https://github.com/crestic-urca/remotelabz.git --branch master
+git clone https://github.com/remotelabz/remotelabz.git --branch master
 ```
 
 You have now a directory `remotelabz` created on your home directory.
@@ -35,11 +35,11 @@ You have now a directory `remotelabz` created on your home directory.
 !!! warning
     If you want to install a specific version, you have to do the following instructions. For version 2.4.1 for example.
     ```bash    
-    git clone https://github.com/crestic-urca/remotelabz.git --branch 2.4.1 --single-branch
+    git clone https://github.com/remotelabz/remotelabz.git --branch 2.4.1 --single-branch
     ```
     or for development version
     ```bash    
-    git clone https://github.com/crestic-urca/remotelabz.git --branch dev
+    git clone https://github.com/remotelabz/remotelabz.git --branch dev
     ```
 
 ### Install the requirements
@@ -189,18 +189,18 @@ You can now test your RemoteLabz front with your internet navigator but you will
 A remotelabz directory will be create on your home directory.
 ```bash
 cd ~
-git clone https://github.com/crestic-urca/remotelabz-worker.git --branch master
+git clone https://github.com/remotelabz/remotelabz-worker.git --branch master
 cd remotelabz-worker
 ```
 
 !!! tips
     If you want to install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
     ```bash    
-    git clone https://github.com/crestic-urca/remotelabz-worker.git --branch 2.4.1 --single-branch
+    git clone https://github.com/remotelabz/remotelabz-worker.git --branch 2.4.1 --single-branch
     ```
     ou
     ```bash    
-    git clone https://github.com/crestic-urca/remotelabz-worker.git --branch dev
+    git clone https://github.com/remotelabz/remotelabz-worker.git --branch dev
     ```
 
 ### Installation of the RemoteLabz worker application

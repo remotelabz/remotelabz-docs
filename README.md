@@ -15,7 +15,7 @@ pip3 install mkdocs mkdocs-material
 ```
 
 ```bash
-git clone https://github.com/crestic-urca/remotelabz-docs.git
+git clone https://github.com/remotelabz/remotelabz-docs.git
 cd remotelabz-docs
 mkdocs build
 ```
