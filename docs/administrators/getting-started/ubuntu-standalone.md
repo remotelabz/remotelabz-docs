@@ -264,10 +264,10 @@ First : go to the sandbox menu and start the "Migration" device. Next, in the co
 
     Add the default route `ip route add default via X.X.X.X`
 
-    Add a DNS Server `echo "nameserver 1.1.1.1" > /etc/resolv.conf`
 
 Next, type the following command :
 ```bash
+echo "nameserver 1.1.1.1" > /etc/resolv.conf
 apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
 echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
