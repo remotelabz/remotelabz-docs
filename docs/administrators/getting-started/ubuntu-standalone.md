@@ -267,6 +267,7 @@ First : go to the sandbox menu and start the "Migration" device. Next, in the co
 
 Next, type the following command :
 ```bash
+sudo rm /etc/resolv.conf
 echo "nameserver 1.1.1.1" > /etc/resolv.conf
 apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
