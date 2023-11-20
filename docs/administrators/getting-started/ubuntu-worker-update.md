@@ -35,6 +35,25 @@ sudo systemctl daemon-reload
 sudo service remotelabz-worker restart
 ```
 
+## From 2.4.3 and above to version 2.5.0
+When you add a worker on the front, you have to add the following lines on the `messenger.yaml` file, in the part 
+```bash
+framework:
+    messenger:
+        transports:
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            worker: 
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+```
+
+```bash
+queues:
+    messages_worker1:
+        binding_keys: [Worker 1 IP]
+```
+
+
 ## From 2.4.1.2 and above to version 2.4.1.3
 
 You have to install ttyd package

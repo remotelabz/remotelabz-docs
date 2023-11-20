@@ -67,3 +67,8 @@ tar xvf ../import_vm.ova new_image.img -O qcow2
 sudo mv Rocky_Linux.img /opt/remotelabz-worker/images/
 ```
 As root, in operating system (OS), add a new operating system and in the Image filename parameter, give the name of your new image file. For our example, you have to type "new_image.img". finally, Create a new device which use this OS.
+
+## How to remove all bridge OVS on a worker manually
+```bash
+for i in sudo ovs-vsctl show| grep "Bridge" | grep "br-" | cut -d " " -f 6; do sudo ovs-vsctl del-br $i; done;
+```

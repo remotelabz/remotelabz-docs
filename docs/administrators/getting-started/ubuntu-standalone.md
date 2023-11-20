@@ -217,6 +217,29 @@ Next, type
 sudo ./install
 ```
 ### Configuration of the worker
+You have to configure, first, at least, 1 worker, from your front, in the admin menu and the left menu "Worker configuration".  When you add a worker on the front, you have to add the following lines 
+```bash
+    messages_worker1:
+        binding_keys: [Worker_1_IP]
+```
+on the `messenger.yaml` file, in the following part 
+```bash
+framework:
+    messenger:
+        transports:
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            worker: 
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    queues:
+```
+
+If you add another worker, you will have to add,
+```bash
+    messages_worker2:
+        binding_keys: [Worker_2_IP]
+```
+and so on.
 
 #### Start your RemoteLabz Worker service
 Normally, the service remotelabz-worker is started during the installation phase and it will start automatically when your system boots but if you need to start the service manually :
@@ -255,6 +278,7 @@ sudo chown -R www-data:www-data var
 ```
 
 ## Configure your RemoteLabz
+
 ### Add a DHCP Service for your laboratory
 In the device list, you will find a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to your laboratory. Each laboratory has its DHCP service and its network so the RemoteLabz needs to configure this generic container to offer IP on the right network. For each lab, if you add the DHCP service container, it will be configured with the IP : IP_Gateway - 1. For example, if your attributed network is 10.10.10.0/27, your gateway will be 10.10.10.30 and you DHCP service container will have the IP 10.10.10.29 .
 

@@ -425,7 +425,6 @@ echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
 !!! warning
     Avoid special character in the JWT, otherwise you will have some errors
 
-
 ### Configure the route from the front to the worker VM's network
 We assume you have configure now all variables in your .env.local which was modified after a copy of the .env
 ```bash
@@ -463,6 +462,7 @@ sudo service remotelabz-proxy start
 !!! warning
     This part can only be done when you RemoteLabz application works fine. So, you have to install the Remotelabz Worker before.
 
+### Configure the worker
 
 ### Configure your container
 In the device list of the RemoteLabz, when you are connected as root, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
@@ -477,8 +477,6 @@ systemctl disable systemd-resolved
 systemctl enable dnsmasq
 systemctl disable systemd-networkd
 ```
-
-
 
 Your "Service" container is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
 On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
