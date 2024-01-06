@@ -40,7 +40,7 @@ sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
 
-##Migration from 2.4.3 to 2.5.0 (dev version until version 2.5.0 is released)
+##Migration from 2.4.3 to 2.4.4
 
 The RabbitMQ configuration need to be modified to manage multiples workers.
 ```bash
