@@ -41,12 +41,26 @@ sudo service remotelabz restart
 ```
 
 ##Migration from 2.4.3 to 2.5.0 (dev version until version 2.5.0 is released)
+
 The RabbitMQ configuration need to be modified to manage multiples workers.
 ```bash
 sudo rabbitmqctl set_user_tags remotelabz-amqp administrator
 sudo rabbitmq-plugins enable rabbitmq_management
 sudo rabbitmqadmin delete exchange name=worker
 ```
+
+You have to do the following task :
+```bash
+cd /opt/remotelabz;
+sudo chmod 664 config/packages/messenger.yaml;
+sudo chown www-data:www-data config/templates;
+sudo chmod 664 config/templates;
+sudo mkdir backups;
+sudo chmod 644 backups;
+sudo apt-get update;
+sudo apt-get install tmux;
+```
+
 
 ##Migration from 2.4.1.5 to 2.4.2.4
 A new feature is introduce to define with protocol can be used to access to the console of the device : `vnc`, `serial` or `login`. So we have to add this protocol to each device. You can have many procotol to the same device. For example, we can use vnc to a qemu vm and a serial to do telnet on the serial line of the VM is the OS is configured.

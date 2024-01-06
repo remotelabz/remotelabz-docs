@@ -72,3 +72,24 @@ As root, in operating system (OS), add a new operating system and in the Image f
 ```bash
 for i in sudo ovs-vsctl show| grep "Bridge" | grep "br-" | cut -d " " -f 6; do sudo ovs-vsctl del-br $i; done;
 ```
+
+## How to check the the queue and exchange with RabbitMQ
+To list the queues
+```bash
+rabbitmqadmin list queues
+```
+
+To list the exchange
+```bash
+rabbitmqadmin list exchanges
+```
+
+To delete an exchange
+```bash
+sudo rabbitmqadmin delete exchange name="worker"
+```
+
+To create an exchange with a specific type (direct or fanout)
+```bash
+sudo rabbitmqadmin declare exchange name="worker" type="direct"
+```
