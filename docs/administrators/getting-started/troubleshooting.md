@@ -20,3 +20,10 @@ If an error occurred when you update your version, from prod or older version, y
  - delete the `*.lock` file
  - check with `git status` if you have additional file on your filesystem and delete them
  - delete the `var/cache` directory
+
+## No device templates are displayed on editor
+If you want to add a device in the editor and no templates are displayed in the dropdown, you have to change the permission of config/templates:
+```bash
+chown www-data:www-data config/templates
+chmod 664 config/templates
+```
