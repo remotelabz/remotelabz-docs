@@ -46,12 +46,21 @@ framework:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
 ```
+On your first worker Worker_1
 
 ```bash
 queues:
     messages_worker1:
-        binding_keys: [Worker 1 IP]
+        binding_keys: [Worker_1 IP]
 ```
+
+On your second worker Worker_2
+```bash
+queues:
+    messages_worker2:
+        binding_keys: [Worker_2 IP]
+```
+And so on...
 
 
 ## From 2.4.1.2 and above to version 2.4.1.3
