@@ -81,6 +81,11 @@ After this previous first step, between each RemoteLabz-Worker, you have to exec
 sudo ssh-copy-id -i /home/remotelabz-worker/.ssh/id_rsa.pub remotelabz-worker@Worker_X-IP
 ```
 
+We also need the package php-ssh2 on the front :
+```bash
+sudo apt-get install php-ssh2
+```
+
 ## From 2.4.1.2 and above Version 2.4.1.3
 
 You have to install ttyd package
