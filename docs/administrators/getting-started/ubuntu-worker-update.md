@@ -62,7 +62,7 @@ queues:
 ```
 And so on...
 
-First, you have to define the authentication key between all workers for ssh. On each worker, you have to execute the following commands :
+First, you have to define the authentication key between all workers for ssh. On each worker, you have to execute the following commands. Obviously, for this following command, you need to know the password of your `remotelabz-worker` user on each worker.
 
 ```bash
 sudo mkdir /home/remotelabz-worker
@@ -70,15 +70,22 @@ sudo mkdir /home/remotelabz-worker/.ssh
 sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh
 sudo chmod 700 /home/remotelabz-worker/.ssh
 sudo -u remotelabz-worker ssh-keygen -t rsa -b 4096 -f /home/remotelabz-worker/.ssh/id_rsa -N ""
+sudo -u remotelabz-worker ssh-keygen -m PEM -t rsa -f /home/remotelabz-worker/.ssh/myremotelabzkey
 sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh -R
 
 sudo chmod 600 /home/remotelabz-worker/.ssh/id_rsa
+sudo chmod 600 /home/remotelabz-worker/.ssh/myremotelabzkey
 sudo cat /home/remotelabz-worker/.ssh/id_rsa.pub | sudo -u remotelabz-worker tee -a /home/remotelabz-worker/.ssh/authorized_keys
+sudo cat /home/remotelabz-worker/.ssh/myremotelabzkey.pub | sudo -u remotelabz-worker tee -a /home/remotelabz-worker/.ssh/authorized_keys
 ```
+
+
 
 After this previous first step, between each RemoteLabz-Worker, you have to execute the following command to each worker can connect, with its key, on any another worker
 ```bash
 sudo ssh-copy-id -i /home/remotelabz-worker/.ssh/id_rsa.pub remotelabz-worker@Worker_X-IP
+sudo ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
+
 ```
 
 We also need the package php-ssh2 on the front :
