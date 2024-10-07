@@ -93,3 +93,8 @@ To create an exchange with a specific type (direct or fanout)
 ```bash
 sudo rabbitmqadmin declare exchange name="worker" type="direct"
 ```
+
+To clear a queue
+```bash
+sudo rabbitmqadmin purge_queue queue_name
+```
