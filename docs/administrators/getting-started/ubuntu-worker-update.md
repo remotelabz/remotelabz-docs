@@ -83,8 +83,8 @@ sudo cat /home/remotelabz-worker/.ssh/myremotelabzkey.pub | sudo -u remotelabz-w
 
 After this previous first step, between each RemoteLabz-Worker, you have to execute the following command to each worker can connect, with its key, on any another worker
 ```bash
-sudo ssh-copy-id -i /home/remotelabz-worker/.ssh/id_rsa.pub remotelabz-worker@Worker_X-IP
-sudo ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
+sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/id_rsa.pub remotelabz-worker@Worker_X-IP
+sudo -u remotelabz-worker  ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
 
 ```
 
@@ -92,6 +92,15 @@ We also need the package php-ssh2 on the front :
 ```bash
 sudo apt-get install php-ssh2
 ```
+
+You have to give right to group `remotelabz-worker` on `/var/lib/lxc` to allow the scp between all workers
+
+```bash
+sudo chown root:remotelabz-worker /var/lib/lxc -R
+sudo find /var/lib/lxc -type f -exec chmod ug+rw {} +
+sudo find /var/lib/lxc -type d -exec chmod ug+rwx {} +
+```
+
 
 ## From 2.4.1.2 and above Version 2.4.1.3
 
