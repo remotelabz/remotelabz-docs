@@ -70,7 +70,7 @@ As root, in operating system (OS), add a new operating system and in the Image f
 
 ## How to remove all bridge OVS on a worker manually
 ```bash
-for i in sudo ovs-vsctl show| grep "Bridge" | grep "br-" | cut -d " " -f 6; do sudo ovs-vsctl del-br $i; done;
+for i in $(sudo ovs-vsctl show | grep "Bridge" | grep "br-" | cut -d " " -f 6); do sudo ovs-vsctl del-br $i; done;
 ```
 
 ## How to check the the queue and exchange with RabbitMQ
@@ -98,3 +98,11 @@ To clear a queue
 ```bash
 sudo rabbitmqadmin purge_queue queue_name
 ```
+
+## How to list all routes of the proxy
+On the front
+```bash
+curl http://localhost:8001/api/routes
+```
+
+
