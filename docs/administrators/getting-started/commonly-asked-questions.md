@@ -106,3 +106,20 @@ curl http://localhost:8001/api/routes
 ```
 
 
+## Too many file opened
+Many parameters have to be modify. Add following lines in `/etc/sysctl.conf` and execute a `sysctl -p` the system read this file.
+
+```bash 
+fs.inotify.max_user_watches=60000
+fs.inotify.max_user_instances=10000
+fs.file-max=9793398
+```
+
+You can also modify the file `/etc/security/limits.conf` which is read on boot and use the command `prlimit --nofile=300000:500000 --pid Process_Number` (`ulimit` is obsolete) to change this value for a given process
+without reboot your server
+
+```bash
+*               soft    nofile          65535
+*               hard    nofile          524288
+```
+
