@@ -35,7 +35,7 @@ sudo systemctl daemon-reload
 sudo service remotelabz-worker restart
 ```
 
-## From 2.4.3 and above to version 2.5.0
+## From 2.4.4 and above to version 2.5.0
 When you add a worker on the front, you have to add the following lines on the `messenger.yaml` file, in the part 
 ```bash
 framework:
@@ -46,15 +46,58 @@ framework:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
 ```
+On your first worker Worker_1
 
 ```bash
 queues:
     messages_worker1:
-        binding_keys: [Worker 1 IP]
+        binding_keys: [Worker_1-IP]
+```
+
+On your second worker Worker_2
+```bash
+queues:
+    messages_worker2:
+        binding_keys: [Worker_2-IP]
+```
+And so on...
+
+First, you have to define the authentication key between all workers for ssh. On each worker, you have to execute the following commands. Obviously, for this following command, you need to know the password of your `remotelabz-worker` user on each worker.
+
+```bash
+sudo mkdir /home/remotelabz-worker
+sudo mkdir /home/remotelabz-worker/.ssh
+sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh
+sudo chmod 700 /home/remotelabz-worker/.ssh
+sudo -u remotelabz-worker ssh-keygen -t rsa -b 4096 -f /home/remotelabz-worker/.ssh/id_rsa -N ""
+sudo -u remotelabz-worker ssh-keygen -m PEM -t rsa -f /home/remotelabz-worker/.ssh/myremotelabzkey
+sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh -R
+
+sudo chmod 600 /home/remotelabz-worker/.ssh/id_rsa
+sudo chmod 600 /home/remotelabz-worker/.ssh/myremotelabzkey
+```
+
+After this previous first step, between each RemoteLabz-Worker, you have to execute the following command to each worker can connect, with its key, on any another worker
+```bash
+sudo -u remotelabz ssh-copy-id -i /home/remotelabz/.ssh/myremotelabzfront.pub remotelabz-worker@ remotelabz-worker@Worker_X-IP
+
+```
+
+We also need the package php-ssh2 on the front :
+```bash
+sudo apt-get install php-ssh2
+```
+
+You have to give right to group `remotelabz-worker` on `/var/lib/lxc` to allow the scp between all workers
+
+```bash
+sudo chown root:remotelabz-worker /var/lib/lxc -R
+sudo find /var/lib/lxc -type f -exec chmod ug+rw {} +
+sudo find /var/lib/lxc -type d -exec chmod ug+rwx {} +
 ```
 
 
-## From 2.4.1.2 and above to version 2.4.1.3
+## From 2.4.1.2 and above Version 2.4.1.3
 
 You have to install ttyd package
 

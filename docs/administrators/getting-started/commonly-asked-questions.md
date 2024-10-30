@@ -52,7 +52,7 @@ To avoid a teacher or an user include a corrupted image, only the administrator 
 19. Find the amount of free space available : `sudo vgdisplay [volume group] | grep "Free"`
 20. Expand the logical volume : `sudo lvextend -L+[freespace]G /dev/[volgroup]/[volume]`
  * Example 1: `sudo lvextend -L+64G /dev/ubuntu-vg/root`
- * Example 2: `sudo lvextend -l 100%FREE /dev/ubuntu-vg/ubuntu`
+ * Example 2: `sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu`
 21. Expand the ext3 file system in the logical volume : `sudo resize2fs /dev/[volgroup]/[volume]`
  * Example: `sudo resize2fs /dev/ubuntu-vg/root`
 22. You can now run the df command to very that you have more space `df -h`
@@ -70,7 +70,7 @@ As root, in operating system (OS), add a new operating system and in the Image f
 
 ## How to remove all bridge OVS on a worker manually
 ```bash
-for i in sudo ovs-vsctl show| grep "Bridge" | grep "br-" | cut -d " " -f 6; do sudo ovs-vsctl del-br $i; done;
+for i in $(sudo ovs-vsctl show | grep "Bridge" | grep "br-" | cut -d " " -f 6); do sudo ovs-vsctl del-br $i; done;
 ```
 
 ## How to check the the queue and exchange with RabbitMQ
@@ -93,3 +93,33 @@ To create an exchange with a specific type (direct or fanout)
 ```bash
 sudo rabbitmqadmin declare exchange name="worker" type="direct"
 ```
+
+To clear a queue
+```bash
+sudo rabbitmqadmin purge_queue queue_name
+```
+
+## How to list all routes of the proxy
+On the front
+```bash
+curl http://localhost:8001/api/routes
+```
+
+
+## Too many file opened
+Many parameters have to be modify. Add following lines in `/etc/sysctl.conf` and execute a `sysctl -p` the system read this file.
+
+```bash 
+fs.inotify.max_user_watches=60000
+fs.inotify.max_user_instances=10000
+fs.file-max=9793398
+```
+
+You can also modify the file `/etc/security/limits.conf` which is read on boot and use the command `prlimit --nofile=300000:500000 --pid Process_Number` (`ulimit` is obsolete) to change this value for a given process
+without reboot your server
+
+```bash
+*               soft    nofile          65535
+*               hard    nofile          524288
+```
+
