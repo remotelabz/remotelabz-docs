@@ -20,3 +20,5 @@ If an error occurred when you update your version, from prod or older version, y
  - delete the `*.lock` file
  - check with `git status` if you have additional file on your filesystem and delete them
  - delete the `var/cache` directory
+
+ 

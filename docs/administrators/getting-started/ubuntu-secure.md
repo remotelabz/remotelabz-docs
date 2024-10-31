@@ -3,14 +3,14 @@
 This section guides you through the configuration of SSL between all service of the RemoteLabz.
 
 ## Requirement
-Your Remotelabz must work fine before to configure the SSL
+Prior to configure SSL, Remotelabz front and worker must be installed and fully functional. 
 
 - You must connect to a device of type QEMU
 - You must connect to a device of type LXC
 
 ## Configure your Apache 2 with HTTPS (required if you want to use Shibboleth)
 
-During the installation process, the file `200-remotelabz-ssl.conf` is copy in your `/etc/apache2/sites-available` directory. The certificate is defined as follow :
+During the installation process, the file `200-remotelabz-ssl.conf` is copied in your `/etc/apache2/sites-available` directory. The certificate is defined as follow :
 ```bash
         SSLCertificateFile	/etc/apache2/RemoteLabz-WebServer.crt
         #SSLCertificateChainFile /etc/ssl/certs/remotelabz._INTERMEDIATE.cer
@@ -35,7 +35,7 @@ sudo remotelabz/bin/install_ssl.sh
 ```
 
 ## Redirection to https
-Verify your application is now available with HTTPS and if it works fine, you can modify the `/etc/apache2/sites-available/100-remotelabz.conf` to redirect all HTTP request to HTTPS. 
+Verify if your application is available with HTTPS and if it works fine, you can modify the `/etc/apache2/sites-available/100-remotelabz.conf` to redirect all HTTP request to HTTPS. 
 Activate the rewrite module
 ```bash
 sudo a2enmod rewrite
@@ -49,7 +49,7 @@ Uncomment the following lines in the file `/etc/apache2/sites-available/100-remo
 #    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
 #</IfModule>
 ```
-Now, if you go to the your application's url with http, you should be redirected to HTTTS.
+Now, if you go to the your application's url with http, you should be redirected to HTTPS.
 
 !!! tips
     You can verify your certificate with the following command : 
@@ -104,7 +104,9 @@ sudo service apache2 restart
 Next step, to finish to configure your Shibboleth Service Provider (SP), you have to modify your `/etc/shibboleth/shibboleth2.xml` file, following the guide from Paragraph 4, depend of your Shibboleth Identity Provider (IdP):
 
  - [SWITCH Shibboleth Service Provider (SP) 3.1 Configuration Guide](https://www.switch.ch/aai/guides/sp/configuration/){target=_blank}
- - [RENATER Shibboleth Service Provider (SP) Configuration Guide](https://services.renater.fr/federation/documentation/guides-installation/sp3/chap04){target=_blank}
+ 
+RENATER Shibboleth Service has been moved to the official shibboleth site.
+ - [Official shibboleth site Installation and Configuration Guide](https://shibboleth.atlassian.net/wiki/spaces/SP3/pages/2065335537/Installation){target=_blank}
 
 You can find all the configuration guides on the following site :
 

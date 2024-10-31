@@ -75,11 +75,16 @@ sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh -R
 
 sudo chmod 600 /home/remotelabz-worker/.ssh/id_rsa
 sudo chmod 600 /home/remotelabz-worker/.ssh/myremotelabzkey
+sudo cat /home/remotelabz-worker/.ssh/id_rsa.pub | sudo -u remotelabz-worker tee -a /home/remotelabz-worker/.ssh/authorized_keys
+sudo cat /home/remotelabz-worker/.ssh/myremotelabzkey.pub | sudo -u remotelabz-worker tee -a /home/remotelabz-worker/.ssh/authorized_keys
 ```
+
+
 
 After this previous first step, between each RemoteLabz-Worker, you have to execute the following command to each worker can connect, with its key, on any another worker
 ```bash
-sudo -u remotelabz ssh-copy-id -i /home/remotelabz/.ssh/myremotelabzfront.pub remotelabz-worker@ remotelabz-worker@Worker_X-IP
+sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/id_rsa.pub remotelabz-worker@Worker_X-IP
+sudo -u remotelabz-worker  ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
 
 ```
 
