@@ -49,6 +49,10 @@ Uncomment the following lines in the file `/etc/apache2/sites-available/100-remo
 #    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
 #</IfModule>
 ```
+Then restart apache
+```bash
+sudo systemctl restart apache2
+```
 Now, if you go to the your application's url with http, you should be redirected to HTTPS.
 
 !!! tips
