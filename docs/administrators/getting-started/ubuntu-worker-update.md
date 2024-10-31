@@ -75,11 +75,16 @@ sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh -R
 
 sudo chmod 600 /home/remotelabz-worker/.ssh/id_rsa
 sudo chmod 600 /home/remotelabz-worker/.ssh/myremotelabzkey
+sudo cat /home/remotelabz-worker/.ssh/id_rsa.pub | sudo -u remotelabz-worker tee -a /home/remotelabz-worker/.ssh/authorized_keys
+sudo cat /home/remotelabz-worker/.ssh/myremotelabzkey.pub | sudo -u remotelabz-worker tee -a /home/remotelabz-worker/.ssh/authorized_keys
 ```
+
+
 
 After this previous first step, between each RemoteLabz-Worker, you have to execute the following command to each worker can connect, with its key, on any another worker
 ```bash
-sudo -u remotelabz ssh-copy-id -i /home/remotelabz/.ssh/myremotelabzfront.pub remotelabz-worker@ remotelabz-worker@Worker_X-IP
+sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/id_rsa.pub remotelabz-worker@Worker_X-IP
+sudo -u remotelabz-worker  ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
 
 ```
 
@@ -115,14 +120,14 @@ You have also to install some default container
 sudo lxc-create -t download -n Migration -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com;
 sudo lxc-create -t download -n Debian -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com;
 sudo lxc-create -t download -n Ubuntu20LTS -- -d ubuntu -r focal -a amd64 --keyserver hkp://keyserver.ubuntu.com;
-sudo lxc-create -t download -n Alpine3.15 -- -d alpine -r 3.15 -a amd64 --keyserver hkp://keyserver.ubuntu.com;
+sudo lxc-create -t download -n Alpine3.17 -- -d alpine -r 3.17 -a amd64 --keyserver hkp://keyserver.ubuntu.com;
 sudo su;
 echo "nameserver 1.1.1.3" > "/var/lib/lxc/Migration/rootfs/etc/resolv.conf";
 echo "nameserver 1.1.1.3" > "/var/lib/lxc/Debian/rootfs/etc/resolv.conf";
 echo "No default login, please use Sandbox to configure a new OS from this" >> "/var/lib/lxc/Debian/rootfs/etc/issue";
 echo "No default login, please use Sandbox to configure a new OS from this" >> "/var/lib/lxc/Ubuntu20LTS/rootfs/etc/issue";
-echo "No default login, please use Sandbox to configure a new OS from this" >> "/var/lib/lxc/Alpine3.15/rootfs/etc/issue";
-echo "nameserver 1.1.1.3" > "/var/lib/lxc/Alpine3.15/rootfs/etc/resolv.conf";
+echo "No default login, please use Sandbox to configure a new OS from this" >> "/var/lib/lxc/Alpine3.17/rootfs/etc/issue";
+echo "nameserver 1.1.1.3" > "/var/lib/lxc/Alpine3.17/rootfs/etc/resolv.conf";
 exit;
 ```
 

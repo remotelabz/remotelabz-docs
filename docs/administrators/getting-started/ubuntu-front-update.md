@@ -61,16 +61,6 @@ sudo apt-get update;
 sudo apt-get install tmux;
 ```
 
-Check if you have a `remotelabz` user with a directory `/home/remotelabz` and `/home/remotelabz/.ssh`
-Generate a key with the command :
-`sudo -u remotelabz-worker ssh-keygen -m PEM -t rsa -f /home/remotelabz-worker/.ssh/myremotelabzfront`
-This file name is defined in your `.env.local`
-
-```bash
-sudo -u remotelabz ssh-keygen
-sudo cat /home/remotelabz/.ssh/myremotelabzfront.pub | sudo -u remotelabz tee -a /home/remotelabz-worker/.ssh/authorized_keys
-```
-
 
 ##Migration from 2.4.1.5 to 2.4.2.4
 A new feature is introduce to define with protocol can be used to access to the console of the device : `vnc`, `serial` or `login`. So we have to add this protocol to each device. You can have many procotol to the same device. For example, we can use vnc to a qemu vm and a serial to do telnet on the serial line of the VM is the OS is configured.

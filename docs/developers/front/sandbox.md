@@ -113,7 +113,7 @@ After that, we can link the **OperatingSystem** to its new **Device** and apply 
 
 - ### RemoteLabz-Worker
 Currently, the VMs are managed with QEMU. When a **Device** instance is created, it create a snapshot of the base image and save it into `./instances/{group|user}/{groupUUID|userUUID}/{labInstanceUUID}/{deviceUUID}/`.<br>
-In order to commit changes done in the SandboxLab **Device** we need to rebase the base image with this snapshot, but to not corrupt others snapshot that could exist we are gonna apply this to a copy of the base image.
+In order to commit changes done in the SandboxLab **Device** we need to rebase the base image with this snapshot, but to not corrupt others snapshots that could exist we are going to apply this to a copy of the base image.
 This is done in [InstanceManager.php](https://github.com/remotelabz/remotelabz-worker/blob/export-vm/src/Service/Instance/InstanceManager.php#L624) in the ***exportDeviceInstance*** function.
 >> The following commands are the 'template' command executed in the function
 ```bash
