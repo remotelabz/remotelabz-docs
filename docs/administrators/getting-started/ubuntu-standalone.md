@@ -19,7 +19,7 @@ Depend of the number of VMs, containers, and, operating system used, you want to
 - 3 containers with Debian 11.4, Alpine 3.15, Ubuntu Server 20.04 LTS
 - 1 VM Alpine 3.10
 
-The 5th device, called "Migration" is another Alpine to use to configure, at the end of the installation, a 6th container, a DHCP service.
+The 5th device, called "Migration" is another Alpine  used to configure, at the end of the installation, a 6th container, a DHCP service.
 
 ## Installation of the front
 
