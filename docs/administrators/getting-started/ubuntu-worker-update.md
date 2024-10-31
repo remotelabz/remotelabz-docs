@@ -35,8 +35,8 @@ sudo systemctl daemon-reload
 sudo service remotelabz-worker restart
 ```
 
-## From 2.4.4 and above to version 2.5.0
-When you add a worker on the front, you have to add the following lines on the `messenger.yaml` file, in the part 
+## From 2.4.2.6 and above to version 2.4.3
+When you add a worker on the front, you have to add the following lines on the `/opt/remotelabz-worker/config/packages/messenger.yaml` file, in the part 
 ```bash
 framework:
     messenger:
@@ -60,27 +60,26 @@ queues:
     messages_worker2:
         binding_keys: [Worker_2-IP]
 ```
-And so on...
+And so on, for all your workers
 
-First, you have to define the authentication key between all workers for ssh. On each worker, you have to execute the following commands. Obviously, for this following command, you need to know the password of your `remotelabz-worker` user on each worker.
+First, you have to define the authentication key between all workers for ssh. On each worker, you have to execute the following commands. 
+
+!!! warning
+    Obviously, for this following command, you need to know the password of your `remotelabz-worker` user on each worker. Perhaps, you need, in a first step, defined your password with `sudo passwd remotelabz-worker`. You need to have the same password on all workers
 
 ```bash
 sudo mkdir /home/remotelabz-worker
 sudo mkdir /home/remotelabz-worker/.ssh
 sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh
 sudo chmod 700 /home/remotelabz-worker/.ssh
-sudo -u remotelabz-worker ssh-keygen -t rsa -b 4096 -f /home/remotelabz-worker/.ssh/id_rsa -N ""
 sudo -u remotelabz-worker ssh-keygen -m PEM -t rsa -f /home/remotelabz-worker/.ssh/myremotelabzkey
 sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh -R
-
-sudo chmod 600 /home/remotelabz-worker/.ssh/id_rsa
 sudo chmod 600 /home/remotelabz-worker/.ssh/myremotelabzkey
 ```
 
 After this previous first step, between each RemoteLabz-Worker, you have to execute the following command to each worker can connect, with its key, on any another worker
 ```bash
-sudo -u remotelabz ssh-copy-id -i /home/remotelabz/.ssh/myremotelabzfront.pub remotelabz-worker@ remotelabz-worker@Worker_X-IP
-
+sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
 ```
 
 We also need the package php-ssh2 on the front :
@@ -96,6 +95,10 @@ sudo find /var/lib/lxc -type f -exec chmod ug+rw {} +
 sudo find /var/lib/lxc -type d -exec chmod ug+rwx {} +
 ```
 
+the last task is to update your sudo file :
+```bash
+sudo cp /opt/remotelabz-worker/config/sudo/remotelabz-worker  /etc/sudoers.d/remotelabz-worker
+```
 
 ## From 2.4.1.2 and above Version 2.4.1.3
 
