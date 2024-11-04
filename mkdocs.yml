@@ -56,7 +56,8 @@ nav:
         
     - 'For developers':
         - Set Up Local Documentation Server : developers/mkdocs.md
-        - Database Management: developers/Database.md    
+        - Database Management: developers/Database.md
+        - Git Setup: developers/github_setup.md     
         - 'Code':
             - Code Organization: developers/vscode.md
             - 'Front':
