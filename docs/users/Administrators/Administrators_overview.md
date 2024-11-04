@@ -27,9 +27,9 @@ Inside this area, you can manage many elements such as :
 * Sandbox : The containers, vms can be started from there.New container can also be created from existing containers.
 * Instances : allow the administrator to start/stop/leave every lab from there.
 * Services : Allow the administrator to start/stop critical system services such as : 
-  - Worker service which is the service that runs all the VM/Container for remotelabZ 
-  - proxy service which is the service that control the private network used by the labs.
-  - Messaging service: which handles communications between the front and the worker. 
+    * Worker service which is the service that runs all the VM/Container for remotelabZ 
+    * proxy service which is the service that control the private network used by the labs.
+    * Messaging service: which handles communications between the front and the worker. 
 * Usage: give the administrator an overview about which resources are consumed by the worker.
 
 ##Profile restriction

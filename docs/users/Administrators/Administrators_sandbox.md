@@ -16,7 +16,7 @@ To make an export, you have to :
 After you've clicked on the export device button, wait until the process is complete.Once done, it leave the lab automatically and the corresponding new device template and Operating System are created. 
 
 !!! warning
-    Only an Administrator can access this menu and modify an existing default image.
+    Only Teachers and Administrator can access this menu and modify an existing default image.
 
 !!! info
     It's recommended to process a manual shutdown of your device to be sure that the writing cache disk is flushed.
