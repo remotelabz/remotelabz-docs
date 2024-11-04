@@ -7,7 +7,7 @@ Only teachers and administrators can create groups.
 
 The creator of the group has the administrator role and he can give this role to other members of the group. 
 
-The group has a "visibility" property. It can be 
+The group has a "visibility" property. It can be :
 
 - public
 - private
