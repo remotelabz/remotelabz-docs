@@ -19,7 +19,7 @@ from there you can choose it's parameters such as :
  * Upload an image file : Select the image to be uploaded from your local computer ( local file).
 
 !!! warning 
-    you can only provide an image URL (link) or a file through the image file field, but not both !
+    You can only provide an image URL (link) or a file through the image file field, but not both !
 
 !!! Tips
     A new operating system is generated when exporting a device through the sandbox menu.

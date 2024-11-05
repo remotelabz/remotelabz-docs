@@ -29,7 +29,6 @@ nav:
             - Overview: users/Administrators/Administrators_overview.md
             - Laboratory: users/Administrators/Administrators_laboratory.md
             - Laboratory Creation Tutorial: users/Administrators/Administrators_lab-creation-tutorial.md
-            - Sandbox: users/Administrators/Administrators_sandbox.md
             - Group Management: users/Administrators/Administrators_group.md
             - 'Admin Area':
                - User Management: users/Administrators/Administrators_user.md
@@ -38,6 +37,7 @@ nav:
                - Hypervisors Management: users/Administrators/Administrators_hypervisors.md
                - Operating System Management: users/Administrators/Administrators_Operating_system.md
                - Device Template Management: users/Administrators/Administrators_Device_templates.md
+               - Sandbox: users/Administrators/Administrators_sandbox.md
                - Instance Management: users/Administrators/Administrators_Instance_management.md
                - Service Management: users/Administrators/Administrators_Service.md
                - Usage Management: users/Administrators/Administrators_resources_usages.md    
@@ -57,7 +57,7 @@ nav:
     - 'For developers':
         - Set Up Local Documentation Server : developers/mkdocs.md
         - Database Management: developers/Database.md
-        - Git Setup: developers/github_setup.md     
+        - Contribute: developers/github_setup.md     
         - 'Code':
             - Code Organization: developers/vscode.md
             - 'Front':

@@ -1,7 +1,7 @@
 #Group management
 ##Group creation
 
-![Screenshot](/images/Administrator/first-lab/Lab_running.png)
+![Screenshot](/images/Administrator/group/GroupCreation.png)
 
 Only teachers and administrators can create groups.
 
