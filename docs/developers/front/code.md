@@ -3,8 +3,8 @@ The remotelabz is divided in 4 parts :
 
 - `remotelabz` for the frontend
 - `remotelabz-worker` for the server which execute all VMs, called the backend
-- `remotelabz-message-bundle` uses by both remotelabz and remotelabz-worker to manage the message exchanged between the frontend and the backend
-- `network-bundle` uses by both frontend and backend
+- `remotelabz-message-bundle` uses by both remotelabz and remotelabz-worker to manage the message exchanged between the frontend and the backend (Deprecated - replaced by RabbitMQ on recent versions)
+- `network-bundle` uses by both frontend and backend (Deprecated - replaced by OpenVswitch on recent versions) 
 
 # Certificates generation for local development
 

@@ -154,7 +154,7 @@ echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
     Avoid special character in the JWT, otherwise you will have some errors
 
 !!! tips
-    In order for the app to work correctly, a key pair is created for JWT. You can find detailed configuration in [the LexikJWTAuthenticationBundle doc](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#generate-the-ssh-keys).
+    In order for the app to work correctly, a key pair is created for JWT. You can find detailed configuration in [the LexikJWTAuthenticationBundle doc](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.rst#generate-the-ssh-keys).
 
 
 #### Directory permissions
@@ -224,6 +224,7 @@ Next, type
 ```bash
 sudo ./install
 ```
+    
 ### Configuration of the worker
 You have to configure, first, at least, 1 worker, from your front server.This is done by modifying `\opt\remotelabz\config\packages\messenger.yaml`  When you add a worker to the front, you will have to add the following lines 
 ```bash
@@ -248,6 +249,12 @@ If you add another worker, you will have to add,
         binding_keys: [Worker_2_IP]
 ```
 and so on.
+!!! warning
+    If the worker is on a distant server, you must check if the worker IP is correctly set in `/opt/remotelabz/.env.local` according to the following :
+    Example with a worker on a server with the IP 123.12.167.22
+    ```bash
+    WORKER_SERVER=123.12.167.22
+    ```
 
 #### Start your RemoteLabz Worker service
 Normally, the service remotelabz-worker is started during the installation phase and it will start automatically when your system boots up.However, if you need to start the service manually :
