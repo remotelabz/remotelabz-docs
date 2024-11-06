@@ -29,7 +29,8 @@ This is due to the script asking to install a version of Alpine that is no longe
 To circumvent this, the install script must be modified.
 Open the install script and change those lines
 
-```LXC=`lxc-ls -name "Alpine3.15"`;
+```bash
+LXC=`lxc-ls -name "Alpine3.15"`;
 if [ "${LXC}" == "" ] ; then
 echo "Creation of a container Alpine 3.15"
 DOWNLOAD_KEYSERVER="keyserver.ubuntu.com" lxc-create -t download -n Alpine3.15 -- -d alpine -r 3.15 -a amd64
@@ -40,7 +41,8 @@ fi;
 ```
 to
 
-```LXC=`lxc-ls -name "Alpine3.17"`;
+```bash
+LXC=`lxc-ls -name "Alpine3.17"`;
 if [ "${LXC}" == "" ] ; then
 echo "Creation of a container Alpine 3.17"
 DOWNLOAD_KEYSERVER="keyserver.ubuntu.com" lxc-create -t download -n Alpine3.17 -- -d alpine -r 3.17 -a amd64
@@ -66,3 +68,24 @@ If you want to add a device in the editor and no templates are displayed in the 
 chown www-data:www-data config/templates
 chmod 664 config/templates
 ```
+## Lab Export running endlessly
+Restart the messenger first.
+If the log mention :
+```bash 
+[2024-11-06T15:46:34.781498+01:00] messenger.CRITICAL: Error thrown while handling message Remotelabz\Message\Message\InstanceActionMessage. Removing from transport after 3 retries. Error: "Handling "Remotelabz\Message\Message\InstanceActionMessage" failed: Undefined class constant 'ACTION_EXPORT'" {"message":{"Remotelabz\\Message\\Message\\InstanceActionMessage":[]},"class":"Remotelabz\\Message\\Message\\InstanceActionMessage","retryCount":3,"error":"Handling \"Remotelabz\\Message\\Message\\InstanceActionMessage\" failed: Undefined class constant 'ACTION_EXPORT'","exception":"[object] (Symfony\\Component\\Messenger\\Exception\\HandlerFailedException(code: 0): Handling \"Remotelabz\\Message\\Message\\InstanceActionMessage\" failed: Undefined class constant 'ACTION_EXPORT' at /opt/remotelabz-worker/vendor/symfony/messenger/Middleware/HandleMessageMiddleware.php:80)\n[previous exception] [object] (Error(code: 0): Undefined class constant 'ACTION_EXPORT' at /opt/remotelabz-worker/src/MessageHandler/InstanceActionMessageHandler.php:141)"} []
+```
+
+This issue is caused by a state message EXPORT that is unrecognized by the worker.To solve this modify the file `/opt/remotelabz-worker/vendor/remotelabz/remotelabz-message-bundle/Message` and add `const ACTION_EXPORT = "export";` at the beginning of the file, where all others actions constants are listed.
+
+Then restart the worker.
+
+ 
+
+
+
+
+
+
+    
+
+

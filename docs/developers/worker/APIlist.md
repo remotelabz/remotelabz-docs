@@ -1,7 +1,7 @@
 #API commands
-Remotelabz workers also use a REST API to communicate certain data to the front 
+Remotelabz workers also use an internal REST API to communicate certain data to the front. 
+Here a list of this API's commands:
 ## Get
-Here a list of this API's get commands:
 
  * `apiGetCPUUsage()` : return cpu usage in percentage
  * `apiGetDiskUsage()` : return disk usage in percentage
@@ -11,7 +11,6 @@ Here a list of this API's get commands:
  * `apiGetSwapUsage()`: Return the SWAP usage percentage.
 
 ## Set
-Here a list of this API's set commands:
 
  * `apiSetUksm($processor)` : Set UKSM status for processor `$processor`.
  * `apiSetKsm($processor)` : Set KSM status for processor `$processor`.

@@ -8,6 +8,7 @@ The remotelabz is divided in 4 parts :
 - `remotelabz-message-bundle` uses by both remotelabz and remotelabz-worker to manage the message exchanged between the frontend and the backend
 - `network-bundle` uses by both frontend and backend
 
+
 ##RemoteLabZ Web Pages Code
 
 The front's webpages code is on ```templates``` directory.

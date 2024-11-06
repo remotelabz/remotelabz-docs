@@ -4,15 +4,15 @@ The goal of the sandbox is to modify an existing VMs images on the RemoteLabz an
 
 ## How to access
 When you click on the menu ```Device Sandbox``, the route `/admin/devices_sandbox` is used. This function is only authorized to a user with an admin role.<br>
-This page is managed by [DeviceSandboxController](https://github.com/remotelabz/remotelabz/blob/export-vm/src/Controller/DeviceSandboxController.php).<br>
+This page is managed by [DeviceSandboxController](https://github.com/remotelabz/remotelabz/blob/master/src/Controller/DeviceSandboxController.php).<br>
 It retrieves all existing device templates in the system and pass it to the template to format the data. It also pass **User** information in the props for later<br>
-The view is described in [templates/device_sandbox/index.html.twig](https://github.com/remotelabz/remotelabz/blob/export-vm/templates/device_sandbox/index.html.twig).
+The view is described in [templates/device_sandbox/index.html.twig](https://github.com/remotelabz/remotelabz/blob/master/templates/device_sandbox/index.html.twig).
 
-The data are processed in React Component that are defined in [assets/js/components/Sandbox/*](https://github.com/remotelabz/remotelabz/tree/export-vm/assets/js/components/Sandbox)<br>
+The data are processed in React Component that are defined in [assets/js/components/Sandbox/*](https://github.com/remotelabz/remotelabz/tree/master/assets/js/components/Sandbox)<br>
 
 ## Sandbox Lab
 In order to launch a Device we need to have it in a **Lab**. So if we want to modify an existing image (**Device**) we need to create a **Lab** and then add the **Device** that we want to modify.<br>
-All the process in order to achieve this is done in the React Component [SandboxListItem](https://github.com/remotelabz/remotelabz/blob/export-vm/assets/js/components/Sandbox/SandboxListItem.js) and is made by calling the API.
+All the process in order to achieve this is done in the React Component [SandboxListItem](https://github.com/remotelabz/remotelabz/blob/master/assets/js/components/Sandbox/SandboxListItem.js) and is made by calling the API.
 
 When you click on ``Device Sandbox``, the process follows the steps :
 
@@ -64,10 +64,10 @@ After this process, we can set the state 'exist' of the sandbox lab to 'true' to
 It will redirect the **User** to `/admin/devices_sandbox/{lab-id}`
 
 ## Sandbox Lab view page
-It takes the template of a **Lab** view page and we adjust it by removing not neccessary data (like Lab name, view_as options). Template can be found here [templates/device_sandbox/view.html.twig](https://github.com/remotelabz/remotelabz/blob/export-vm/templates/device_sandbox/view.html.twig)
+It takes the template of a **Lab** view page and we adjust it by removing not neccessary data (like Lab name, view_as options). Template can be found here [templates/device_sandbox/view.html.twig](https://github.com/remotelabz/remotelabz/blob/master/templates/device_sandbox/view.html.twig)
 
 ### Export button
-In this part, all the code is in [InstanceListItem.js](https://github.com/remotelabz/remotelabz/blob/export-vm/assets/js/components/Instances/InstanceListItem.js)
+In this part, all the code is in [InstanceListItem.js](https://github.com/remotelabz/remotelabz/blob/master/assets/js/components/Instances/InstanceListItem.js)
 We want to export VMs so we need to add an export button with a text option (to name the new **Device**). <br>
 We only want to export the VM if it's stopped and come from a Sandbox Lab. The first button will toggle the form.
 ``` javascript
@@ -85,7 +85,7 @@ toggleShowExport = () => {
     this.setState({ showExport: !this.state.showExport });
 }
 ```
-When the button is pressed, it will show a form that is managed by the React Component [InstanceExport](https://github.com/remotelabz/remotelabz/blob/export-vm/assets/js/components/Instances/InstanceExport.js).
+When the button is pressed, it will show a form that is managed by the React Component [InstanceExport](https://github.com/remotelabz/remotelabz/blob/master/assets/js/components/Instances/InstanceExport.js).
 We pass to the Component the actual deviceInstance that we want to export and the function that manage the exportation process.
 ``` javascript
 {(deviceInstance.state == 'stopped' && this.state.showExport) &&
@@ -96,9 +96,9 @@ The function ***exportDeviceTemplate*** is making a call to the API endpoint `/a
 
 ## Export Process
 ### RemoteLabz
-In order to export a **Device**, we need to make an API endpoint that is managed in [InstanceController](https://github.com/remotelabz/remotelabz/blob/export-vm/src/Controller/InstanceController.php#L152). It requires the deviceInstance UUID, to fetch the Object from the database, and a name.
+In order to export a **Device**, we need to make an API endpoint that is managed in [InstanceController](https://github.com/remotelabz/remotelabz/blob/master/src/Controller/InstanceController.php#L152). It requires the deviceInstance UUID, to fetch the Object from the database, and a name.
 After that we can launch the process to create a clone of the **Device** and its **Operating System**.<br>
-The process is managed in [InstanceManager](https://github.com/remotelabz/remotelabz/blob/export-vm/src/Service/Instance/InstanceManager.php#L211) by the function ***export***.<br>
+The process is managed in [InstanceManager](https://github.com/remotelabz/remotelabz/blob/master/src/Service/Instance/InstanceManager.php#L211) by the function ***export***.<br>
 In order to avoid conflicts in image name, we need to make it unique by adding current date and time plus an id.
 ```php
 now = new DateTime();
@@ -114,7 +114,7 @@ After that, we can link the **OperatingSystem** to its new **Device** and apply 
 - ### RemoteLabz-Worker
 Currently, the VMs are managed with QEMU. When a **Device** instance is created, it create a snapshot of the base image and save it into `./instances/{group|user}/{groupUUID|userUUID}/{labInstanceUUID}/{deviceUUID}/`.<br>
 In order to commit changes done in the SandboxLab **Device** we need to rebase the base image with this snapshot, but to not corrupt others snapshots that could exist we are going to apply this to a copy of the base image.
-This is done in [InstanceManager.php](https://github.com/remotelabz/remotelabz-worker/blob/export-vm/src/Service/Instance/InstanceManager.php#L624) in the ***exportDeviceInstance*** function.
+This is done in [InstanceManager.php](https://github.com/remotelabz/remotelabz-worker/blob/master/src/Service/Instance/InstanceManager.php#L624) in the ***exportDeviceInstance*** function.
 >> The following commands are the 'template' command executed in the function
 ```bash
 cp image-source new-image
@@ -126,16 +126,16 @@ rm new-snapshot
 The new image will be saved with the other base image, in `/images/`
 
 ## React Component
-- ### [SandboxManager](https://github.com/remotelabz/remotelabz/blob/export-vm/assets/js/components/Sandbox/SandboxManager.js)
+- ### [SandboxManager](https://github.com/remotelabz/remotelabz/blob/master/assets/js/components/Sandbox/SandboxManager.js)
 This is the main component that is called by ***react_component*** in the template.<br>
 There is only a call to [SandboxList](#sandboxlist) in it but was created for future usage / improvements.<br>
 It send a list of **Device** and the **User** data to [SandboxList](#sandboxlist).
 
-- ### [SandboxList](https://github.com/remotelabz/remotelabz/blob/export-vm/assets/js/components/Sandbox/SandboxList.js)
+- ### [SandboxList](https://github.com/remotelabz/remotelabz/blob/master/assets/js/components/Sandbox/SandboxList.js)
 This component process the devices data (given in **json** format by the Controller ealier).
 For each **Device** it create a [SandboxListItem](#sandboxlistitem) and sends **Device** and **User** data to it.
 
-- ### [SandboxListItem](https://github.com/remotelabz/remotelabz/blob/export-vm/assets/js/components/Sandbox/SandboxListItem.js)
+- ### [SandboxListItem](https://github.com/remotelabz/remotelabz/blob/master/assets/js/components/Sandbox/SandboxListItem.js)
 This is where the main process is done. It manage the 'state' of each device template.<br>
 When the component is called, it is going to search if the **Device** as already a Sandbox Lab created for it and the **User**.<br>
 If a Sandbox exist, it will show a button to redirect the **User** to the **Device** Sandbox Lab, otherwise It will show the 'Modify' button that will create the Sandbox instance.
@@ -146,8 +146,8 @@ It handle the export form.
 ## New Endpoints
 - ### Web
 ```
-GET /admin/devices_sandbox			- HomePage of Sandbox
-GET /admin/devices_sandbox/{labId}	- Sandbox Lab page
+GET /admin/sandbox			- HomePage of Sandbox
+GET /admin/sandbox/{labId}	- Sandbox Lab page
 ```
 - ### API
 ```
