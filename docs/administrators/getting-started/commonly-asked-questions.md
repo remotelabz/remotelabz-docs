@@ -45,16 +45,16 @@ To avoid a teacher or an user include a corrupted image, only the administrator 
 15. Restart the VM and log in
 16. Type `sudo fdisk -l` and check that a new partition is present
 17. Find your volume group with `df -h`.
- * Example: `/dev/mapper/ubuntu--vg-root 15G 4.5G ...`
- * Volume group is: `ubuntu-vg`
+    * Example: `/dev/mapper/ubuntu--vg-root 15G 4.5G ...`
+    * Volume group is: `ubuntu-vg`
 18. Extend the volume group : `sudo vgextend [volume group] /dev/sdaX`
- * Example: `sudo vgextend ubuntu-vg /dev/sda3`
+    * Example: `sudo vgextend ubuntu-vg /dev/sda3`
 19. Find the amount of free space available : `sudo vgdisplay [volume group] | grep "Free"`
 20. Expand the logical volume : `sudo lvextend -L+[freespace]G /dev/[volgroup]/[volume]`
- * Example 1: `sudo lvextend -L+64G /dev/ubuntu-vg/root`
- * Example 2: `sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu`
+     * Example 1: `sudo lvextend -L+64G /dev/ubuntu-vg/root`
+     * Example 2: `sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu`
 21. Expand the ext3 file system in the logical volume : `sudo resize2fs /dev/[volgroup]/[volume]`
- * Example: `sudo resize2fs /dev/ubuntu-vg/root`
+     * Example: `sudo resize2fs /dev/ubuntu-vg/root`
 22. You can now run the df command to very that you have more space `df -h`
 
 ## How to import a new image from an OVA
@@ -70,7 +70,7 @@ As root, in operating system (OS), add a new operating system and in the Image f
 
 ## How to remove all bridge OVS on a worker manually
 ```bash
-for i in sudo ovs-vsctl show| grep "Bridge" | grep "br-" | cut -d " " -f 6; do sudo ovs-vsctl del-br $i; done;
+for i in $(sudo ovs-vsctl show | grep "Bridge" | grep "br-" | cut -d " " -f 6); do sudo ovs-vsctl del-br $i; done;
 ```
 
 ## How to check the the queue and exchange with RabbitMQ
