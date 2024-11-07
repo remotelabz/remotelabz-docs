@@ -79,7 +79,7 @@ sudo chmod 600 /home/remotelabz-worker/.ssh/myremotelabzkey
 
 After this previous first step, between each RemoteLabz-Worker, you have to execute the following command to each worker can connect, with its key, on any another worker
 ```bash
-sudo -u remotelabz ssh-copy-id -i /home/remotelabz/.ssh/myremotelabzfront.pub remotelabz-worker@ remotelabz-worker@Worker_X-IP
+sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
 ```
 
 We also need the package php-ssh2 on the front :
