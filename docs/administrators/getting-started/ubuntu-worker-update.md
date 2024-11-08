@@ -1,4 +1,4 @@
-# RemoteLabz's front update guide
+# RemoteLabz's worker update guide
 
 ###Save your .env file
 All configuration variables are saved in the file `.env.local` or if you don't have this file, in the file `.env`
@@ -87,7 +87,7 @@ The package php-ssh2 on the front is also required, you can install it using the
 sudo apt-get install php-ssh2
 ```
 
-Proper permissions must be set to allow the group `remotelabz-worker` on `/var/lib/lxc` to make scp connection on each workers
+you must set proper permissions to allow the group `remotelabz-worker` on `/var/lib/lxc` to make scp connection on all workers
 
 ```bash
 sudo chown root:remotelabz-worker /var/lib/lxc -R
@@ -102,7 +102,7 @@ sudo cp /opt/remotelabz-worker/config/sudo/remotelabz-worker  /etc/sudoers.d/rem
 
 ## From 2.4.1.2 and above Version 2.4.1.3
 
-First, Install the ttyd package
+First,you have to Install the ttyd package
 
 ```bash
 sudo apt-get install -y screen build-essential cmake git libjson-c-dev libwebsockets-dev
@@ -113,12 +113,12 @@ cmake ..
 make && sudo make install
 ```
 
-Then install some default container
+Then, You need to install some default container
 ```bash
 sudo lxc-create -t download -n Migration -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com;
 sudo lxc-create -t download -n Debian -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com;
 sudo lxc-create -t download -n Ubuntu20LTS -- -d ubuntu -r focal -a amd64 --keyserver hkp://keyserver.ubuntu.com;
-sudo lxc-create -t download -n Alpine3.15 -- -d alpine -r 3.15 -a amd64 --keyserver hkp://keyserver.ubuntu.com;
+sudo lxc-create -t download -n Alpine3.17 -- -d alpine -r 3.17 -a amd64 --keyserver hkp://keyserver.ubuntu.com;
 sudo su;
 echo "nameserver 1.1.1.3" > "/var/lib/lxc/Migration/rootfs/etc/resolv.conf";
 echo "nameserver 1.1.1.3" > "/var/lib/lxc/Debian/rootfs/etc/resolv.conf";
@@ -128,7 +128,7 @@ echo "No default login, please use Sandbox to configure a new OS from this" >> "
 echo "nameserver 1.1.1.3" > "/var/lib/lxc/Alpine3.15/rootfs/etc/resolv.conf";
 exit;
 ```
-Last, restart all the workers.
+Once done, you have to restart all the workers.
 ```bash
 echo "%remotelabz-worker     ALL = (ALL) NOPASSWD: $(which ip), $(which iptables), $(which ovs-vsctl), $(which systemctl) start remotelabz*, $(which systemctl) stop remotelabz*, $(which systemctl) restart remotelabz*, $(which systemctl) status remotelabz*" | sudo tee /etc/sudoers.d/remotelabz-worker
 echo "%www-data     ALL = (ALL) NOPASSWD: $(which ip), $(which iptables), $(which ovs-vsctl), $(which systemctl) start remotelabz*, $(which systemctl) stop remotelabz*, $(which systemctl) restart remotelabz*, $(which systemctl) status remotelabz*" | sudo tee -a /etc/sudoers.d/remotelabz-worker
