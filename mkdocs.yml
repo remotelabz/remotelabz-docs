@@ -23,9 +23,7 @@ nav:
         - 'Update':
              - Update Front: administrators/getting-started/ubuntu-front-update.md
              - Update Worker: administrators/getting-started/ubuntu-worker-update.md
-        - 'Your First Laboratory':
-             - As a Teacher: users/Teachers/Teachers_lab-creation-tutorial.md
-             - As an administrator: users/Administrators/Administrators_lab-creation-tutorial.md
+        - Your First Laboratory: users/Teachers/Teachers_lab-creation-tutorial.md
 
     - 'Using RemoteLabZ':
         - 'Students':
@@ -53,11 +51,10 @@ nav:
                - Usage Management: users/Administrators/Administrators_resources_usages.md    
 
     - 'Contribute':
-        - Set Up a Local Documentation Server : developers/mkdocs.md
-        - Database Management: developers/Database.md
-        - Contribute to RemoteLabZ: developers/github_setup.md     
-        - 'Code':
+        - Contribute to RemoteLabZ: developers/github_setup.md
+        - 'Development':
             - Code Organization: developers/vscode.md
+            - Database Management: developers/Database.md
             - 'Front':
                 - Certificates management: developers/front/certificates.md
                 - Device Sandbox: developers/front/sandbox.md

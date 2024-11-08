@@ -5,7 +5,7 @@ Remotelabz uses a MYSQL database that can be accessed locally on remotelabz fron
 
 By default, the MySQL database is configured with the root password : "RemoteLabz-2022$", a user "user" is also created with password "Mysql-Pa33wrd$". 
 
-##Remote access to database
+##Accessing Remotely to Database
 
 First you need to edit the mysql configuration file `/etc/mysql/mysql.conf.d/mysqld.cnf` on the front server
 
@@ -28,7 +28,7 @@ GRANT ALL PRIVILEGES ON remotelabz.* TO 'rlabdevel'@'%' with grant option;
 !!! Warning 
     This will expose your mysql server over your network.For security reasons,tt is recommended to choose a strong password for the user `rlabdevel`.
 
-##Database schematic
+##Database Structure
 
 ![Screenshot](/images/Developers/remotelabz-schema-db.png)
 
