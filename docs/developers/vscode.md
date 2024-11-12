@@ -19,7 +19,6 @@ The web page of a lab is on file ```view.html.twig``` and the lab is managed by 
 ### PHP Code
 
 For the front server and the worker server, the PHP code is located on `/opt/remotelabz/src`.
-This project use the Symphony framework,it's sourcefiles are located on `/opt/remotelabz/vendor` .
 
 Remotelabz logs are located on `/opt/remotelabz/var/log`
 
@@ -68,12 +67,12 @@ Version 16.8 minimum because some script uses Hooks (https://fr.reactjs.org/docs
 ### amqp-messenger 
 
 This project uses AMQP messaging protocol to handle communication between the host and the worker.
-amqp-messenger is a library required by symphony to handle this amqp protocol.
+amqp-messenger is a library required by symphony to handle this protocol.
 Recommended version is 5.2.12.
 
 ### Symfony
 
-This project is based on Symphony which is a popular MVC framework for PHP.
+This project is based on Symphony which is a popular MVC framework for PHP.It's sourcefiles are located on `/opt/remotelabz/vendor` .
 We recommand version 5.4.2.9 minimum. 
 
 

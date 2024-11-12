@@ -51,7 +51,7 @@ sudo ./bin/install_requirement.sh
 After this process, you have to take into account the following information :
 
 #### RabbitMQ and MySQL pre-configurations
-The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user "user" is created with password "Mysql-Pa33wrd\$". It is recommended to change it once your RemoteLabz works fine.
+The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user "user" is created with password "Mysql-Pa33wrd\$". It is recommended to change it once you have ensured that RemoteLabz is working fine.
 
 !!! Tips
     During the `install_requirement.sh` process, a `remotelabz-amqp` user is created in RabbitMQ with the password `password-amqp`. If you want to change the password of an existing user `remotelabz-amqp` of your RabbitMQ, you have to type the following command :
