@@ -16,7 +16,6 @@ copyright: Developed by Julien Hubert &amp; Florent Nolot 2018 - 2024 Modified b
 nav:
     - 'Getting Started':
         - What is RemoteLabZ ?: index.md
-        - Requirements: administrators/getting-started/install.md
         - 'Installation':
                 - Installation: administrators/getting-started/ubuntu-standalone.md
                 - SSL: administrators/getting-started/ubuntu-secure.md

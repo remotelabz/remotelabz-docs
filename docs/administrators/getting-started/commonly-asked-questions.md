@@ -1,5 +1,9 @@
 # Commonly Asked Questions
 
+## RemoteLabZ Logs location 
+
+RemoteLabz's logs are located under `/opt/remotelabz/var/log/` and RabbitMQ's log under `/var/log/rabbitmq`
+
 ## Change password of phpmyadmin
 ```bash
 sudo mysql -h localhost -u root -p
