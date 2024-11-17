@@ -82,6 +82,11 @@ Once done, for each RemoteLabz-Worker, you have to execute the following command
 sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
 ```
 
+To test the ssh key copy, you have to :
+```bash
+sudo -u remotelabz-worker ssh -i /home/remotelabz-worker/.ssh/myremotelabzkey remotelabz-worker@Worker_X-IP
+```
+
 The package php-ssh2 on the front is also required, you can install it using the command below :
 ```bash
 sudo apt-get install php-ssh2
