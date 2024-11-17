@@ -3,8 +3,8 @@ The remotelabz is divided in 4 parts :
 
 - `remotelabz` for the frontend
 - `remotelabz-worker` for the server which execute all VMs, called the backend
-- `remotelabz-message-bundle` uses by both remotelabz and remotelabz-worker to manage the message exchanged between the frontend and the backend
-- `network-bundle` uses by both frontend and backend
+- `remotelabz-message-bundle` uses by both remotelabz and remotelabz-worker to manage the message exchanged between the frontend and the backend (Deprecated - replaced by RabbitMQ on recent versions)
+- `network-bundle` uses by both frontend and backend (Deprecated - replaced by OpenVswitch on recent versions) 
 
 # Certificates generation for local development
 
@@ -36,17 +36,21 @@ openssl x509 -req -in server-dev-rlz.csr -out server-dev-rlz.crt -CA server-dev-
 ```
 
 # Code organisation
+##Remotelabz
 The front's code is on ```templates``` directory.
 
 The web page of a lab is on file ```view.html.twig``` and the lab is managed by a react component ```{{ react_component('InstanceManager', {'props': props}) }}``` defined in ```assets/js/components/Instances/```
 
 When a user starts a lab, a message (json) is sent to the worker and analyzed by ```MessageHandler/InstanceActionMessageHandler.php```. The instance, which is a started lab, is managed by the Instance Manager service in ```Service/Instance/InstanceManager.php```
 
+
 # Semantic Versioning
 
 https://semver.org/
 
-# Use of ttyd and configurable-http-proxy
+#Dependencies
+
+## Use of ttyd and configurable-http-proxy
 
 We assume the following.
 On the front :
@@ -63,10 +67,10 @@ on the worker, we receive a request to `/test12` So, with ttyd, we have to `ttyd
 
 If you add a route to https and use ttyd with cert, it's doesn't work.
 
-# Yarn 
+## Yarn 
 
 Each time you modify Javascript or ReactJS, you need to do a `yarn encore dev` All JS code is in the asset directory.
 
-# ReactJS
+## ReactJS
 
 Version 16.8 minimum because some script uses Hooks (https://fr.reactjs.org/docs/hooks-state.html). All codes are not translate to use Hooks.

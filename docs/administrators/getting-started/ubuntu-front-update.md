@@ -25,7 +25,7 @@ git pull
     git checkout dev
     ```
 
-Compare your `.env.local` file with the `.env` file to be sure we have the same parameters defined 
+Compare your `.env.local` file with the `.env` file to make sure the same parameters are there
 
 ```bash
 sudo composer update
@@ -42,14 +42,14 @@ sudo service remotelabz restart
 
 ##Migration from 2.4.3 to 2.4.4
 
-The RabbitMQ configuration need to be modified to manage multiples workers.
+The RabbitMQ configuration need to be modified in order to manage multiples workers.
 ```bash
 sudo rabbitmqctl set_user_tags remotelabz-amqp administrator
 sudo rabbitmq-plugins enable rabbitmq_management
 sudo rabbitmqadmin delete exchange name=worker
 ```
 
-You have to do the following task :
+Then, the following commands must be entered  :
 ```bash
 cd /opt/remotelabz;
 sudo chmod 664 config/packages/messenger.yaml;
@@ -62,9 +62,9 @@ sudo apt-get install tmux;
 ```
 
 !!! warning
-    Before to execute the following task, update all your workers with the version at least 2.4.3 or dev from october 26, 2024 (commit 5b929ae)
+    Prior to execute the following task, update all your workers. Their version must not be older than 2.4.3 or dev from october 26, 2024 (commit 5b929ae)
 
-Check if you have a `remotelabz` user with a directory `/home/remotelabz` and `/home/remotelabz/.ssh` with the correct ownerships and permissions.
+Check that you have a `remotelabz` user with a directory `/home/remotelabz` and `/home/remotelabz/.ssh` with the correct ownerships and permissions.
 
 Generate the key named `myremotelabzfront`, defined in your `.env.local` with the following command:
 
@@ -81,15 +81,15 @@ sudo cp /opt/remotelabz/config/system/sudoers /etc/sudoers.d/remotelabz
 ```
 
 ##Migration from 2.4.1.5 to 2.4.2.4
-A new feature is introduce to define with protocol can be used to access to the console of the device : `vnc`, `serial` or `login`. So we have to add this protocol to each device. You can have many procotol to the same device. For example, we can use vnc to a qemu vm and a serial to do telnet on the serial line of the VM is the OS is configured.
+A new feature has been introduced which allow to define which protocol that can be used to access the device's console : `vnc`, `serial` or `login`. So we have to add this protocol to each device. You can have more than one procotol to the same device. For example, we can use the vnc protocol to connect to a qemu vm and the serial protocol to use telnet on the serial line of the VM where the OS is configured.
 
 The main usage is : 
-- `vnc` for qemu VM
-- `login` for container lxc
-- `serial` for network device like firewalls, switchs, routers, ...
+  - `vnc` for qemu VM
+  - `login` for container lxc
+  - `serial` for network device like firewalls, switchs, routers, ...
 
 ##Migration from 2.4.1.1 to 2.4.1.3
-In your device, you have a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to each lab you will build.
+In your device, you have a device which is named "Migration". This container will be used to configure a new container, called "Service" which will provide a DHCP service to each lab you will build.
 
 First : in the sandbox, start the "Migration" device. In the console, configure the network of the device (show the log to know it) and next, type the following command :
 ```bash
@@ -99,7 +99,7 @@ echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf;
 sync;
 systemctl enable dnsmasq;
 ```
-Modify your /etc/sudoers file to add, at the end, the two following lines: 
+Modify your /etc/sudoers file to add, at the end, the following lines: 
 ```bash
 Cmnd_Alias REMOTELABZ_CMDS = /bin/systemctl start remotelabz*, /bin/systemctl stop remotelabz*, /bin/systemctl status remotelabz*
 
@@ -108,18 +108,18 @@ Cmnd_Alias REMOTELABZ_CMDS = /bin/systemctl start remotelabz*, /bin/systemctl st
 
 ##Migration from 2.4.0 to 2.4.1.1
 
-To update from 2.4.0 to 2.4.1.1, on the worker, you have to :
+To update from 2.4.0 to 2.4.1.1, on the worker, you need to type the following command :
 ```bash
 sudo lxc-create -t download -n Migration -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com
 ```
-Create a new device like in the following image :
+Then,create a new device like in the following image :
 ![Screenshot](/images/Migration/Migration.jpg)
 In the Device Sandbox menu, click on the button "Modify" of the device "Migration" and start it (with button play). On the worker, a new container is created and started with an uuid name. You can find the uuid under the device name "Migration", like in the following image.
 ![Screenshot](/images/Migration/Migration-Sandbox.jpg)
-In this example, the uuid is`a18d566a-6023-43df-a16e-4367065c5ecf` and on the worker, with the command `lxc-ls -f`, we can see this container.
+In this example, the uuid is`a18d566a-6023-43df-a16e-4367065c5ecf`.This container can be listed directly on the worker, using the command `lxc-ls -f`.
 ![Screenshot](/images/Migration/Migration-Console.jpg)
 
-Install in this container a dhcp server. The following example used the previous uuid.
+A DHCP server must be installed on this container. The example below is using the previous uuid.
 ```bash
 sudo lxc-attach -n "a18d566a-6023-43df-a16e-4367065c5ecf"
 echo "nameserver 1.1.1.3" > /etc/resolv.conf
@@ -128,25 +128,25 @@ apt-get upgrade
 apt-get install dnsmasq
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
 ```
-After, you can stop the container from the RemoteLabz interface and you have to export this modified device with the name "Service"
+Once done, stop the modified container from the RemoteLabz interface and export it using the name "Service".
 ![Screenshot](/images/Migration/Migration-Export.jpg)
 
-A new operating system and device is created with the name "Service" but the name of the image of the operating system is wrong. It's "service_" following a date. You have to edit the Operating System called "Service" with the Edit button. 
+Then a new operating system and device is created with the name "Service" but the name of the operating system's image is wrong. It is called "service_" following a date.Using the Edit button, Edit this name and name it "Service" instead. 
 ![Screenshot](/images/Migration/Migration-OS-image.jpg)
 
 Change the image filename "service_" to "Service"
 ![Screenshot](/images/Migration/Migration-OS-changed.jpg)
 
-Now, you can create a new lab with this device to offer IPv4 addresses to all other device, with the DHCP server installed in this container. The IPv4 of the DHCP will be the (last IPv4 - 1). The last IP is always the gateway of your laboratory.
+Now, once a new lab has been created using this device, all other devices on it will automatically receive IPv4 addresses thanks to the DHCP server installed in the associated container. The DHCP's IPV4 will be the (last IPv4 - 1). The last IP always corresponds to your laboratory's gateway.
 
 ![Screenshot](/images/Migration/Migration-End.jpg)
 
 
 ##Migration from 2.3 to 2.4.0
-To update from 2.3 to 2.4.0, you can add default image to all labs with the following command :
+To update from 2.3 to 2.4.0, add default image to all labs with the following command :
 ```bash
 sudo find /opt/remotelabz/public/uploads/lab/banner/* -type d -exec cp /opt/remotelabz/public/build/images/logo/nopic.jpg {}/nopic.jpg \;
 ```
-You also have to add all user in the default group if you want they can execute some basic labs
+If needed, add all user in the default group so they can access to the labs.
 
 
