@@ -1,7 +1,7 @@
 
 # Configure your RemoteLabz
 
-### Add a DHCP Service for your laboratory
+## Add a DHCP Service for your laboratory
 In the device list, you will find a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to your laboratory. Each laboratory has its own DHCP service and its own network, so the RemoteLabz needs to configure this generic container to offer IP on the right network. For each lab, if you add the DHCP service container, it will be configured with the IP : IP_Gateway - 1. 
 For example, if your attributed network is 10.10.10.0/27, your gateway will be 10.10.10.30 and you DHCP service container will have the IP 10.10.10.29 .
 
@@ -30,17 +30,17 @@ The last line (`systemctl disable systemd-networkd`) is mandatory otherwise your
 Your "Service" device, which is a container, is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
 On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
 
-# Configure RemoteLabz to use SSL
+## Configure RemoteLabz to use SSL
 
 This section guides you through the configuration of SSL between all service of the RemoteLabz.
 
-## Requirement
+### Requirement
 Prior to configure SSL, Remotelabz front and worker must be installed and fully functional. 
 
 - You must connect to a device of type QEMU
 - You must connect to a device of type LXC
 
-## Configure your Apache 2 with HTTPS (required if you want to use Shibboleth)
+### Configure your Apache 2 with HTTPS (required if you want to use Shibboleth)
 
 During the installation process, the file `200-remotelabz-ssl.conf` is copied in your `/etc/apache2/sites-available` directory. The certificate is defined as follow :
 ```bash
@@ -50,7 +50,7 @@ During the installation process, the file `200-remotelabz-ssl.conf` is copied in
 ```
 
 Two case, either you have an official certificate or you have to generate your own certificate.
-### Official certificate
+#### Official certificate
 
 If you have an official certificate, you have to copy it in your `/etc/apache2` directory and rename it to `RemoteLabz-WebServer.crt` and `RemoteLabz-WebServer.key`. Next, you have to activate this site:
 ```bash
@@ -59,14 +59,14 @@ sudo a2enmod ssl
 sudo service apache2 reload
 ```
 
-### Self-signed certificate
+#### Self-signed certificate
 Execute the script 
 ```bash
 cd ~
 sudo remotelabz/bin/install_ssl.sh
 ```
 
-## Redirection to https
+### Redirection to https
 Verify if your application is available with HTTPS and if it works fine, you can modify the `/etc/apache2/sites-available/100-remotelabz.conf` to redirect all HTTP request to HTTPS. 
 Activate the rewrite module
 ```bash
@@ -99,7 +99,7 @@ Now, if you go to the your application's url with http, you should be redirected
     sudo service apache2 reload
     ```
 
-### Copy certificate files to the worker
+#### Copy certificate files to the worker
 Copy the two files `~/EasyRSA/RemoteLabz-WebServer.crt` and `~/EasyRSA/RemoteLabz-WebServer.key` to your **worker** in directory `/opt/remotelabz-worker/config/certs`
 
 ```bash
@@ -121,7 +121,7 @@ sudo service remotelabz-worker restart
     You need to use the same certificate between your front and the worker. Don't forget to copy them and to change it automatically if your certificate expired.
 
 
-## Shibboleth (optional - You have to be registered by Renater)
+### Shibboleth (optional - You have to be registered by Renater)
 
 !!!warning
     You have to activate HTTPS to use Shibboleth authentication method
