@@ -18,7 +18,7 @@ nav:
         - What is RemoteLabZ ?: index.md
         - 'Installation':
                 - Installation: administrators/getting-started/ubuntu-standalone.md
-                - SSL: administrators/getting-started/ubuntu-secure.md
+                - Configuration: administrators/getting-started/ubuntu-secure.md
         - 'Update':
              - Update Front: administrators/getting-started/ubuntu-front-update.md
              - Update Worker: administrators/getting-started/ubuntu-worker-update.md
@@ -63,6 +63,8 @@ nav:
                 - States Messages: developers/messenger/code.md
     
     - 'Commonly Asked Questions': administrators/getting-started/commonly-asked-questions.md
+    - 'How-to Guides':
+        - PHP Downgrade: HowTo/PHPDowngrade.md    
     - Troubleshooting: administrators/getting-started/troubleshooting.md
 
 theme:

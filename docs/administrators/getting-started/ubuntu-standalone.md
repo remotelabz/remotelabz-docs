@@ -2,8 +2,12 @@
 
 This section guides you through the installation of RemoteLabz and its components on an Ubuntu system. We assume you have already installed an Ubuntu Server 20.04 LTS.For now, we support only this version of Ubuntu.
 
-## Installation of the requirements
-The first step is to install Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso on
+## Requirements
+
+Only Ubuntu-based distributions are compatible with RemotelabZ.
+
+
+The first step is to install a ubuntu distro like Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso on
 
 - only one computer if you want to use the Front and the Worker on the same server
 - 2 computers if you want to separate your Front and your Worker.
@@ -20,6 +24,9 @@ This depends of the number of VMs, containers, and, operating system used, you w
 - 1 VM Alpine 3.10
 
 The 5th device, called "Migration" is another Alpine used for configuration.At the end of the installation, a 6th container with a DHCP service must be created.
+
+!!! warning
+    RemoteLabZ require PHP 7.4 to work properly. PHP 8.0 or higher is not supported.To downgrade PHP see [PHP Downgrade](../../../HowTo/PHPDowngrade)
 
 ## Installation of the front
 
@@ -49,6 +56,7 @@ sudo ./bin/install_requirement.sh
 ```
 
 After this process, you have to take into account the following information :
+
 
 #### RabbitMQ and MySQL pre-configurations
 The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user "user" is created with password "Mysql-Pa33wrd\$". It is recommended to change it once you have ensured that RemoteLabz is working fine.
@@ -225,6 +233,7 @@ Next, type
 sudo ./install
 ```
     
+
 ### Configuration of the worker
 You have to configure, first, at least, 1 worker, from your front server.This is done by modifying `\opt\remotelabz\config\packages\messenger.yaml`  When you add a worker to the front, you will have to add the following lines 
 ```bash
