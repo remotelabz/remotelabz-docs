@@ -92,13 +92,6 @@ The package php-ssh2 on the front is also required, you can install it using the
 sudo apt-get install php-ssh2
 ```
 
-you must set proper permissions to allow the group `remotelabz-worker` on `/var/lib/lxc` to make scp connection on all workers
-
-```bash
-sudo chown root:remotelabz-worker /var/lib/lxc -R
-sudo find /var/lib/lxc -type f -exec chmod ug+rw {} +
-sudo find /var/lib/lxc -type d -exec chmod ug+rwx {} +
-```
 
 Last, update your sudo file :
 ```bash
