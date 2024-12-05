@@ -20,9 +20,10 @@ Since remotelabz 2.4.4, teachers may also have profiles with extended permission
 ![Screenshot](/images/Teacher/Teacher_edit_Front.png)
 
 It comes with an admin menu, on which can be edited :
- - Devices
- - Operating system
- - Manage lab codes
+
+* Devices
+* Operating system
+* Manage lab codes
 
 ![Screenshot](/images/Teacher/teacher_profile_edit.png)
 

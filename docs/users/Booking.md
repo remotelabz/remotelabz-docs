@@ -6,7 +6,7 @@ Since remotelabz 2.4.4, it is possible for everyone to schedule physical laborat
 ##Booking a lab
 Everyone, including students can book a laboratory.To do this, click on new booking.
 
-![Screenshot](/images/booking/physical lab booking.png)
+![Screenshot](/images/booking/physical_lab_booking.png)
 
 A new form appear You need to fill in the following information :
 
