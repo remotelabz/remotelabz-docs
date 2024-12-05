@@ -1,5 +1,5 @@
 #User management
-![Screenshot](/images/User_indiv.png)
+![Screenshot](/images/Administrator/user-management.png)
 
 In Remotelabz, a user can have one of the following role :
  

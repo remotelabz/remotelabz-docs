@@ -2,7 +2,7 @@
 In remotelabz 2.4.4 it is possible to add workers without modifying the `messenger.yaml` file.
 However this is restricted to administrators.
 
-#Add workers
+##Add workers
 
 To do this, go to Admin area -> System -> Worker configuration.
 
@@ -13,7 +13,7 @@ Then click on the `+` button and enter the worker IP address.
 
 When done, the new worker is added and you can check his status on the Usage tab.
 
-#Modify workers
+##Modify workers
 
 It is also possible to disable or delete any RemoteLabZ workers from there.
 
