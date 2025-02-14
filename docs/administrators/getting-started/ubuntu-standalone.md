@@ -131,7 +131,8 @@ If you decided to change it during the installation process, don't forget to do 
 Run the `remotelabz-ctl` configuration utility to setup your database :
 
 ```bash
-sudo remotelabz-ctl reconfigure database
+cd /opt/remotelabz
+sudo bin/remotelabz-ctl reconfigure database
 ```
 
 Don't forget to edit your `/opt/remotelabz/.env.local` :
