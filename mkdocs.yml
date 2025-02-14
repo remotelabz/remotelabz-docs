@@ -15,7 +15,7 @@ copyright: Developed by Julien Hubert &amp; Florent Nolot 2018 - 2024 Modified b
 
 nav:
     - 'Getting Started':
-        - What is RemoteLabZ ?: index.md
+        - What is RemoteLabz ?: index.md
         - 'Installation':
                 - Installation: administrators/getting-started/ubuntu-standalone.md
                 - SSL: administrators/getting-started/ubuntu-secure.md
@@ -24,7 +24,7 @@ nav:
              - Update Worker: administrators/getting-started/ubuntu-worker-update.md
         - Your First Laboratory: users/Teachers/Teachers_lab-creation-tutorial.md
 
-    - 'Using RemoteLabZ':
+    - 'Using RemoteLabz':
         - 'Students':
             - Overview: users/Students/Students_overview.md
             - Laboratory: users/Students/Students_laboratory.md
@@ -50,7 +50,7 @@ nav:
                - Usage Management: users/Administrators/Administrators_resources_usages.md    
 
     - 'Contribute':
-        - Contribute to RemoteLabZ: developers/github_setup.md
+        - Contribute to RemoteLabz: developers/github_setup.md
         - 'Development':
             - Code Organization: developers/vscode.md
             - Database Management: developers/Database.md

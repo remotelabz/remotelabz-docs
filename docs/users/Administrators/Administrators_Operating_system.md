@@ -1,10 +1,10 @@
 #Operating system management
 From this area, you can manage the operating system linked on a device template.
 ![Screenshot](/images/Administrator/Operating_system/Administrator_OperatingSystem.png)
-There is multiple default operating system provided with RemoteLabZ.
+There is multiple default operating system provided with RemoteLabz.
 
 !!! Tips
-    The operating system can be hosted through a local image (link icon) or a link where RemoteLabZ can retrieve the image (File icon). 
+    The operating system can be hosted through a local image (link icon) or a link where RemoteLabz can retrieve the image (File icon). 
 
 
 ##Operating system creation

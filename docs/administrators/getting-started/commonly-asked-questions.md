@@ -1,6 +1,6 @@
 # Commonly Asked Questions
 
-## RemoteLabZ Logs location 
+## RemoteLabz Logs location 
 
 RemoteLabz's logs are located under `/opt/remotelabz/var/log/` and RabbitMQ's log under `/var/log/rabbitmq`
 
@@ -67,10 +67,11 @@ We assume your image has the name `import_vm.ova` in OVF format and in your home
 cd ~
 mkdir new_image
 cd new_image
-tar xvf ../import_vm.ova new_image.img -O qcow2
-sudo mv Rocky_Linux.img /opt/remotelabz-worker/images/
+tar xvf ../import_vm.ova 
+qemu-img convert import_vm.vmdk new_image.img -O qcow2
+sudo mv new_image.img /opt/remotelabz-worker/images/
 ```
-As root, in operating system (OS), add a new operating system and in the Image filename parameter, give the name of your new image file. For our example, you have to type "new_image.img". finally, Create a new device which use this OS.
+As root, in operating system (OS), add a new operating system and in the Image filename parameter, give the name of your new image file. For our example, you have to type "new_image.img". Finally, create a new device which use this OS.
 
 ## How to remove all bridge OVS on a worker manually
 ```bash

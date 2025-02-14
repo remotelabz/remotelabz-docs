@@ -6,7 +6,7 @@ A laboratory, also called in this documentation an activity, is an exercise asso
 
 ##Instance management
 
-In RemoteLabZ, once a student start a laboratory, He can manage the newly created instance and it's associated containers through the laboratory management panel.
+In RemoteLabz, once a student start a laboratory, He can manage the newly created instance and it's associated containers through the laboratory management panel.
 
 ![Screenshot](/images/Students/Students_Lab.png)
 
@@ -47,7 +47,7 @@ You can access to the Subject and lab title through this screen as well.
 
 ##Remote access.
 
-In order to  access to your lab from your workstation (through ssh for instance), you need to connect through RemoteLabZ VPN.
+In order to  access to your lab from your workstation (through ssh for instance), you need to connect through RemoteLabz VPN.
 
 To do this, you need to:
 

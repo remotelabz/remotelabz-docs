@@ -70,17 +70,6 @@ This will force the installer to install a version of Alpine that is still maint
 Re-run the install script after this.
 
 
-## Lab Export running endlessly
-Restart the messenger first.
-If the log mention :
-```bash 
-[2024-11-06T15:46:34.781498+01:00] messenger.CRITICAL: Error thrown while handling message Remotelabz\Message\Message\InstanceActionMessage. Removing from transport after 3 retries. Error: "Handling "Remotelabz\Message\Message\InstanceActionMessage" failed: Undefined class constant 'ACTION_EXPORT'" {"message":{"Remotelabz\\Message\\Message\\InstanceActionMessage":[]},"class":"Remotelabz\\Message\\Message\\InstanceActionMessage","retryCount":3,"error":"Handling \"Remotelabz\\Message\\Message\\InstanceActionMessage\" failed: Undefined class constant 'ACTION_EXPORT'","exception":"[object] (Symfony\\Component\\Messenger\\Exception\\HandlerFailedException(code: 0): Handling \"Remotelabz\\Message\\Message\\InstanceActionMessage\" failed: Undefined class constant 'ACTION_EXPORT' at /opt/remotelabz-worker/vendor/symfony/messenger/Middleware/HandleMessageMiddleware.php:80)\n[previous exception] [object] (Error(code: 0): Undefined class constant 'ACTION_EXPORT' at /opt/remotelabz-worker/src/MessageHandler/InstanceActionMessageHandler.php:141)"} []
-```
-
-This issue is caused by a state message EXPORT that is unrecognized by the worker.To solve this modify the file `/opt/remotelabz-worker/vendor/remotelabz/remotelabz-message-bundle/Message` and add `const ACTION_EXPORT = "export";` at the beginning of the file, where all others actions constants are listed.
-
-Then restart the worker.
-
  
 
 
