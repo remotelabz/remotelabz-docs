@@ -9,7 +9,7 @@ The first step is to install Ubuntu Server 20.04 LTS https://releases.ubuntu.com
 - 2 computers if you want to separate your Front and your Worker.
 
 !!! warning
-    This application doesn't work in a container
+    This application doesn't work neither in a container, nor in WSL
 
 
 To install both the Front and the Worker on the same device, the minimum requirement is 
