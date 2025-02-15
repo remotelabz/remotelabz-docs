@@ -20,10 +20,10 @@ To install both the Front and the Worker on the same device, the minimum require
 
 This depends of the number of VMs, containers, and, operating system used, you want to run simultaneously. At the end of the installation, 4 devices will be installed and configured :
 
-- 3 containers with Debian 11.4, Alpine 3.15, Ubuntu Server 20.04 LTS
+- 3 containers with Debian 11.4, Alpine Edge, Ubuntu Server 24.04 LTS
 - 1 VM Alpine 3.10
 
-The 5th device, called "Migration" is another Alpine used for configuration. At the end of the installation, a 6th container with a DHCP service must be created.
+The 5th device, called "Migration" is another Debian used for configuration. At the end of the installation, a 6th container with a DHCP service must be created.
 
 ## Installation of the front
 
@@ -149,9 +149,13 @@ sudo mkdir -p config/jwt
 sudo openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
 #Your can use as passphrase "JWTTok3n"
 sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
-sudo chown -R www-data:www-data config/jwt
-sudo chown -R www-data:www-data var
-sudo chown -R www-data:www-data config/templates
+sudo chown remotelabz:www-data * -R
+sudo chmod g+w /opt/remotelabz/var -R
+sudo chmod g+w /opt/remotelabz/public/uploads -R
+sudo chmod g+w config/templates
+sudo chmod g+r config/jwt/private.pem
+
+
 # Replace 'yourpassphrase' by your actual passphrase
 echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
 ```
@@ -224,7 +228,7 @@ sudo ./install
 ```
     
 ### Configuration of the worker
-You have to configure, first, at least, 1 worker, from your front server.This is done by modifying `\opt\remotelabz\config\packages\messenger.yaml`  When you add a worker to the front, you will have to add the following lines 
+You have to configure, first, at least, 1 worker, from your front server.This is done by modifying `/opt/remotelabz/config/packages/messenger.yaml`  When you add a worker to the front, you will have to add the following lines 
 ```bash
     messages_worker1:
         binding_keys: [Worker_1_IP]
