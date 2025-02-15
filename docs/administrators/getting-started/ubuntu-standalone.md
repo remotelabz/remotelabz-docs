@@ -228,7 +228,11 @@ sudo ./install
 ```
     
 ### Configuration of the worker
-You have to configure, first, at least, 1 worker, from your front server.This is done by modifying `/opt/remotelabz/config/packages/messenger.yaml`  When you add a worker to the front, you will have to add the following lines 
+You have to configure the worker IP on the web interface of the front by clicking on the button + and type its IP. If you use only one server for the front and the worker, you can put 127.0.0.1 .
+
+![Add a worker](/images/Administrator/AddWorker.png)
+
+On your worker, you have to define the message queue and its IP, in the file `/opt/remotelabz-worker/config/packages/messenger.yaml` When you add a new worker to the front, you will have to add the following lines 
 ```bash
     messages_worker1:
         binding_keys: [Worker_1_IP]
@@ -244,6 +248,7 @@ framework:
                 options:
                     queues:
 ```
+on the first worker.
 
 If you add another worker, you will have to add,
 ```bash
@@ -251,12 +256,6 @@ If you add another worker, you will have to add,
         binding_keys: [Worker_2_IP]
 ```
 and so on.
-!!! warning
-    If the worker is on a distant server, you must check if the worker IP is correctly set in `/opt/remotelabz/.env.local` according to the following :
-    Example with a worker on a server with the IP 123.12.167.22
-    ```bash
-    WORKER_SERVER=123.12.167.22
-    ```
 
 #### Start your RemoteLabz Worker service
 Normally, the service remotelabz-worker is started during the installation phase and it will start automatically when your system boots up.However, if you need to start the service manually :
