@@ -232,7 +232,7 @@ You have to configure the worker IP on the web interface of the front by clickin
 
 ![Add a worker](/images/Administrator/AddWorker.png)
 
-On your worker, you have to define the message queue and its IP, in the file `/opt/remotelabz-worker/config/packages/messenger.yaml` When you add a new worker to the front, you will have to add the following lines 
+On your worker, you have to define the message queue and its IP, in the file `/opt/remotelabz-worker/config/packages/messenger.yaml`. When you add a new worker to the front, you will have to add the following lines 
 ```bash
     messages_worker1:
         binding_keys: [Worker_1_IP]
@@ -256,6 +256,11 @@ If you add another worker, you will have to add,
         binding_keys: [Worker_2_IP]
 ```
 and so on.
+
+!!! warning
+    Don't forget to modify your `/opt/remotelabz-worker/.env.local` file. You have to define the following parameters :
+    ADM_INTERFACE; FRONT_SERVER_IP; SSH_USER_PASSWD; SSH_USER_PRIVATEKEY_FILE; SSH_USER_PUBLICKEY_FILE
+    You have also to configure your
 
 #### Start your RemoteLabz Worker service
 Normally, the service remotelabz-worker is started during the installation phase and it will start automatically when your system boots up.However, if you need to start the service manually :
