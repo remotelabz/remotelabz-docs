@@ -163,6 +163,10 @@ echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
 !!! warning
     Avoid special character in the JWT, otherwise you will have some errors
 
+!!! warning
+    You have to configure the variable DEPLOY_SINGLE_SERVER in your .env.local . Set to the value 1 if you deploy the RemoteLabz on only one server and set to 0 otherwise. The default value is 1 because we assume you deploy the front and the worker on the same server.
+
+
 !!! tips
     In order for the app to work correctly, a key pair is created for JWT. You can find detailed configuration in [the LexikJWTAuthenticationBundle doc](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.rst#generate-the-ssh-keys).
 

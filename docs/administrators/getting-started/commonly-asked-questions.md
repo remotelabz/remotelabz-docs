@@ -78,7 +78,7 @@ As root, in operating system (OS), add a new operating system and in the Image f
 for i in $(sudo ovs-vsctl show | grep "Bridge" | grep "br-" | cut -d " " -f 6); do sudo ovs-vsctl del-br $i; done;
 ```
 
-## How to check the the queue and exchange with RabbitMQ
+## How to check the queue and exchange with RabbitMQ
 To list the queues
 ```bash
 rabbitmqadmin list queues
