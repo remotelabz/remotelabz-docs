@@ -128,3 +128,9 @@ without reboot your server
 *               soft    nofile          65535
 *               hard    nofile          524288
 ```
+
+## How to install with iso on CD and driver on floppy
+
+```bash
+qemu-system-x86_64 -enable-kvm -machine accel=kvm:tcg -cpu max -display none -name Your_VM -m 1024 -drive file=/path/file.img,if=virtio -smp 1 -device e1000,netdev=eth0-4f5965f2,mac=52:54:00:9E:92:56 -netdev tap,ifname=eth0-4f5965f2,id=eth0-4f5965f2,script=no -k fr -rtc base=localtime,clock=host -vga qxl -usb -device usb-tablet,bus=usb-bus.0 -device usb-ehci,id=ehci -vnc 0.0.0.0:31338 -boot d -blockdev driver=file,node-name=f0,filename=/path/virtio-win.vfd -device floppy,drive=f0 -cdrom filename.iso
+```
