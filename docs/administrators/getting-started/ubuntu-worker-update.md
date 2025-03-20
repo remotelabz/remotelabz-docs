@@ -1,4 +1,4 @@
-# RemoteLabz's front update guide
+# RemoteLabz's worker update guide
 
 ###Save your .env file
 All configuration variables are saved in the file `.env.local` or if you don't have this file, in the file `.env`
@@ -24,7 +24,7 @@ git pull
     git checkout dev
     ```
 
-Compare your `.env.local` file with the `.env` file to be sure we have the same parameters defined 
+Compare your `.env.local` file with the `.env` file to be sure the same parameters are set 
 
 ```bash
 sudo composer update
@@ -35,8 +35,8 @@ sudo systemctl daemon-reload
 sudo service remotelabz-worker restart
 ```
 
-## From 2.4.4 and above to version 2.5.0
-When you add a worker on the front, you have to add the following lines on the `messenger.yaml` file, in the part 
+## From 2.4.2.6 and above to version 2.4.3
+When you link a worker to the front, don't forget to add the following lines on the `/opt/remotelabz-worker/config/packages/messenger.yaml` file, in the part 
 ```bash
 framework:
     messenger:
@@ -60,51 +60,47 @@ queues:
     messages_worker2:
         binding_keys: [Worker_2-IP]
 ```
-And so on...
+And so on, for all your workers
 
-First, you have to define the authentication key between all workers for ssh. On each worker, you have to execute the following commands. Obviously, for this following command, you need to know the password of your `remotelabz-worker` user on each worker.
+Then, you will have to define the authentication key between all workers for ssh. On each worker, you have to execute the following commands. 
+
+!!! warning
+    Obviously, for the following command, you need to remember the password of your `remotelabz-worker` user on each worker. If not already done, you need to define it first using `sudo passwd remotelabz-worker`. All workers must have the same password.
 
 ```bash
 sudo mkdir /home/remotelabz-worker
 sudo mkdir /home/remotelabz-worker/.ssh
 sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh
 sudo chmod 700 /home/remotelabz-worker/.ssh
-sudo -u remotelabz-worker ssh-keygen -t rsa -b 4096 -f /home/remotelabz-worker/.ssh/id_rsa -N ""
 sudo -u remotelabz-worker ssh-keygen -m PEM -t rsa -f /home/remotelabz-worker/.ssh/myremotelabzkey
 sudo chown remotelabz-worker:remotelabz-worker /home/remotelabz-worker/.ssh -R
-
-sudo chmod 600 /home/remotelabz-worker/.ssh/id_rsa
 sudo chmod 600 /home/remotelabz-worker/.ssh/myremotelabzkey
-sudo cat /home/remotelabz-worker/.ssh/id_rsa.pub | sudo -u remotelabz-worker tee -a /home/remotelabz-worker/.ssh/authorized_keys
-sudo cat /home/remotelabz-worker/.ssh/myremotelabzkey.pub | sudo -u remotelabz-worker tee -a /home/remotelabz-worker/.ssh/authorized_keys
 ```
 
-
-
-After this previous first step, between each RemoteLabz-Worker, you have to execute the following command to each worker can connect, with its key, on any another worker
+Once done, for each RemoteLabz-Worker, you have to execute the following command to allow each worker to connect, using it's own key, to another one.
 ```bash
-sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/id_rsa.pub remotelabz-worker@Worker_X-IP
-sudo -u remotelabz-worker  ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
-
+sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz-worker@Worker_X-IP
 ```
 
-We also need the package php-ssh2 on the front :
+To test the ssh key copy, you have to :
+```bash
+sudo -u remotelabz-worker ssh -i /home/remotelabz-worker/.ssh/myremotelabzkey remotelabz-worker@Worker_X-IP
+```
+
+The package php-ssh2 on the front is also required, you can install it using the command below :
 ```bash
 sudo apt-get install php-ssh2
 ```
 
-You have to give right to group `remotelabz-worker` on `/var/lib/lxc` to allow the scp between all workers
 
+Last, update your sudo file :
 ```bash
-sudo chown root:remotelabz-worker /var/lib/lxc -R
-sudo find /var/lib/lxc -type f -exec chmod ug+rw {} +
-sudo find /var/lib/lxc -type d -exec chmod ug+rwx {} +
+sudo cp /opt/remotelabz-worker/config/sudo/remotelabz-worker  /etc/sudoers.d/remotelabz-worker
 ```
-
 
 ## From 2.4.1.2 and above Version 2.4.1.3
 
-You have to install ttyd package
+First,you have to Install the ttyd package
 
 ```bash
 sudo apt-get install -y screen build-essential cmake git libjson-c-dev libwebsockets-dev
@@ -115,12 +111,12 @@ cmake ..
 make && sudo make install
 ```
 
-You have also to install some default container
+Then, You need to install some default container
 ```bash
 sudo lxc-create -t download -n Migration -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com;
 sudo lxc-create -t download -n Debian -- -d debian -r bullseye -a amd64 --keyserver hkp://keyserver.ubuntu.com;
 sudo lxc-create -t download -n Ubuntu20LTS -- -d ubuntu -r focal -a amd64 --keyserver hkp://keyserver.ubuntu.com;
-sudo lxc-create -t download -n Alpine3.15 -- -d alpine -r 3.15 -a amd64 --keyserver hkp://keyserver.ubuntu.com;
+sudo lxc-create -t download -n Alpine3.17 -- -d alpine -r 3.17 -a amd64 --keyserver hkp://keyserver.ubuntu.com;
 sudo su;
 echo "nameserver 1.1.1.3" > "/var/lib/lxc/Migration/rootfs/etc/resolv.conf";
 echo "nameserver 1.1.1.3" > "/var/lib/lxc/Debian/rootfs/etc/resolv.conf";
@@ -130,7 +126,7 @@ echo "No default login, please use Sandbox to configure a new OS from this" >> "
 echo "nameserver 1.1.1.3" > "/var/lib/lxc/Alpine3.15/rootfs/etc/resolv.conf";
 exit;
 ```
-
+Once done, you have to restart all the workers.
 ```bash
 echo "%remotelabz-worker     ALL = (ALL) NOPASSWD: $(which ip), $(which iptables), $(which ovs-vsctl), $(which systemctl) start remotelabz*, $(which systemctl) stop remotelabz*, $(which systemctl) restart remotelabz*, $(which systemctl) status remotelabz*" | sudo tee /etc/sudoers.d/remotelabz-worker
 echo "%www-data     ALL = (ALL) NOPASSWD: $(which ip), $(which iptables), $(which ovs-vsctl), $(which systemctl) start remotelabz*, $(which systemctl) stop remotelabz*, $(which systemctl) restart remotelabz*, $(which systemctl) status remotelabz*" | sudo tee -a /etc/sudoers.d/remotelabz-worker
