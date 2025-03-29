@@ -69,7 +69,6 @@ fi;
 This will force the installer to install a version of Alpine that is still maintained (3.17).
 Re-run the install script after this.
 
-
 ## Lab Export running endlessly
 Restart the messenger first.
 If the log mention :
@@ -81,7 +80,14 @@ This issue is caused by a state message EXPORT that is unrecognized by the worke
 
 Then restart the worker.
 
- 
+## 2 VM with the same address
+
+Even if your two VMs have different MAC address on its interface, from Ubuntu 16, the DHCP client send, not your MAC address but an information stores in the /etc/machine-id . So, when you put 2 times the same VM in a same lab, you have to, either change the machine-id value or change your /etc/netplan/ file :
+
+```bash
+      dhcp4: yes
+      dhcp-identifier: mac
+```
 
 
 
