@@ -12,7 +12,7 @@ By clicking on the `new hypervisor` button, you will be prompted to enter the ne
 ![Screenshot](/images/Administrator/hypervisor/Administrator_Hypervisor_add.png)
 Here, you can enter the name of the new hypervisor and then click on `submit` to add it to the hypervisor's list.
 !!!warning
-    You can only add here the name of the hypervisor .The technical details of the hypervisor must be provided manually in RemoteLabZ.This guide doesn't cover this topic yet.
+    You can only add here the name of the hypervisor .The technical details of the hypervisor must be provided manually in RemoteLabz.This guide doesn't cover this topic yet.
 ## Hypervisor edition
 Once selected, you can also edit the hypervisor's name through the `edit` button or delete it through the `Delete` button.
 !!!Warning

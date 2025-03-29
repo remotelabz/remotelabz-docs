@@ -8,6 +8,7 @@ The screen is divided in 6 main parts :
 
 * The lab management tab (on which you can create or stop lab)
 * The group management tab (on which you can create groups and add your student to them)
+* The booking menu tab (on which you can book a physical lab)
 * The admin area (which allow you manage almost every aspects of the application)
 * Your lab list (those you can access from your groups)
 * The setting Menu which allows you to customize your settings.

@@ -1,6 +1,6 @@
 # Commonly Asked Questions
 
-## RemoteLabZ Logs location 
+## RemoteLabz Logs location 
 
 RemoteLabz's logs are located under `/opt/remotelabz/var/log/` and RabbitMQ's log under `/var/log/rabbitmq`
 
@@ -20,7 +20,7 @@ To list the number of message in each queues
 sudo rabbitmqctl list_queues
 ```
 
-## How to modify the image of the device
+## How to modify a device's image
 To avoid a teacher or an user include a corrupted image, only the administrator can modify an existing default image. With the menu `Device Sandbox`, a new lab is created and after the export button is click, a new device template and new Operating Systems are created. To make an export, you have to :
 
 1. Click on `Device Sandbox`
@@ -67,17 +67,18 @@ We assume your image has the name `import_vm.ova` in OVF format and in your home
 cd ~
 mkdir new_image
 cd new_image
-tar xvf ../import_vm.ova new_image.img -O qcow2
-sudo mv Rocky_Linux.img /opt/remotelabz-worker/images/
+tar xvf ../import_vm.ova 
+qemu-img convert import_vm.vmdk new_image.img -O qcow2
+sudo mv new_image.img /opt/remotelabz-worker/images/
 ```
-As root, in operating system (OS), add a new operating system and in the Image filename parameter, give the name of your new image file. For our example, you have to type "new_image.img". finally, Create a new device which use this OS.
+As root, in operating system (OS), add a new operating system and in the Image filename parameter, give the name of your new image file. For our example, you have to type "new_image.img". Finally, create a new device which use this OS.
 
 ## How to remove all bridge OVS on a worker manually
 ```bash
 for i in $(sudo ovs-vsctl show | grep "Bridge" | grep "br-" | cut -d " " -f 6); do sudo ovs-vsctl del-br $i; done;
 ```
 
-## How to check the the queue and exchange with RabbitMQ
+## How to check the queue and exchange with RabbitMQ
 To list the queues
 ```bash
 rabbitmqadmin list queues
@@ -101,29 +102,4 @@ sudo rabbitmqadmin declare exchange name="worker" type="direct"
 To clear a queue
 ```bash
 sudo rabbitmqadmin purge_queue queue_name
-```
-
-
-## How to list all routes of the proxy
-On the front
-```bash
-curl http://localhost:8001/api/routes
-```
-
-
-## Too many file opened
-Many parameters have to be modify. Add following lines in `/etc/sysctl.conf` and execute a `sysctl -p` the system read this file.
-
-```bash 
-fs.inotify.max_user_watches=60000
-fs.inotify.max_user_instances=10000
-fs.file-max=9793398
-```
-
-You can also modify the file `/etc/security/limits.conf` which is read on boot and use the command `prlimit --nofile=300000:500000 --pid Process_Number` (`ulimit` is obsolete) to change this value for a given process
-without reboot your server
-
-```bash
-*               soft    nofile          65535
-*               hard    nofile          524288
 ```

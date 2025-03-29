@@ -6,7 +6,7 @@ A laboratory, also called in this documentation an activity, is an exercise asso
 
 ##Instance management
 
-In RemoteLabZ, once a laboratory is started, the newly created instance and it's associated containers can be managed through the laboratory management panel.
+In RemoteLabz, once a laboratory is started, the newly created instance and it's associated containers can be managed through the laboratory management panel.
 
 ![Screenshot](/images/Administrator/Administrator_Instances.png)
 
@@ -66,7 +66,7 @@ You can also import a previously exported lab from there through the `import` bu
  
 ##Remote access.
 
-In order to  access to your lab from your workstation (through ssh for instance), you need to connect through RemoteLabZ VPN.
+In order to  access to your lab from your workstation (through ssh for instance), you need to connect through RemoteLabz VPN.
 
 To do this, you need to:
 

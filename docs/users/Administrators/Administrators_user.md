@@ -1,7 +1,7 @@
 #User management
-![Screenshot](/images/User_indiv.png)
+![Screenshot](/images/Administrator/user-management.png)
 
-In the Remotelabz, a user can have one of the following role :
+In Remotelabz, a user can have one of the following role :
  
  * student
  * teacher

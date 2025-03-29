@@ -1,14 +1,14 @@
-#Contribute to RemoteLabZ
+#Contribute to RemoteLabz
 
-The Remotelabz project source code is hosted on GitHub at https://github.com/remotelabz/ and always welcome new contributors !
+The RemoteLabz project source code is hosted on GitHub at https://github.com/remotelabz/ and always welcome new contributors !
 
 There is five different repositories for this project:
 
-* Remotelabz : Remotelab'Z front interface.
-* Remotelabz-worker: Remotelab'Z VM management side.
-* Remotelabz-docs : RemoteLab'Z document component (this guide's repository)
-* Network-bundle : A module used by RemoteLab'Z to handle all IP and network aspects.
-* Remotelabz-message-bundle: Another module that handles shared messages between RemotelabZ workers and the front. 
+* Remotelabz : RemoteLabz front interface.
+* Remotelabz-worker: RemoteLabz VM management side.
+* Remotelabz-docs : RemoteLabz document component (this guide's repository)
+* Network-bundle : A module used by RemoteLabz to handle all IP and network aspects.
+* Remotelabz-message-bundle: Another module that handles shared messages between RemoteLabz workers and the front. 
 
 If you wish to contribute, here the steps.
 ## Commit code on the repositories

@@ -2,11 +2,19 @@
 
 This section guides you through the installation of RemoteLabz and its components on an Ubuntu system. We assume you have already installed an Ubuntu Server 20.04 LTS.For now, we support only this version of Ubuntu.
 
-## Installation of the requirements
-The first step is to install Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso on
+## Requirements
 
-- only one computer if you want to use the Front and the Worker on the same server
+Only Ubuntu-based distributions are compatible with RemotelabZ.
+
+
+The first step is to install a ubuntu distro like Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso on
+
+- only one server or one VM if you want to use the Front and the Worker on the same server
 - 2 computers if you want to separate your Front and your Worker.
+
+!!! warning
+    This application doesn't work neither in a container, nor in WSL
+
 
 To install both the Front and the Worker on the same device, the minimum requirement is 
 
@@ -16,10 +24,13 @@ To install both the Front and the Worker on the same device, the minimum require
 
 This depends of the number of VMs, containers, and, operating system used, you want to run simultaneously. At the end of the installation, 4 devices will be installed and configured :
 
-- 3 containers with Debian 11.4, Alpine 3.15, Ubuntu Server 20.04 LTS
+- 3 containers with Debian 11.4, Alpine Edge, Ubuntu Server 24.04 LTS
 - 1 VM Alpine 3.10
 
-The 5th device, called "Migration" is another Alpine used for configuration.At the end of the installation, a 6th container with a DHCP service must be created.
+The 5th device, called "Migration" is another Debian used for configuration. At the end of the installation, a 6th container with a DHCP service must be created.
+
+!!! warning
+    RemoteLabZ require PHP 7.4 to work properly. PHP 8.0 or higher is not supported.To downgrade PHP see [PHP Downgrade](../../../HowTo/PHPDowngrade)
 
 ## Installation of the front
 
@@ -49,6 +60,7 @@ sudo ./bin/install_requirement.sh
 ```
 
 After this process, you have to take into account the following information :
+
 
 #### RabbitMQ and MySQL pre-configurations
 The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user "user" is created with password "Mysql-Pa33wrd\$". It is recommended to change it once you have ensured that RemoteLabz is working fine.
@@ -116,6 +128,30 @@ sudo ./bin/install
 ```
 The install process may take around 5 minutes
 
+After this process, you have to take into account the following information :
+
+#### RabbitMQ and MySQL pre-configurations
+The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user "user" is created with password "Mysql-Pa33wrd\$". It is recommended to change it once you have ensured that RemoteLabz is working fine.
+
+!!! Tips
+    During the `install_requirement.sh` process, a `remotelabz-amqp` user is created in RabbitMQ with the password `password-amqp`. If you want to change the password of an existing user `remotelabz-amqp` of your RabbitMQ, you have to type the following command :
+    ```
+    sudo rabbitmqctl change_password 'remotelabz-amqp' 'new_password'
+    ```
+    For MySQL, to set the root password to `new_password`
+    ```
+    sudo mysql -u root -h localhost
+    ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY 'new_password';
+    FLUSH PRIVILEGES;
+    EXITS;
+    ```
+    The remotelabz default user is `user` and its password `Mysql-Pa33wrd\$`. If you want to change to `new_password` for example, you have to do the following:
+    ```
+    ALTER USER IF EXISTS 'user'@'localhost' IDENTIFIED BY 'new_password';
+    FLUSH PRIVILEGES;
+    EXITS;
+    ```
+
 !!! info
     During the installation, some actions is done on the directory permission :
     ```bash
@@ -123,11 +159,27 @@ The install process may take around 5 minutes
     chmod g+rx /etc/openvpn/server -R
     ```
 
+#### OpenVPN pre-configuration
+The default passphrase used during the `install_requirement.sh` process is `R3mot3!abz-0penVPN-CA2020`. You can find this value in your `.env` file
+
+```bash
+SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
+```
+If you decided to change it during the installation process, don't forget to do this in the `/opt/remotelabz/.env.local`.
+
+!!! warning
+    The last line `push "route 10.11.0.0 255.255.0.0"` in your `/etc/openvpn/server/server.conf` must be modified if you modify, in your `.env.local` file, the parameters of the two next lines 
+    ```BASE_NETWORK=10.11.0.0
+    BASE_NETWORK_NETMASK=255.255.0.0```
+    This network will be the network used for your laboratory. Your user must have a route on its workstation to join, via his VPN, his laboratory. Be careful, this network must be different of your home network.
+`
+
 #### Configure the RemoteLabz database
 Run the `remotelabz-ctl` configuration utility to setup your database :
 
 ```bash
-sudo remotelabz-ctl reconfigure database
+cd /opt/remotelabz
+sudo bin/remotelabz-ctl reconfigure database
 ```
 
 Don't forget to edit your `/opt/remotelabz/.env.local` :
@@ -144,8 +196,13 @@ sudo mkdir -p config/jwt
 sudo openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
 #Your can use as passphrase "JWTTok3n"
 sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
-sudo chown -R www-data:www-data config/jwt
-sudo chown -R www-data:www-data var
+sudo chown remotelabz:www-data * -R
+sudo chmod g+w /opt/remotelabz/var -R
+sudo chmod g+w /opt/remotelabz/public/uploads -R
+sudo chmod g+w config/templates
+sudo chmod g+r config/jwt/private.pem
+
+
 # Replace 'yourpassphrase' by your actual passphrase
 echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
 ```
@@ -153,16 +210,12 @@ echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
 !!! warning
     Avoid special character in the JWT, otherwise you will have some errors
 
+!!! warning
+    You have to configure the variable DEPLOY_SINGLE_SERVER in your .env.local . Set to the value 1 if you deploy the RemoteLabz on only one server and set to 0 otherwise. The default value is 1 because we assume you deploy the front and the worker on the same server.
+
+
 !!! tips
     In order for the app to work correctly, a key pair is created for JWT. You can find detailed configuration in [the LexikJWTAuthenticationBundle doc](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.rst#generate-the-ssh-keys).
-
-
-#### Directory permissions
-
-To work properly, RemoteLabZ need the right to add/delete/modify files on the following directories:
-
- - <code>/opt/remotelabz/var</code> this is where RemotelabZ store it's logs and cached data.To set proper permissions on this directory, you need to enter as administrator <code>chmod -R 757 /opt/remotelabz/var </code>
- - <code>/opt/remotelabz/config/templates</code> this is where RemotelabZ store it's container files.To set proper permissions on this directory, you need to enter as administrator <code>chmod -R 757 /opt/remotelabz/config/templates</code>
 
 
 #### Start the RemoteLabz Front
@@ -207,7 +260,7 @@ A `remotelabz-worker` directory is created after the previous command.
     ```bash    
     git clone https://github.com/remotelabz/remotelabz-worker.git --branch 2.4.1 --single-branch
     ```
-    ou
+    or
     ```bash    
     git clone https://github.com/remotelabz/remotelabz-worker.git --branch dev
     ```
@@ -225,8 +278,13 @@ Next, type
 sudo ./install
 ```
     
+
 ### Configuration of the worker
-You have to configure, first, at least, 1 worker, from your front server.This is done by modifying `\opt\remotelabz\config\packages\messenger.yaml`  When you add a worker to the front, you will have to add the following lines 
+You have to configure the worker IP on the web interface of the front by clicking on the button + and type its IP. If you use only one server for the front and the worker, you can put 127.0.0.1 .
+
+![Add a worker](/images/Administrator/AddWorker.png)
+
+On your worker, you have to define the message queue and its IP, in the file `/opt/remotelabz-worker/config/packages/messenger.yaml`. When you add a new worker to the front, you will have to add the following lines 
 ```bash
     messages_worker1:
         binding_keys: [Worker_1_IP]
@@ -242,6 +300,7 @@ framework:
                 options:
                     queues:
 ```
+on the first worker.
 
 If you add another worker, you will have to add,
 ```bash
@@ -249,12 +308,11 @@ If you add another worker, you will have to add,
         binding_keys: [Worker_2_IP]
 ```
 and so on.
+
 !!! warning
-    If the worker is on a distant server, you must check if the worker IP is correctly set in `/opt/remotelabz/.env.local` according to the following :
-    Example with a worker on a server with the IP 123.12.167.22
-    ```bash
-    WORKER_SERVER=123.12.167.22
-    ```
+    Don't forget to modify your `/opt/remotelabz-worker/.env.local` file. You have to define the following parameters :
+    ADM_INTERFACE; FRONT_SERVER_IP; SSH_USER_PASSWD; SSH_USER_PRIVATEKEY_FILE; SSH_USER_PUBLICKEY_FILE
+    You have also to configure your
 
 #### Start your RemoteLabz Worker service
 Normally, the service remotelabz-worker is started during the installation phase and it will start automatically when your system boots up.However, if you need to start the service manually :
@@ -295,10 +353,11 @@ sudo chown -R www-data:www-data var
 ## Configure your RemoteLabz
 
 ### Add a DHCP Service for your laboratory
-In the device list, you will find a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to your laboratory. Each laboratory has its own DHCP service and its own network, so the RemoteLabz needs to configure this generic container to offer IP on the right network. For each lab, if you add the DHCP service container, it will be configured with the IP : IP_Gateway - 1. 
+In the device list, you will find a device with the name "Migration". This container will be used to configure, via the Sandbox function, a new container, called "Service" to provide a DHCP service to your laboratory. Each laboratory has its own DHCP service and its own network, so the RemoteLabz needs to configure this generic container to offer IP on the right network. For each lab, if you add the DHCP service container, it will be configured with the IP : IP_Gateway - 1. 
 For example, if your attributed network is 10.10.10.0/27, your gateway will be 10.10.10.30 and you DHCP service container will have the IP 10.10.10.29 .
 
 First : go to the sandbox menu and start the "Migration" device. Next, in the console of the started device, configure the network of the device (show the log, with "Show logs" button to know it) 
+
 !!! tips
     Add an IP address `ip addr add X.X.X.X/M dev eth0`
 

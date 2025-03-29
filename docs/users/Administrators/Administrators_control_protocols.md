@@ -12,7 +12,7 @@ By clicking on the `new Control Protocol Type` button, you will be prompted to e
 ![Screenshot](/images/Administrator/Control_protocol/Administrator_Control_Protocol_add.png)
 Here, you can enter the name of the new protocol then click on submit to add it to the control protocol list.
 !!!warning
-    You can only add here the name of the protocol.The technical details of the protocol must be added manually in RemoteLabZ.This guide doesn't cover this topic yet.
+    You can only add here the name of the protocol.The technical details of the protocol must be added manually in RemoteLabz.This guide doesn't cover this topic yet.
 ## Control protocol edition
 Once selected, you can also edit the protocol's name through the `edit` button or delete it through the `Delete` button.
 !!!Warning

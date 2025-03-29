@@ -7,6 +7,7 @@ The screen is divided in 4 main parts :
 
 * The group list
 * Your labs (those you can access from your groups)
+* The group management tab (on which you can create groups and add your student to them)
 * The setting Menu which allows you to customize your settings .
 * The lab instances which allows you to start/stop or leave a lab
 
