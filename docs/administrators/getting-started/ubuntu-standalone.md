@@ -2,8 +2,12 @@
 
 This section guides you through the installation of RemoteLabz and its components on an Ubuntu system. We assume you have already installed an Ubuntu Server 20.04 LTS.For now, we support only this version of Ubuntu.
 
-## Installation of the requirements
-The first step is to install Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso on
+## Requirements
+
+Only Ubuntu-based distributions are compatible with RemotelabZ.
+
+
+The first step is to install a ubuntu distro like Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso on
 
 - only one server or one VM if you want to use the Front and the Worker on the same server
 - 2 computers if you want to separate your Front and your Worker.
@@ -24,6 +28,9 @@ This depends of the number of VMs, containers, and, operating system used, you w
 - 1 VM Alpine 3.10
 
 The 5th device, called "Migration" is another Debian used for configuration. At the end of the installation, a 6th container with a DHCP service must be created.
+
+!!! warning
+    RemoteLabZ require PHP 7.4 to work properly. PHP 8.0 or higher is not supported.To downgrade PHP see [PHP Downgrade](../../../HowTo/PHPDowngrade)
 
 ## Installation of the front
 
@@ -51,6 +58,46 @@ You have now a directory `remotelabz` created on your home directory.
 cd remotelabz
 sudo ./bin/install_requirement.sh
 ```
+
+After this process, you have to take into account the following information :
+
+
+#### RabbitMQ and MySQL pre-configurations
+The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user "user" is created with password "Mysql-Pa33wrd\$". It is recommended to change it once you have ensured that RemoteLabz is working fine.
+
+!!! Tips
+    During the `install_requirement.sh` process, a `remotelabz-amqp` user is created in RabbitMQ with the password `password-amqp`. If you want to change the password of an existing user `remotelabz-amqp` of your RabbitMQ, you have to type the following command :
+    ```
+    sudo rabbitmqctl change_password 'remotelabz-amqp' 'new_password'
+    ```
+    For MySQL, to set the root password to `new_password`
+    ```
+    sudo mysql -u root -h localhost
+    ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY 'new_password';
+    FLUSH PRIVILEGES;
+    EXITS;
+    ```
+    The remotelabz default user is `user` and its password `Mysql-Pa33wrd\$`. If you want to change to `new_password` for example, you have to do the following:
+    ```
+    ALTER USER IF EXISTS 'user'@'localhost' IDENTIFIED BY 'new_password';
+    FLUSH PRIVILEGES;
+    EXITS;
+    ```
+
+#### OpenVPN pre-configuration
+The default passphrase used during the `install_requirement.sh` process is `R3mot3!abz-0penVPN-CA2020`. You can find this value in your `.env` file
+
+```bash
+SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
+```
+If you decide to change it, don't forget to do this in the `/opt/remotelabz/.env.local`.
+
+!!! warning
+    The last line `push "route 10.11.0.0 255.255.0.0"` in your `/etc/openvpn/server/server.conf` must be modified if you modify, in your `.env.local` file, the parameters of the two next lines 
+    ```BASE_NETWORK=10.11.0.0
+    BASE_NETWORK_NETMASK=255.255.0.0```
+    This network will be the network used for your laboratory. Your user must have a route on its workstation to join, via his VPN, his laboratory. Be careful, this network must be different of your home network.
+`
 
 ### Configure the mail (Exim4)
 1. Configure the /etc/aliases to redirect all mail to root to an existing user of your OS
@@ -213,7 +260,7 @@ A `remotelabz-worker` directory is created after the previous command.
     ```bash    
     git clone https://github.com/remotelabz/remotelabz-worker.git --branch 2.4.1 --single-branch
     ```
-    ou
+    or
     ```bash    
     git clone https://github.com/remotelabz/remotelabz-worker.git --branch dev
     ```
@@ -231,6 +278,7 @@ Next, type
 sudo ./install
 ```
     
+
 ### Configuration of the worker
 You have to configure the worker IP on the web interface of the front by clicking on the button + and type its IP. If you use only one server for the front and the worker, you can put 127.0.0.1 .
 
