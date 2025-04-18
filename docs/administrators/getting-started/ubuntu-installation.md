@@ -32,6 +32,10 @@ The 5th device, called "Migration" is another Alpine used for configuration.At t
 
 ## Installation of the requirements
 
+!!! news
+    The tutorial of this part : <a href="https://www.youtube.com/watch?v=tc-X8UDvuss" target="_blank">RemoteLabz Installation Part1</a>
+
+
 ### Retrieve the RemoteLabz Front source
 A remotelabz directory will be created on your home directory.
 ```bash
@@ -401,5 +405,11 @@ APP_MAINTENANCE=0
 ```
 If you leave this value to 1, nobody, except the administrator will be able to use the application.
 
+## Create your first lab
+
+!!! news
+    The tutorial to create a first lab with 1 container and 1 DHCP server : <a href="https://www.youtube.com/watch?v=S0f2-kCIP_k" target="_blank">RemoteLabz first laboratory</a>
+
 ## Secure the communication
 If you want to secure all communication between the client, the Remotelabz front and the Remotelabz Worker, you have to follow the instruction of [page SSL](ubuntu-secure.md) Perhaps, you web navigator ne
+
