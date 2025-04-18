@@ -1,54 +1,6 @@
 
 # Configure your RemoteLabz
 
-## Add a DHCP Service for your laboratory
-In the device list, you will find a device with the name "Migration". This container will be used to configure a new container, called "Service" to provide a DHCP service to your laboratory. Each laboratory has its own DHCP service and its own network, so the RemoteLabz needs to configure this generic container to offer IP on the right network. For each lab, if you add the DHCP service container, it will be configured with the IP : IP_Gateway - 1. 
-For example, if your attributed network is 10.10.10.0/27, your gateway will be 10.10.10.30 and you DHCP service container will have the IP 10.10.10.29 .
-
-First : go to the sandbox menu and start the "Migration" device. Next, in the console of the started device, configure the network of the device (show the log, with "Show logs" button to know it) 
-!!! tips
-    Add an IP address `ip addr add X.X.X.X/M dev eth0`
-
-    Add the default route `ip route add default via X.X.X.X`
-
-
-Next, type the following command :
-```bash
-sudo rm /etc/resolv.conf
-echo "nameserver 1.1.1.1" > /etc/resolv.conf
-apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
-echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
-echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
-systemctl stop systemd-resolved
-systemctl disable systemd-resolved
-systemctl disable systemd-networkd
-systemctl enable dnsmasq
-systemctl start dnsmasq
-```
-
-The last line (`systemctl disable systemd-networkd`) is mandatory otherwise your container will not have any IP.
-
-
-Configuration example for a container that is connected to the network 10.11.18.0 :
-
-```bash
-ip addr add 10.11.18.3 dev eth0
-ip route add default via 10.11.18.254 dev eth0 onlink
-sudo rm /etc/resolv.conf
-echo "nameserver 1.1.1.1" > /etc/resolv.conf
-apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
-echo "dhcp-range=10.11.18.1,10.11.18.255" >> /etc/dnsmasq.conf
-echo "dhcp-option=3,10.11.18.254" >> /etc/dnsmasq.conf
-systemctl stop systemd-resolved
-systemctl disable systemd-resolved
-systemctl disable systemd-networkd
-systemctl enable dnsmasq
-systemctl start dnsmasq
-```
-
-Your "Service" device, which is a container, is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
-On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
-
 ## Configure RemoteLabz to use SSL
 
 This section guides you through the configuration of SSL between all service of the RemoteLabz.
