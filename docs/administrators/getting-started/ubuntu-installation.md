@@ -176,6 +176,23 @@ If you decided to change it during the installation process, don't forget to do 
     BASE_NETWORK_NETMASK=255.255.0.0```
     This network will be the network used for your laboratory. Your user must have a route on its workstation to join, via his VPN, his laboratory. Be careful, this network must be different of your home network.
 
+
+!!! Tips 
+    For developper, if you want to contribute to the project and not have any rights issues with VScode and your sources installed on your home, you have to link the default installation directory to your remotelabz directory in your home.
+
+    ```bash
+    cd ~/remotelabz
+    sudo cp /opt/remotelabz/.* . -Rf
+    sudo cp /opt/remotelabz/* . -Rf
+    sudo rm /opt/remotelabz -Rf
+    sudo ln -s `pwd` /opt/remotelabz
+    sudo chown $USER:www-data .* -R
+    sudo chown remotelabz:www-data * -R
+    sudo usermod -aG sudo $USER
+    sudo chmod g+w * -R
+    ```
+
+
 #### Configure the RemoteLabz database
 Run the `remotelabz-ctl` configuration utility to setup your database :
 
@@ -282,7 +299,22 @@ Next, type
 ```bash
 sudo ./install
 ```
-    
+
+!!! tips
+    For developper, if you want to contribute to the project and not have any rights issues with VScode and your sources installed on your home, you have to link the default installation directory to your remotelabz directory in your home.
+    ```bash
+    cd ~/remotelabz-worker
+    sudo cp /opt/remotelabz-worker/.* . -Rf
+    sudo cp /opt/remotelabz-worker/* . -Rf
+    sudo rm /opt/remotelabz-worker -Rf
+    sudo ln -s `pwd` /opt/remotelabz-worker
+    sudo chown $USER:www-data .* -R
+    sudo chown remotelabz-worker:www-data * -R
+    sudo usermod -aG sudo $USER
+    sudo chmod g+w * -R
+    ```
+
+
 ### Configuration of the Worker
 
 !!! news
