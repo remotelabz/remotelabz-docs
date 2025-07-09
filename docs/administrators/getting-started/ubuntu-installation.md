@@ -11,6 +11,9 @@ The first step is to install a ubuntu distro like Ubuntu Server 20.04 LTS https:
 - only one computer if you want to use the Front and the Worker on the same server
 - 2 computers if you want to separate your Front and your Worker.
 
+!!! note
+    The version 2.5 for Ubuntu 24.04 LTS Server is available on branch Upgrade-2.5
+
 !!! warning
     This application doesn't work neither in a container, nor in WSL
 

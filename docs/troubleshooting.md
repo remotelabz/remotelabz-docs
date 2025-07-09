@@ -28,6 +28,15 @@ chown www-data:www-data config/templates
 chmod 664 config/templates
 ```
 
+## Clone Ubuntu VM and DHCP client doesn't work
+
+When you clone an Ubuntu VM, it doesn’t use its MAC address to obtain an IP address, but rather a random machine ID value stored in the `/etc/machine-id` file. So, after cloning an Ubuntu VM, you will have two VMs with the same IP address but different MAC addresses. To solve this problem, you need to change the machine ID value
+```bash
+sudo rm /etc/machine-id
+sudo systemd-machine-id-setup
+sudo reboot
+```
+
 ## Error with numpy when installing
 
 If the setup fails while processing numpy-2.1.3.tar.gz with this error:

@@ -4,7 +4,7 @@ RemoteLabz needs at least 2 hosts :
  
 - 1 for the web site, called the RemoteLabz's front.
 - 1 for the server which execute the virtuals machines, called *remotelabz-worker*.
-- (Optionnal) 1 for the RabbitMQ which can be also a virtual machine.
+
 
 !!! info
     Technically, you may be able to use only one host for all services, but since remotelabz-worker has to run QEMU, we recommend to use a different server for each service.
