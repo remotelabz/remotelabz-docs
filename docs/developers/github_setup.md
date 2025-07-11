@@ -26,6 +26,8 @@ cd ~/remotelabz-worker
 sudo mv /opt/remotelabz-worker/* .
 sudo rm /opt/remotelabz-worker -Rf
 sudo ln -s ~/remotelabz-worker /opt/remotelabz-worker
+sudo chown :www-data * -Rf
+sudo chmod g+w * -Rf
 ```
 
 
