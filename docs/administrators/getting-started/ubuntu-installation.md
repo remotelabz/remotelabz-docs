@@ -432,7 +432,7 @@ The line (`systemctl disable systemd-networkd`) is mandatory otherwise your cont
 
 Your "Service" device, which is a container, is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
 On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
-In the device menu, rename the device "Service" to "DHCP Service" for better clarity in future use. Also, remove the "login" option from the control protocols, as users should not edit this VM.
+In the device menu, remove the "login" option from the control protocols, as users should not edit this VM.
 
 ![DHCP Service](/images/Administrator/DHCP-service.png)
 
