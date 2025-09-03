@@ -31,9 +31,23 @@ sudo composer update
 sudo php bin/console cache:clear
 sudo chown remotelabz-worker:www-data * -R
 sudo chmod g+w /opt/remotelabz-worker/var -R
+sudo chown :remotelabz-worker /var/lib/lxc
+sudo chmod g+w /var/lib/lxc
 sudo systemctl daemon-reload
 sudo service remotelabz-worker restart
 ```
+
+## From 2.4.3 to version 2.5
+```bash
+cd /opt/remotelabz-worker
+git checkout Upgrade-2.5
+git fetch
+git pull
+```
+
+Upgrade your Ubuntu version to Ubuntu 24 LTS
+Upgrade to NodeJS20
+Install PHP 8.4 only
 
 ## From 2.4.2.6 and above to version 2.4.3
 When you link a worker to the front, don't forget to add the following lines on the `/opt/remotelabz-worker/config/packages/messenger.yaml` file, in the part 

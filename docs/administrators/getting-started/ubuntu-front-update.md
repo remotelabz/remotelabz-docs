@@ -39,8 +39,19 @@ sudo chmod g+r config/jwt/private.pem
 sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
+## Migration from 2.4.4 to version 2.5
+```bash
+cd /opt/remotelabz-worker
+git checkout Upgrade-2.5
+git fetch
+git pull
+```
 
-##Migration from 2.4.3 to 2.4.4
+Upgrade your Ubuntu version to Ubuntu 24 LTS
+Upgrade to NodeJS20
+Install PHP 8.4 only
+
+## Migration from 2.4.3 to 2.4.4
 
 The RabbitMQ configuration need to be modified in order to manage multiples workers.
 ```bash
