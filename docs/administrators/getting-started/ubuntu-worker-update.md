@@ -33,6 +33,7 @@ sudo chown remotelabz-worker:www-data * -R
 sudo chmod g+w /opt/remotelabz-worker/var -R
 sudo chown :remotelabz-worker /var/lib/lxc
 sudo chmod g+w /var/lib/lxc
+sudo chown remotelabz-worker: /opt/remotelabz-worker/images
 sudo systemctl daemon-reload
 sudo service remotelabz-worker restart
 ```
