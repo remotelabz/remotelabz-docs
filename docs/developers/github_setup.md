@@ -11,6 +11,28 @@ There is five different repositories for this project:
 * Remotelabz-message-bundle: Another module that handles shared messages between RemoteLabz workers and the front. 
 
 If you wish to contribute, here the steps.
+
+## Clone in your homedir
+
+When you clone the repository and you install the application, a new directory is installed in /opt. When you will develop and to show the result, you have to modify the code in the /opt directory with the root right. To avoid to connect to root on your workstation and to develop as a user, you have to follow this steps :
+
+ * clone the repository
+
+### For the worker
+Do the part "Installation of the RemoteLabz worker application" of the installation documentation of the worker
+
+```bash
+cd ~/remotelabz-worker
+sudo mv /opt/remotelabz-worker/* .
+sudo rm /opt/remotelabz-worker -Rf
+sudo ln -s ~/remotelabz-worker /opt/remotelabz-worker
+sudo chown :www-data * -Rf
+sudo chmod g+w * -Rf
+```
+
+
+
+
 ## Commit code on the repositories
 ###Sign your Code
 

@@ -1,13 +1,13 @@
 # RemoteLabz's worker update guide
 
-###Save your .env file
+### Save your .env file
 All configuration variables are saved in the file `.env.local` or if you don't have this file, in the file `.env`
 If you don't have a .env.local, save your .env to .env.local
 ```bash
 sudo -u remotelabz cp .env .env.local
 ```
 
-###Update the code
+### Update the code
 ```bash
 cd /opt/remotelabz-worker
 git fetch
@@ -25,15 +25,43 @@ git pull
     ```
 
 Compare your `.env.local` file with the `.env` file to be sure the same parameters are set 
-
+### General process
 ```bash
 sudo composer update
 sudo php bin/console cache:clear
 sudo chown remotelabz-worker:www-data * -R
 sudo chmod g+w /opt/remotelabz-worker/var -R
+sudo chown :remotelabz-worker /var/lib/lxc
+sudo chmod g+w /var/lib/lxc
+sudo chown remotelabz-worker: /opt/remotelabz-worker/images
 sudo systemctl daemon-reload
 sudo service remotelabz-worker restart
 ```
+!!! warning
+    When you restart the remotelabz-worker service, all VM and containers restart.
+ 
+
+## From 2.4.3 to version 2.5
+Upgrade your Ubuntu version to Ubuntu 24 LTS
+
+Upgrade to NodeJS20
+
+Install PHP 8.4 only
+
+### Install cgroup v2
+Modify your /etc/default/grub and the following line 
+```GRUB_CMDLINE_LINUX_DEFAULT="systemd.unified_cgroup_hierarchy=1"```
+
+Execute a ```sudo update-grub```
+
+### Update your RemoteLabz-Worker version
+```bash
+cd /opt/remotelabz-worker
+git checkout Upgrade-2.5
+git fetch
+git pull
+```
+And follow the general process
 
 ## From 2.4.2.6 and above to version 2.4.3
 When you link a worker to the front, don't forget to add the following lines on the `/opt/remotelabz-worker/config/packages/messenger.yaml` file, in the part 
