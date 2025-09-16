@@ -40,6 +40,12 @@ sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
 ## Migration from 2.4.4 to version 2.5
+Upgrade your Ubuntu version to Ubuntu 24 LTS
+
+Upgrade to NodeJS20
+
+Install PHP 8.4 only
+
 ```bash
 cd /opt/remotelabz-worker
 git checkout Upgrade-2.5
@@ -47,9 +53,6 @@ git fetch
 git pull
 ```
 
-Upgrade your Ubuntu version to Ubuntu 24 LTS
-Upgrade to NodeJS20
-Install PHP 8.4 only
 
 ## Migration from 2.4.3 to 2.4.4
 
