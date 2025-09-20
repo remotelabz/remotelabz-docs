@@ -40,7 +40,17 @@ sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
 ## Migration from 2.4.4 to 2.5.0
-We recommand you to install from a clear ubuntu distribution installation this new version. Otherwise, you have to do a dist-upgrade to Ubuntu 24.04, install PHP 8.4 and NodeJS 20. After this step, you can make the previous general command to update your RemoteLabz solution. Next step, you have to configure your php to allow large file upload. In this example, we allow up to 10G for a file.
+We recommand you to install from a clear ubuntu distribution installation this new version. Otherwise, you have to do a dist-upgrade to Ubuntu 24.04, install PHP 8.4 and NodeJS 20. 
+```bash
+cd /opt/remotelabz-worker
+git checkout Upgrade-2.5
+git fetch
+git pull
+```
+
+After this step, you can make the previous general command to update your RemoteLabz solution.
+
+Next step, you have to configure your php to allow large file upload. In this example, we allow up to 10G for a file.
 
 ```bash
 sudo nano /etc/php/8.4/apache2/php.ini

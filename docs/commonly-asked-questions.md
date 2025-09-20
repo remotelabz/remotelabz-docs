@@ -103,3 +103,38 @@ To clear a queue
 ```bash
 sudo rabbitmqadmin purge_queue queue_name
 ```
+
+## Configure OpenVSwitch
+
+Visualisation des configurations des ports
+```bash
+ovs-vsctl list interface eth1
+
+# Voir seulement les options configurées
+ovs-vsctl get interface eth1 options
+
+# Voir la vitesse configurée
+ovs-vsctl get interface eth1 options:link_speed
+ovs-vsctl get interface eth1 options:duplex
+```
+
+Liste des bridges et de ses ports
+```bash
+ovs-vsctl list-br  # Liste des bridges
+ovs-vsctl list-ports br0  # Ports d'un bridge spécifique
+```
+    
+Configurer la vitesse d'un port et son duplex
+```bash
+ovs-vsctl set interface eth1 options:link_speed=100
+ovs-vsctl set interface eth1 options:duplex=full
+```
+Ou en une seule commande :
+```bash
+ovs-vsctl set interface eth1 options:link_speed=100 options:duplex=full
+```
+
+Traffic Control
+```bash
+tc qdisc add dev eth1 root handle 1: tbf rate 100mbit burst 32kbit latency 400ms
+```
