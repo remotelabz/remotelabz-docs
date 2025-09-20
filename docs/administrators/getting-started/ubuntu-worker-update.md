@@ -64,6 +64,8 @@ And so on, for all your workers
 
 Then, you will have to define the authentication key between all workers for ssh. On each worker, you have to execute the following commands. 
 
+### SSH key between the workers
+
 !!! warning
     Obviously, for the following command, you need to remember the password of your `remotelabz-worker` user on each worker. If not already done, you need to define it first using `sudo passwd remotelabz-worker`. All workers must have the same password.
 
