@@ -39,13 +39,8 @@ sudo chmod g+r config/jwt/private.pem
 sudo systemctl daemon-reload
 sudo service remotelabz restart
 ```
-## Migration from 2.4.4 to version 2.5
-Upgrade your Ubuntu version to Ubuntu 24 LTS
-
-Upgrade to NodeJS20
-
-Install PHP 8.4 only
-
+## Migration from 2.4.4 to 2.5.0
+We recommand you to install from a clear ubuntu distribution installation this new version. Otherwise, you have to do a dist-upgrade to Ubuntu 24.04, install PHP 8.4 and NodeJS 20. 
 ```bash
 cd /opt/remotelabz-worker
 git checkout Upgrade-2.5
@@ -53,6 +48,31 @@ git fetch
 git pull
 ```
 
+After this step, you can make the previous general command to update your RemoteLabz solution.
+
+Next step, you have to configure your php to allow large file upload. In this example, we allow up to 10G for a file.
+
+```bash
+sudo nano /etc/php/8.4/apache2/php.ini
+```
+Change the line :
+```bash
+upload_max_filesize = 10G
+post_max_size = 10G
+max_execution_time = 300
+max_input_time = 300
+memory_limit = 128M
+file_uploads = On
+max_file_uploads = 1
+```
+
+### Add SSH keys for front to worker
+Check you have execute the part "SSH key between the front and the workers" from update "Migration from 2.4.3 to 2.4.4" part.
+
+You can verify by executing the following command
+```bash
+sudo -u remotelabz ssh -i /home/remotelabz/.ssh/myremotelabzfront remotelabz-worker@Worker_X-IP
+```
 
 ## Migration from 2.4.3 to 2.4.4
 
@@ -74,7 +94,7 @@ sudo chmod 644 backups;
 sudo apt-get update;
 sudo apt-get install tmux;
 ```
-
+### SSH key between the front and the workers
 !!! warning
     Prior to execute the following task, update all your workers. Their version must not be older than 2.4.3 or dev from october 26, 2024 (commit 5b929ae)
 
