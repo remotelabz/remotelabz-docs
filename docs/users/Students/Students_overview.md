@@ -1,22 +1,26 @@
-#Profile layout
+# Profile layout
 After login as student, you will be taken to your profile main page.
 
-![Screenshot](/images/Students/Students_Front.png)
+![Screenshot](/images/Students/Student_Overview.png)
 
-The screen is divided in 4 main parts :
+The screen is divided in 3 main parts :
 
-* The group list
-* Your labs (those you can access from your groups)
-* The group management tab (on which you can create groups and add your student to them)
-* The setting Menu which allows you to customize your settings .
-* The lab instances which allows you to start/stop or leave a lab
+* The **navigation bar** with :
+       * Groups : all group that you belong to.
+       * Bookings : to book a physical lab.
+       * Instances list : all lab instances in which you can start/stop or leave.
+       * Settings : to customise your profile.
+* **Your labs** : displays labs that you can access from your groups.
+* **Your groups** : displays groups that you belong to.
 
-##Profile restriction
+
+## Profile restriction
 A student cannot :
 
+* create new lab
+* create/modify containers using the sandbox menu
+* manage users 
 * manage groups (create group, modify groups, adding/deleting labs to it)
-* Create new lab
-* Create/modify containers using the sandbox menu
-* manage Users 
 
-Only teachers and administrators can create lab , manage containers users and groups.
+
+Only teachers and administrators can create labs, manage containers, users and groups.
