@@ -46,8 +46,10 @@ nav:
                - 'Device components':
                    - Flavor Management: users/Administrators/Administrators_flavors.md
                    - Control Protocol Management: users/Administrators/Administrators_control_protocols.md
-                   - Hypervisors Management: users/Administrators/Administrators_hypervisors.md
+                   - Hypervisor Management: users/Administrators/Administrators_hypervisors.md
                    - Operating System Management: users/Administrators/Administrators_Operating_system.md
+                   - Architecture Management: users/Administrators/Administrators_architecture.md
+                   - ISO Management: users/Administrators/Administrators_iso.md
                    - Device Template Management: users/Administrators/Administrators_Device_templates.md
                - Sandbox: users/Administrators/Administrators_sandbox.md
                - PDU management: users/Administrators/Administrators_PDU.md

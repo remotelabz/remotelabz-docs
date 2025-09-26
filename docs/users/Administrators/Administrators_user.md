@@ -1,21 +1,19 @@
-#User management
+# User management
 ![Screenshot](/images/Administrator/user-management.png)
 
-In Remotelabz, a user can have one of the following role :
+In RemoteLabz, a user can have one of the following role :
  
- * student
- * teacher
- * administrator
+ * **student**
+ * **teacher**
+ * **editor teacher**
+ * **administrator**
 
-The student can :
- 
- * start, stop, and use a laboratory
- 
-The teacher can :
+Permissions by roles are as follows :
 
- * create groups
- * start, stop, and use a laboratory
+![Screenshot](/images/Administrator/Administrator_user_permissions.png)
 
-Only the administrator of the application can add new operating system and new device template. The teacher has to ask to his administrator if he need new virtual machine with a specific configuration.
+!!!warning
+    ONLY the administrator of the application can add new operating system and new device template. 
+    The teacher has to ask to his administrator if he need new virtual machine with a specific configuration.
 
-The administrator can administrate all the application
+The administrator can administrate all the application.
