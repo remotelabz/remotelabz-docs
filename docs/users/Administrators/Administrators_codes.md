@@ -1,6 +1,6 @@
 # Lab code
 
-In RemoteLabz 2.4.4, users can access a lab by using a specific code issued by his administrator or a teacher.
+In RemoteLabz 2.4.4, users can access a lab by using a specific code issued by their administrator or a teacher.
 On the administrator side, you can manage existing code for all user and every created laboratory.
 
 ## Lab code creation
