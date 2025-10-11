@@ -61,7 +61,35 @@ git checkout Upgrade-2.5
 git fetch
 git pull
 ```
-And follow the general process
+
+### Install cached resource management
+
+```bash
+mkdir -p "/opt/remotelabz-worker/var/cache/resources"
+ln -fs /opt/remotelabz-worker/bin/remotelabz-cache.service /etc/systemd/system/remotelabz-cache.service
+ln -fs /opt/remotelabz-worker/bin/remotelabz-cache.timer /etc/systemd/system/remotelabz-cache.timer
+sudo systemctl daemon-reload
+sudo systemctl enable remotelabz-worker.service
+sudo systemctl enable remotelabz-cache.timer
+sudo systemctl start remotelabz-cache.timer
+```
+
+### Increase the LXC capabilities
+
+To support many LXC container, you have to increase the maximum opened files.
+Add at the end of your `/etc/sysctl.conf` file
+
+```
+fs.inotify.max_user_watches=800000
+fs.inotify.max_user_instances=500000
+fs.file-max=15793398
+kernel.pty.max = 10000
+```
+
+Don't forget to read again the sysctl file `sudo sysctl -f /etc/sysctl.conf`
+
+
+And now you can follow the general process
 
 ## From 2.4.2.6 and above to version 2.4.3
 When you link a worker to the front, don't forget to add the following lines on the `/opt/remotelabz-worker/config/packages/messenger.yaml` file, in the part 
