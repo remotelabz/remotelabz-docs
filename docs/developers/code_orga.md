@@ -36,7 +36,7 @@ The images files are on the `/site/images` Directory
 
 ## Code Edition  
 
-###Editor
+### Editor
 
 You can use an editor like Visual Studio Code to edit most of the files 
 
@@ -53,7 +53,7 @@ Visual studio is supported on Mac,Windows and linux (debian and fedora).
 Remotelabz version's name follow the rules of semantic versioning.You can find a complete description at : https://semver.org/
 
 
-##Dependencies
+## Dependencies
 
 ### Yarn 
 
@@ -76,7 +76,21 @@ This project is based on Symphony which is a popular MVC framework for PHP.It's 
 We recommand version 5.4.2.9 minimum. 
 
 
+## Device creation workflow
 
 
+## Laboratory workflow
 
+When a user joins a lab, clones linked to the lab's devices are created. If these devices come from templates with available ISOs, a radio button area will be displayed to select the ISO to boot from.
+
+If the ISO checkbox is checked, the device will boot from the ISO. When the VM is shut down, the export button will be available to save this device as a booted template (which will then have the value 2 in the template), bearing in mind that a template has the value 1 and a linked clone has the value 0.
+
+When a user starts a device, there are three possible scenarios:
+
+ - the device is not associated with an ISO, and we create a clone linked to the template
+ - the device can be associated with an ISO and, either :
+    - the boot ISO checkbox is checked, so we boot from this iso image
+    - or the boot ISO checkbox is not checker, either :
+        - there exist a booted template (template value 2), we boot from that image
+        - there don't exist a booted template, we start the device's blank image
 
