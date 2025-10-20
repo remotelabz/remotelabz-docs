@@ -75,9 +75,11 @@ Recommended version is 5.2.12.
 This project is based on Symphony which is a popular MVC framework for PHP.It's sourcefiles are located on `/opt/remotelabz/vendor` .
 We recommand version 5.4.2.9 minimum. 
 
+## Operating systems
+You can create operating system from a QEMU qcow2 file or from an URL. You can also create a blank OS image for a given flavor-disk. the flavor entity is only for memory, versus the flavor
 
 ## Device creation workflow
-
+If you need to create a device, you have to, either select an "real" operating system or, if you want to boot on iso, a "blank" operating system.
 
 ## Laboratory workflow
 
