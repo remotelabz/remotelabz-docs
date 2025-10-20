@@ -61,9 +61,9 @@ nav:
         - Booking: users/Booking.md
         - Lab Code: users/codes.md
     - 'Contribute':
-        - Contribute to RemoteLabz: developers/github_setup.md
+        - Contribute to RemoteLabz: developers/contribute.md
         - 'Development':
-            - Code Organization: developers/vscode.md
+            - Code Organization: developers/code_orga.md
             - Database Management: developers/Database.md
             - 'Front':
                 - Certificates management: developers/front/certificates.md
