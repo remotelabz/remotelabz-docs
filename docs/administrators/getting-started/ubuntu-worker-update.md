@@ -88,8 +88,9 @@ kernel.pty.max = 10000
 
 Don't forget to read again the sysctl file `sudo sysctl -f /etc/sysctl.conf`
 
+Add new directory to store the iso `sudo mkdir /opt/remotelabz-worker/iso/`
 
-And now you can follow the general process
+And now you can follow the general update process
 
 ## From 2.4.2.6 and above to version 2.4.3
 When you link a worker to the front, don't forget to add the following lines on the `/opt/remotelabz-worker/config/packages/messenger.yaml` file, in the part 

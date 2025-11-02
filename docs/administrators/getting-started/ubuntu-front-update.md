@@ -47,9 +47,6 @@ git checkout Upgrade-2.5
 git fetch
 git pull
 ```
-
-After this step, you can make the previous general command to update your RemoteLabz solution.
-
 Next step, you have to configure your php to allow large file upload. In this example, we allow up to 10G for a file.
 
 ```bash
@@ -65,6 +62,11 @@ memory_limit = 128M
 file_uploads = On
 max_file_uploads = 1
 ```
+
+Add iso directory : ``sudo mkdir /opt/remotelabz/public/uploads/iso``
+
+After these steps, you can make the previous general command to update your RemoteLabz solution.
+
 
 ### Add SSH keys for front to worker
 Check you have execute the part "SSH key between the front and the workers" from update "Migration from 2.4.3 to 2.4.4" part.
