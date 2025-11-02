@@ -61,6 +61,18 @@ To avoid a teacher or an user include a corrupted image, only the administrator 
      * Example: `sudo resize2fs /dev/ubuntu-vg/root`
 22. You can now run the df command to very that you have more space `df -h`
 
+## Extend physical partition
+If you have a diffenre between the size of your disk and the logical size of your part, perhaps, the partition does not use all your disk.
+
+1. `sudo parted /dev/sda`
+2. In parted, type the following command
+    * `(parted) print`
+    * `(parted) resizepart 3 100%`
+    * `(parted) quit`
+3. `sudo pvresize /dev/sda3`
+4. `sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv`
+5. `sudo resize2fs /dev/ubuntu-vg/ubuntu-lv`
+
 ## How to import a new image from an OVA
 We assume your image has the name `import_vm.ova` in OVF format and in your home directory.
 ```bash
