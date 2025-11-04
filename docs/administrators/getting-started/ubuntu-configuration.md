@@ -110,18 +110,36 @@ sudo service apache2 restart
 
 Next step, to finish to configure your Shibboleth Service Provider (SP), you have to modify your `/etc/shibboleth/shibboleth2.xml` file, following the guide from Paragraph 4, depend of your Shibboleth Identity Provider (IdP):
 
- - [SWITCH Shibboleth Service Provider (SP) 3.1 Configuration Guide](https://www.switch.ch/aai/guides/sp/configuration/){target=_blank}
+ - [Switch Shibboleth Service Provider (SP) 3.5 Configuration Guide](https://www.switch.ch/aai/guides/sp/configuration/){target=_blank}
  
-RENATER Shibboleth Service has been moved to the official shibboleth site.
- - [Official shibboleth site Installation and Configuration Guide](https://shibboleth.atlassian.net/wiki/spaces/SP3/pages/2065335537/Installation){target=_blank}
-
-You can find all the configuration guides on the following site :
-
-- [On Ubuntu 20.04 LTS](https://www.switch.ch/aai/guides/sp/installation/?os=ubuntu20){target=_blank}
-
 To enable Shibboleth site-wide, you need to change the value of `ENABLE_SHIBBOLETH` environment variable :
 
 ```bash
 # .env.local
 ENABLE_SHIBBOLETH=1
+```
+
+Example of configuration :
+In your 200-remotelabz-ssl.conf
+
+```bash
+    <Location /Shibboleth.sso>
+        SetHandler shib
+    </Location>
+    #
+    <Location />
+        AuthType shibboleth
+        ShibRequestSetting requireSession 0
+        ShibUseHeaders On
+        ShibRequestSetting applicationId default
+        Require shibboleth
+    </Location>
+
+    <Location /public>
+        AuthType shibboleth
+        ShibRequestSetting requireSession 0
+        ShibUseHeaders On
+        ShibRequestSetting applicationId default
+        Require shibboleth
+    </Location>
 ```
