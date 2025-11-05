@@ -150,3 +150,18 @@ Traffic Control
 ```bash
 tc qdisc add dev eth1 root handle 1: tbf rate 100mbit burst 32kbit latency 400ms
 ```
+
+Delete a vlan tag
+```bash
+ovs-vsctl remove port <port_name> tag X
+```
+
+Add a vlan tag
+```bash
+ovs-vsctl set port <port_name> tag <vlan>
+```
+
+Delete a trunk
+```bash
+ovs-vsctl set port <port_name> trunks=[]
+```
