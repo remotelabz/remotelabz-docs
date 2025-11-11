@@ -6,7 +6,7 @@ This section guides you through the installation of RemoteLabz and its component
 
 Only Ubuntu-based distributions are compatible with Remotelabz.
 
-The first step is to install a ubuntu distro like Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso on
+The first step is to install a ubuntu distro like Ubuntu Server 24.04 LTS on
 
 - only one computer if you want to use the Front and the Worker on the same server
 - 2 computers if you want to separate your Front and your Worker.
@@ -19,11 +19,13 @@ The first step is to install a ubuntu distro like Ubuntu Server 20.04 LTS https:
 
 To install both the Front and the Worker on the same device, the minimum requirement is 
 
-- a hard disk of at least 30 Go.
+- a hard disk of at least 30 Go for the system
 - 2 Go of RAM
 - 1 CPU
+- LVM volume management
+- 2 logicals volumes for /opt and /var/lib/lxc. The size depends of the maximum number of VM and containers you want to run and image and iso to store.
 
-This depends of the number of VMs, containers, and, operating system used, you want to run simultaneously. At the end of the installation, 4 devices will be installed and configured :
+At the end of the installation, 4 devices will be installed and configured :
 
 - 3 containers with Debian 11.4, Alpine 3.15, Ubuntu Server 20.04 LTS
 - 1 VM Alpine 3.10
@@ -31,7 +33,15 @@ This depends of the number of VMs, containers, and, operating system used, you w
 The 5th device, called "Migration" is another Alpine used for configuration.At the end of the installation, a 6th container with a DHCP service must be created.
 
 !!! warning
-    RemoteLabZ require PHP 7.4 to work properly. PHP 8.0 or higher is not supported.To downgrade PHP see [PHP Downgrade](../../../HowTo/PHPDowngrade)
+    RemoteLabz require PHP 8.4 to work properly.
+
+!!! info
+    For the worker, the image and iso of each device is stored in `/opt/remotelabz-worker/images`, `/opt/remotelabz-worker/iso`, respectively. Each laboratory stores the user's VM in $working_directory/instances and the container in the lxc default working directory `/var/lib/lxc`
+    
+    To avoid storage problem on the system, we recommand to build 2 partitions for :
+    
+    - `/opt`
+    - `/var/lib/lxc`
 
 ## Installation of the requirements
 

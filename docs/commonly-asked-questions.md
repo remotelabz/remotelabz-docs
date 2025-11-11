@@ -126,7 +126,7 @@ ovs-vsctl list interface eth1
 ovs-vsctl get interface eth1 options
 
 # Voir la vitesse configurée
-ovs-vsctl get interface eth1 options:link_speed
+ovs-vsctl get interface eth1 options:link-speed
 ovs-vsctl get interface eth1 options:duplex
 ```
 
@@ -138,12 +138,12 @@ ovs-vsctl list-ports br0  # Ports d'un bridge spécifique
     
 Configurer la vitesse d'un port et son duplex
 ```bash
-ovs-vsctl set interface eth1 options:link_speed=100
+ovs-vsctl set interface eth1 options:link-speed=100
 ovs-vsctl set interface eth1 options:duplex=full
 ```
 Ou en une seule commande :
 ```bash
-ovs-vsctl set interface eth1 options:link_speed=100 options:duplex=full
+ovs-vsctl set interface eth1 options:link-speed=100 options:duplex=full
 ```
 
 Traffic Control
