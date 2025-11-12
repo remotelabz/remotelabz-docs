@@ -25,20 +25,14 @@ git pull
     ```
 
 Compare your `.env.local` file with the `.env` file to be sure the same parameters are set 
+
 ### General process
 ```bash
-sudo composer update
-sudo php bin/console cache:clear
-sudo chown remotelabz-worker:www-data * -R
-sudo chmod g+w /opt/remotelabz-worker/var -R
-sudo chown :remotelabz-worker /var/lib/lxc
-sudo chmod g+w /var/lib/lxc
-sudo chown remotelabz-worker: /opt/remotelabz-worker/images
-sudo systemctl daemon-reload
-sudo service remotelabz-worker restart
+cd /opt/remotelabz-worker
+sudo bin/remotelabz-worker-update.sh
 ```
 !!! warning
-    When you restart the remotelabz-worker service, all VM and containers restart.
+    When you update, the remotelabz-worker service restarts and all VMs and containers restart.
  
 
 ## From 2.4.3 to version 2.5

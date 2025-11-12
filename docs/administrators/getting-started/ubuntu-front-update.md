@@ -28,16 +28,8 @@ git pull
 Compare your `.env.local` file with the `.env` file to make sure the same parameters are there
 
 ```bash
-sudo composer update
-sudo yarn encore prod
-sudo php bin/console doctrine:migrations:migrate
-sudo php bin/console cache:clear
-sudo chown remotelabz:www-data * -R
-sudo chmod g+w /opt/remotelabz/var -R
-sudo chmod g+w /opt/remotelabz/public/uploads -R
-sudo chmod g+r config/jwt/private.pem
-sudo systemctl daemon-reload
-sudo service remotelabz restart
+cd /opt/remotelabz
+sudo bin/remotelabz-update.sh
 ```
 ## Migration from 2.4.4 to 2.5.0
 We recommand you to install from a clear ubuntu distribution installation this new version. Otherwise, you have to do a dist-upgrade to Ubuntu 24.04, install PHP 8.4 and NodeJS 20. 

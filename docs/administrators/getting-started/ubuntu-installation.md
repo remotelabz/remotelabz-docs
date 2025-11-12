@@ -12,7 +12,7 @@ The first step is to install a ubuntu distro like Ubuntu Server 24.04 LTS on
 - 2 computers if you want to separate your Front and your Worker.
 
 !!! note
-    The version 2.5 for Ubuntu 24.04 LTS Server is available on branch Upgrade-2.5
+    The future version 2.5 for Ubuntu 24.04 LTS Server is available on branch Upgrade-2.5
 
 !!! warning
     This application doesn't work neither in a container, nor in WSL
@@ -32,16 +32,34 @@ At the end of the installation, 4 devices will be installed and configured :
 
 The 5th device, called "Migration" is another Alpine used for configuration.At the end of the installation, a 6th container with a DHCP service must be created.
 
-!!! warning
+!!! warning "Requirements"
     RemoteLabz require PHP 8.4 to work properly.
 
-!!! info
-    For the worker, the image and iso of each device is stored in `/opt/remotelabz-worker/images`, `/opt/remotelabz-worker/iso`, respectively. Each laboratory stores the user's VM in $working_directory/instances and the container in the lxc default working directory `/var/lib/lxc`
+!!! info "Partition your disk"
+    For the worker, the image and iso of each virtual device is stored in `/opt/remotelabz-worker/images`, `/opt/remotelabz-worker/iso`, respectively. Each laboratory stores the user's VM in `/opt/remotelabz-worker/instances` and the container in the lxc default working directory `/var/lib/lxc`
     
     To avoid storage problem on the system, we recommand to build 2 partitions for :
     
     - `/opt`
     - `/var/lib/lxc`
+
+!!! question "How size my partition ?"
+    For example, on a RemoteLabz deploys for 355 users and which uses 2 workers :
+
+    - on the first worker, 193 containers use 289 Go (1.4 Go/container) and 56 VMs use 281 Go (5 Go/VM), respectively
+    - on the second worker, 286 containers use 327 Go (1,1 Go/container) and 34 VMs use 284 Go (8,3 Go/VM), respectively
+
+    All VMs and containers are linux servers.
+
+    For the system, we need at :
+    
+    - on the front, at least 30 Go + space to store the uploaded iso and VM images
+
+    !!! note
+        On the front, the uploaded iso and VM image are stored in the /opt/remotelabz/public/uploads directory
+
+    - on the worker, at least 30 Go
+
 
 ## Installation of the requirements
 
