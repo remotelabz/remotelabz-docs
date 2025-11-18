@@ -33,6 +33,20 @@ To avoid a teacher or an user include a corrupted image, only the administrator 
 
 ## Change the size of a partition on LVM
 
+### Add new hot plug physical disk to LVM
+1. Scan your host if the disk is not detected : (to execute in root) `echo "- - -" > /sys/class/scsi_host/host2/scan`
+1. Create partition on the new disk `sudo fdisk /dev/sdb`
+    1. Enter `p` to print the partition table
+    1. Enter `n` to add a new partition
+    1. Enter `p` again to make it a primary partition
+    1. Enter the number of your new partition
+    1. Pick the first cylinder which will most like come at the end of the last partition (this is the default value)
+    1. Change the label `t` and select type `8e`
+    1. Enter `w` to save these changes
+1. Extend your volume group `sudo vgextend ubuntu-vg /dev/sdb1`
+1. Extend your logical volume `sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv`
+1. Extend your filesystem `sudo resize2fs /dev/ubuntu-vg/ubuntu-lv`
+
 ### How to increase size of disk on LVM virtual machines
 1. Shutdown the VM
 1. Right click the VM and select Edit Settings
@@ -74,6 +88,7 @@ If you have a difference between the size of your disk and the logical size of y
 1. `sudo pvresize /dev/sda3`
 1. `sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv`
 1. `sudo resize2fs /dev/ubuntu-vg/ubuntu-lv`
+
 
 ### Shrink the size of a mounted partition
 You cannot shrink an ext4 partition online. You have to use initramfs and reboot your system.
