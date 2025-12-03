@@ -59,7 +59,6 @@ Add iso directory : ``sudo mkdir /opt/remotelabz/public/uploads/iso``
 
 After these steps, you can make the previous general command to update your RemoteLabz solution.
 
-
 ### Add SSH keys for front to worker
 Check you have execute the part "SSH key between the front and the workers" from update "Migration from 2.4.3 to 2.4.4" part.
 
@@ -67,6 +66,47 @@ You can verify by executing the following command
 ```bash
 sudo -u remotelabz ssh -i /home/remotelabz/.ssh/myremotelabzfront remotelabz-worker@Worker_X-IP
 ```
+
+### Add the reverse proxy
+
+#### HAProxy on your front
+```bash
+sudo apt install haproxy
+```
+
+You have to create your .pem for the certificate.
+
+```bash
+sudo cat RemoteLabz-WebServer.crt RemoteLabz-WebServer.key > ~/RemoteLabz-WebServer.pem
+sudo mv ~/RemoteLabz-WebServer.pem /etc/apache2/
+```
+
+Replace your `/etc/haproxy/haproxy.cfg` par le fichier disponible dans `/opt/remotelabz/config/haproxy/`.
+```bash
+sudo cp /opt/remotelabz/config/haproxy/haproxy.cfg /etc/haproxy/
+sudo systemctl restart haproxy
+```
+
+#### Change the configuration of Apache2
+Now, Apache2 listen on port 8080 and 8443
+In your `/etc/apache2/sites-enable/100-remotelabz-ssl.conf` change the line `<VirtualHost *:80>` to `<VirtualHost *:8080>`. In your `/etc/apache2/sites-enable/200-remotelabz-ssl.conf` change the line `<VirtualHost *:443>` to `<VirtualHost *:8443>`
+
+In your `/etc/apache2/ports.conf`, you must have the following configuration :
+```bash
+# File /etc/apache2/ports.conf
+Listen 8080
+
+<IfModule ssl_module>
+        Listen 8443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+        Listen 8443
+</IfModule>
+```
+
+Now, you can restart your apache2 service : `sudo systemctl restart apache2`
+
 
 ## Migration from 2.4.3 to 2.4.4
 
@@ -108,7 +148,7 @@ Update your file  `/etc/sudoers.d/remotelabz`
 sudo cp /opt/remotelabz/config/system/sudoers /etc/sudoers.d/remotelabz
 ```
 
-##Migration from 2.4.1.5 to 2.4.2.4
+## Migration from 2.4.1.5 to 2.4.2.4
 A new feature has been introduced which allow to define which protocol that can be used to access the device's console : `vnc`, `serial` or `login`. So we have to add this protocol to each device. You can have more than one procotol to the same device. For example, we can use the vnc protocol to connect to a qemu vm and the serial protocol to use telnet on the serial line of the VM where the OS is configured.
 
 The main usage is : 
@@ -116,7 +156,8 @@ The main usage is :
   - `login` for container lxc
   - `serial` for network device like firewalls, switchs, routers, ...
 
-##Migration from 2.4.1.1 to 2.4.1.3
+## Migration from 2.4.1.1 to 2.4.1.3
+
 In your device, you have a device which is named "Migration". This container will be used to configure a new container, called "Service" which will provide a DHCP service to each lab you will build.
 
 First : in the sandbox, start the "Migration" device. In the console, configure the network of the device (show the log to know it) and next, type the following command :
