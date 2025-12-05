@@ -104,6 +104,13 @@ Listen 8080
         Listen 8443
 </IfModule>
 ```
+Copy the file `config/apache/200-remotelabz-ssl.conf` to your Apache directory `/etc/apache2/sites-enabled/` and replace the IP parameter with the IP address of your frontend in the line `ServerName 192.168.11.131`.
+
+Add the module headers and remoteip
+```bash
+a2enmod headers
+a2enmod remoteip
+```
 
 Now, you can restart your apache2 service : `sudo systemctl restart apache2`
 
