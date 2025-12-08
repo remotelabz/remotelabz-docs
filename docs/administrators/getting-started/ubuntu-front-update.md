@@ -39,6 +39,8 @@ git checkout Upgrade-2.5
 git fetch
 git pull
 ```
+You need `sudo apt install qemu-utils` to support image vmdk and ova importation.
+
 Next step, you have to configure your php to allow large file upload. In this example, we allow up to 10G for a file.
 
 ```bash
@@ -153,6 +155,11 @@ Update your file  `/etc/sudoers.d/remotelabz`
 
 ```bash
 sudo cp /opt/remotelabz/config/system/sudoers /etc/sudoers.d/remotelabz
+```
+
+To test the ssh key copy, you have to :
+```bash
+sudo -u remotelabz ssh -i /home/remotelabz/.ssh/myremotelabzfront remotelabz-worker@Worker_X-IP
 ```
 
 ## Migration from 2.4.1.5 to 2.4.2.4
