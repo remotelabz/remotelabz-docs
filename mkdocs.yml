@@ -72,7 +72,8 @@ nav:
                 - API Commands: developers/worker/APIlist.md
             - 'Messenger':
                 - States Messages: developers/messenger/code.md
-    
+            - 'Notification':
+                - Flash message: developers/notification.md
     - 'Commonly Asked Questions': commonly-asked-questions.md
   
     - Troubleshooting: troubleshooting.md

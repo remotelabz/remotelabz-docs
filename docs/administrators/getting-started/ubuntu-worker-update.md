@@ -86,6 +86,18 @@ Add new directory to store the iso `sudo mkdir /opt/remotelabz-worker/iso/`
 
 And now you can follow the general update process
 
+### SSH connexion from workers to front
+Copy the public key of all workers to the front.
+
+```bash
+sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz@Front-IP
+```
+
+You can test the front has your key.
+```bash
+sudo -u remotelabz-worker ssh -i /home/remotelabz-worker/.ssh/myremotelabzkey remotelabz@Front-IP
+```
+
 ## From 2.4.2.6 and above to version 2.4.3
 When you link a worker to the front, don't forget to add the following lines on the `/opt/remotelabz-worker/config/packages/messenger.yaml` file, in the part 
 ```bash
