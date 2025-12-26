@@ -116,6 +116,15 @@ a2enmod remoteip
 
 Now, you can restart your apache2 service : `sudo systemctl restart apache2`
 
+### New asyncrhonous notification system
+
+Add the file `/opt/remotelabz/config/system/remotelabz-cron` in your `cron.d` directory.
+
+```bash
+sudo cp /opt/remotelabz/config/system/remotelabz-cron /etc/cron.d/
+```
+
+Don't forget to update your worker configuration and share your remotelabz-worker key to the front. Read the RemoteLabz worker update documentation.
 
 ## Migration from 2.4.3 to 2.4.4
 
