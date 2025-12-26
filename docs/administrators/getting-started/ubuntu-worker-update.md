@@ -98,6 +98,9 @@ You can test the front has your key.
 sudo -u remotelabz-worker ssh -i /home/remotelabz-worker/.ssh/myremotelabzkey remotelabz@Front-IP
 ```
 
+### Login to container
+You have to install `pamtester` in all your container to a user can log in. The Remotelabz Worker now use a specific script with ttyd to improve the login process.
+
 ## From 2.4.2.6 and above to version 2.4.3
 When you link a worker to the front, don't forget to add the following lines on the `/opt/remotelabz-worker/config/packages/messenger.yaml` file, in the part 
 ```bash
