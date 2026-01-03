@@ -267,6 +267,69 @@ echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
     In order for the app to work correctly, a key pair is created for JWT. You can find detailed configuration in [the LexikJWTAuthenticationBundle doc](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.rst#generate-the-ssh-keys).
 
 
+### Configure RemoteLabz to use SSL
+
+This section guides you through the configuration of SSL between all service of the RemoteLabz.
+
+#### Configure your Apache 2 with HTTPS
+
+During the installation process, the file `200-remotelabz-ssl.conf` is copied in your `/etc/apache2/sites-available` directory. The certificate is defined as follow :
+```bash
+        SSLCertificateFile	/etc/apache2/RemoteLabz-WebServer.crt
+        #SSLCertificateChainFile /etc/ssl/certs/remotelabz._INTERMEDIATE.cer
+        SSLCertificateKeyFile /etc/apache2/RemoteLabz-WebServer.key
+```
+
+Two case, either you have an official certificate or you have to generate your own certificate.
+##### Official certificate
+
+If you have an official certificate, you have to copy it in your `/etc/apache2` directory and rename it to `RemoteLabz-WebServer.crt` and `RemoteLabz-WebServer.key`. Next, you have to activate this site:
+```bash
+sudo a2ensite 200-remotelabz-ssl.conf
+sudo a2enmod ssl
+sudo service apache2 reload
+```
+
+##### Self-signed certificate
+Execute the script 
+```bash
+cd ~
+sudo remotelabz/bin/install_ssl.sh
+```
+
+#### Redirection to https
+Verify if your application is available with HTTPS and if it works fine, you can modify the `/etc/apache2/sites-available/100-remotelabz.conf` to redirect all HTTP request to HTTPS. 
+Activate the rewrite module
+```bash
+sudo a2enmod rewrite
+```
+
+Uncomment the following lines in the file `/etc/apache2/sites-available/100-remotelabz.conf`:
+```bash
+#<IfModule mod_rewrite.c>
+#    RewriteEngine On
+#    RewriteCond %{HTTPS} !=on
+#    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+#</IfModule>
+```
+Then restart apache
+```bash
+sudo systemctl restart apache2
+```
+Now, if you go to the your application's url with http, you should be redirected to HTTPS.
+
+!!! tips
+    You can verify your certificate with the following command : 
+    ```bash
+    openssl x509 -noout -text -in /etc/apache2/RemoteLabz-WebServer.crt
+    ```
+
+!!! warning 
+    Don't forget to reload the Apache 2 service
+    ```bash
+    sudo service apache2 reload
+    ```
+
 #### Start the RemoteLabz Front
 
 In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/crestic/remotelabz-worker), you need to start **Symfony Messenger** :
@@ -385,6 +448,27 @@ and so on.
     Don't forget to modify your `/opt/remotelabz-worker/.env.local` file. You have to define the following parameters :
     ADM_INTERFACE; FRONT_SERVER_IP; and SSH_USER_PASSWD; SSH_USER_PRIVATEKEY_FILE; SSH_USER_PUBLICKEY_FILE if you have many workers
 
+#### Copy certificate files from the front to the worker
+Copy the two files `~/EasyRSA/RemoteLabz-WebServer.crt` and `~/EasyRSA/RemoteLabz-WebServer.key` to your **worker** in directory `/opt/remotelabz-worker/config/certs`
+
+```bash
+cd ~/EasyRSA
+source /opt/remotelabz/.env.local
+scp ~/EasyRSA/RemoteLabz-WebServer.crt user@${WORKER_SERVER}:~
+sudo scp ~/EasyRSA/RemoteLabz-WebServer.key user@${WORKER_SERVER}:~
+```
+
+On the **worker**
+```bash
+cd ~
+sudo mv RemoteLabz-WebServer.* /opt/remotelabz-worker/config/certs/
+sudo sed -i "s/REMOTELABZ_PROXY_USE_WSS=0/REMOTELABZ_PROXY_USE_WSS=1/g" /opt/remotelabz-worker/.env.local
+sudo service remotelabz-worker restart
+```
+
+!!! warning
+    You need to use the same certificate between your front and the worker. Don't forget to copy them and to change it automatically if your certificate expired.
+
 
 #### Start your RemoteLabz Worker service
 Normally, the service remotelabz-worker is started during the installation phase and it will start automatically when your system boots up.However, if you need to start the service manually :
@@ -476,6 +560,36 @@ If you leave this value to 1, nobody, except the administrator will be able to u
 !!! news
     The tutorial to create a first lab with 1 container and 1 DHCP server : <a href="https://www.youtube.com/watch?v=S0f2-kCIP_k" target="_blank">RemoteLabz first laboratory</a>
 
-## Secure the communication
-If you want to secure all communication between the client, the Remotelabz front and the Remotelabz Worker, you have to follow the instruction of [page SSL](ubuntu-secure.md) Perhaps, you web navigator ne
+### Shibboleth (optional - You have to be registered by Renater)
 
+!!!warning
+    You have to activate HTTPS to use Shibboleth authentication method
+
+```bash
+cd ~
+curl --fail --remote-name https://pkg.switch.ch/switchaai/ubuntu/dists/focal/main/binary-all/misc/switchaai-apt-source_1.0.0~ubuntu20.04.1_all.deb
+sudo apt install ./switchaai-apt-source_1.0.0~ubuntu20.04.1_all.deb
+sudo apt update
+sudo apt install --install-recommends shibboleth
+sudo a2enconf shib
+sudo a2enmod shib
+sudo service apache2 restart
+```
+
+Next step, to finish to configure your Shibboleth Service Provider (SP), you have to modify your `/etc/shibboleth/shibboleth2.xml` file, following the guide from Paragraph 4, depend of your Shibboleth Identity Provider (IdP):
+
+ - [SWITCH Shibboleth Service Provider (SP) 3.1 Configuration Guide](https://www.switch.ch/aai/guides/sp/configuration/){target=_blank}
+ 
+RENATER Shibboleth Service has been moved to the official shibboleth site.
+ - [Official shibboleth site Installation and Configuration Guide](https://shibboleth.atlassian.net/wiki/spaces/SP3/pages/2065335537/Installation){target=_blank}
+
+You can find all the configuration guides on the following site :
+
+- [On Ubuntu 20.04 LTS](https://www.switch.ch/aai/guides/sp/installation/?os=ubuntu20){target=_blank}
+
+To enable Shibboleth site-wide, you need to change the value of `ENABLE_SHIBBOLETH` environment variable :
+
+```bash
+# .env.local
+ENABLE_SHIBBOLETH=1
+```
