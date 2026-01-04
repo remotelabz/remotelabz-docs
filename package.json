@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.remotelabz.com:crestic/remotelabz-docs.git"
+    "url": "git@gitlab.remotelabz.com:remotelabz/remotelabz-docs.git"
   },
   "author": "Julien Hubert, Florent Nolot",
   "license": "MIT"

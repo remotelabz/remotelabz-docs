@@ -297,27 +297,6 @@ cd ~
 sudo remotelabz/bin/install_ssl.sh
 ```
 
-#### Redirection to https
-Verify if your application is available with HTTPS and if it works fine, you can modify the `/etc/apache2/sites-available/100-remotelabz.conf` to redirect all HTTP request to HTTPS. 
-Activate the rewrite module
-```bash
-sudo a2enmod rewrite
-```
-
-Uncomment the following lines in the file `/etc/apache2/sites-available/100-remotelabz.conf`:
-```bash
-#<IfModule mod_rewrite.c>
-#    RewriteEngine On
-#    RewriteCond %{HTTPS} !=on
-#    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
-#</IfModule>
-```
-Then restart apache
-```bash
-sudo systemctl restart apache2
-```
-Now, if you go to the your application's url with http, you should be redirected to HTTPS.
-
 !!! tips
     You can verify your certificate with the following command : 
     ```bash
@@ -327,23 +306,34 @@ Now, if you go to the your application's url with http, you should be redirected
 !!! warning 
     Don't forget to reload the Apache 2 service
     ```bash
-    sudo service apache2 reload
+    sudo systemctl restart apache2
     ```
 
 #### Start the RemoteLabz Front
 
-In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/crestic/remotelabz-worker), you need to start **Symfony Messenger** :
+In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/remotelabz/remotelabz-worker), you need to start **Symfony Messenger** :
 
 ```bash
 sudo systemctl enable remotelabz
 sudo systemctl enable remotelabz-proxy
+sudo systemctl enable remotelabz-route-monitor
+sudo systemctl enable remotelabz-clean-notification
+sudo systemctl enable remotelabz-git-version-update
+
 sudo systemctl start remotelabz
 sudo systemctl start remotelabz-proxy
+sudo systemctl start remotelabz-route-monitor
+sudo systemctl start remotelabz-clean-notification
+sudo systemctl start remotelabz-git-version-update
 ```
 
 You can now test your RemoteLabz front with your internet navigator but you will just make connection until the worker is not installed.
 
+!!! warning
+    The front is only listen on TCP/443
+
 !!! info
+    The url : https://Your_IP
     The default credentials are :
 
     - Username : `root@localhost`
