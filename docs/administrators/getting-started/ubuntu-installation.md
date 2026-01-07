@@ -81,9 +81,9 @@ You have now a directory `remotelabz` created on your home directory.
     ```bash    
     git clone https://github.com/remotelabz/remotelabz.git --branch 2.4.1 --single-branch
     ```
-    or for development version
+    or for Upgrade-2.5 version
     ```bash    
-    git clone https://github.com/remotelabz/remotelabz.git --branch dev
+    git clone https://github.com/remotelabz/remotelabz.git --branch Upgrade-2.5
     ```
 
 ### Install the requirements
