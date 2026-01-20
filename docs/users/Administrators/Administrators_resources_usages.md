@@ -1,5 +1,5 @@
-#Resources usage dashboard
-![Screenshot](/images/Administrator/Resources_overview.png)
+# Resources Usage Dashboard
+![Screenshot](/images/Administrator/Usage/Administrator_usage.png)
 Allow to monitor the worker's available resources such as:
 
 * CPU usage
@@ -9,5 +9,5 @@ Allow to monitor the worker's available resources such as:
 Others indicators were added on the 2.4.4 version:
 
 * LXCFS file system status 
-* The number of running VM, LXC containers.
-* The number of opened files.
+* Number of running VM, LXC containers.
+* Number of opened files.

@@ -1,8 +1,9 @@
 # Hypervisor management
 The hypervisor is the software that host the device.
 ![Screenshot](/images/Administrator/hypervisor/Administrator_Hypervisor.png)
-By default, Remotelabz comes with three different hypervisors:
+By default, Remotelabz comes with four different hypervisors:
 
+* **physical** : for physical machines
 * **natif** : default hypervisor.
 * **LXC** : host the device on lxc ( required for containers)
 * **QEMU** : host the device on qemu (required for virtual machines).
@@ -21,5 +22,5 @@ Once selected, you can also edit the hypervisor's name through the `Edit` button
     Once you have clicked on the `Delete` button, the hypervisor's name will be definitely removed without any confirmation.
     
 ![Screenshot](/images/Administrator/hypervisor/Administrator_Hypervisor_selected.png)
-Once you have pressed the `Edit` button,you will be able to edit the hypervisor through this screen. 
+Once you have pressed the `Edit` button, you will be able to edit the hypervisor through this screen. 
 ![Screenshot](/images/Administrator/hypervisor/Administrator_Hypervisor_edit.png)

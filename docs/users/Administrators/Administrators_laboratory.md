@@ -6,67 +6,75 @@ A laboratory, also called in this documentation an activity, is an exercise asso
 
 ## Instance management
 
-In RemoteLabz, once a laboratory is started, the newly created instance and it's associated containers can be managed through the laboratory management panel.
+In RemoteLabz, when you join a lab, you create an instance of this lab. You can manage its associated containers through the laboratory management panel.
 
-![Screenshot](/images/Administrator/Administrator_Instances.png)
+![Screenshot](/images/Administrator/Administrator_instance_management.png)
 
-This panel allow to :
+To manage an instance, click on the `Details` button.
 
- - Start/Stop each containers of the lab through the start/stop button
- - Have direct console access to the containers through the lab console button
- - See the startup log for each containers
- - Leave the lab. Only possible when all containers are stopped.It destroy the instance completely.
- - Download the lab's associated OpenVPN file (useful to connect through protocol like SSH for instance)
- - See the lab topology through the see lab button. This will open the editor panel allowing to see the lab topology, subject and associated exercises.
+![Screenshot](/images/Teacher/Teacher_lab_instance_details.png)
+
+From there, you have access to all informations about the instance, you can :
+
+- See the owner of the instance
+- Start all, stop all and reset all devices
+- Start, stop or reset one device
+- Leave the lab
+
 
 !!!Warning
      Once the leave lab button has been clicked, it destroy the lab instance erasing **ALL MODIFICATIONS** on the lab's containers.
 
-
 ## Lab Topology
 
-![Screenshot](/images/Administrator/labtopology.png)
+![Screenshot](/images/Teacher/labtopology.png)
 
 A laboratory needs basically three elements:
 
- - Your own containers
- - A switch to interconnect them 
- - A service device which is a container configured with a DHCP server that gives internet addresses to your machines. Always start it first.
+- **Service Device** : to give to your lab internet connectivity through a DHCP server. It should be always started it first.
+- **Switch** : to interconnect every containers in a local network.
+- **Containers** : your own containers.
 
-You can access to the subject and lab title through this screen as well.
+With the sidebar on the left, you can access to the subject and lab title through this screen as well.
  
 !!!Warning
     Only teachers and administrators can create a laboratory using the `new lab` button.
 
-## Lab edition
+## Lab Edition
 
-![Screenshot](/images/Administrator/Administrator_Lab_edition.png)
+![Screenshot](/images/Teacher/Teacher_Lab_edition.png)
 
-Once the laboratory has been left, an `Edit` button appears which will lead you to the lab editor.
-From there, you can modify every aspects of the laboratory (including it's topology, practical subjects, title...)
+To edit a laboratory, if you joined the lab you should leave it. This action will destroy your instance and all associated containers.
 
-You can also delete the lab from there through clicking on the `Delete` button.
+Once the laboratory has been left, an `edit` button appears on the top right corner which will lead you to the lab editor.
+From there, you can modify every aspects of the laboratory including its title, topology, practical subject...
 
-!!!Warning
-    You can't edit the lab once it has been joined.
-
-## Lab export
-
-It is also possible to save the lab topology on your computer. This can be accomplished through the `Export` button. You can import it later using the `Import Lab` button on the lab's management page.
+You can also delete the lab from there through clicking on the `delete` button.
 
 !!!Warning
-    This save only the topology, but not the lab's containers !
+    You can't edit the lab once it has been joined. If users have already joined your lab, to have the new edited lab they should leave it. This will cause the loss of all their data and containers.
 
-## Lab creation
-![Screenshot](/images/Administrator/Administrator_lab_creation.png)
+## Lab Export 
 
-It is possible to create a new lab on RemoteLabz with the `new lab` button that will appear once you get to the lab section.
+It is also possible to save the lab topology on your computer. This can be accomplished through the `export` button. 
+
+A `tar.gz` file with the lab's json file and the qcow2 image of the container will be downloaded. You can then import the lab.
+
+!!!Warning
+    This saves only the topology not the lab's data on containers !
+
+## Lab Creation
+
+![Screenshot](/images/Teacher/Teacher_lab_tab.png)
+
+It is possible to create a new lab on RemoteLabz with the `New Virtual Lab` and `New Physical Lab` buttons that will appear once you get to the lab section.
 
 You can also import a previously exported lab from there through the `import` button.
- 
+
+You can have more precise information in the `Laboratory Creation` section
 ## Remote access
 
-In order to access to your lab from your workstation (through SSH for instance), you need to connect through RemoteLabz VPN.
+In order to access to your lab from your workstation through SSH for instance, you need to connect through RemoteLabz VPN.
 
 To do this, you need to:
 
@@ -77,15 +85,7 @@ To do this, you need to:
 
 If the client display this, you are connected.
 
-<img src="/images/Administrator/VPN_Connect.png" height=600px width=300px>
-
-
-
-
-
-
-
-
+<img src="/images/Teacher/VPN_Connect.png" height=600px width=300px>
 
 
 

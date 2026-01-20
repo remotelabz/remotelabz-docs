@@ -1,9 +1,9 @@
 #Group management
 ##Group creation
 
-![Screenshot](/images/Teacher/group/Teacher_new_group.png)
+To create a group, click on the `Groups` tab at the top left corner.
 
-Only teachers and administrators can create groups.
+![Screenshot](/images/Teacher/group/Teacher_new_group.png)
 
 The creator of the group has the administrator role and they can give this role to other members of the group. 
 
@@ -15,12 +15,12 @@ The group has a `visibility` property. It can be :
 
 The administrator of RemoteLabz shows all groups and so, all activities.
 
-Private groups can be used to test and develop activities and as soon as the activities are ready, either the owner or the administrator of the group can change the `visibility` property to add the activities in a public or internal groups.
+Internal groups can be used to test and develop activities and as soon as the activities are ready, either the owner or the administrator of the group can change the `visibility` property to add the activities in a public or private groups.
 
 !!! Tip
     From version 2.4.0, each privileged user of a group (owner or administrator of a group) can add to its group, any laboratories whose he is the author. If a lab is added to a group, each member of any sub-group can also view this lab. But if a laboratory is added only to a sub-group, nobody of its parent group can see this lab.Let 3 groups, Gr1 with the two following sub-group SubGrA and SubGrB. If Lab A is affected to Gr1, so all members of SubGrA and SubGrB can execute Lab A. But if Lab B is affected to SubGrB, only members of SubGrB will execute this Lab B.
 
-In the group setting panel, every parameter including name, subname, visibility, description... can be changed by it's administrator(s).It is also possible to delete the group or change it's namespace from there 
+In the group setting panel, every parameter including name, subname, visibility, description  can be changed by it's administrator(s). It is also possible to delete the group or change it's namespace from there.
 
 ## Adding user to a group
 
@@ -28,9 +28,10 @@ In the group setting panel, every parameter including name, subname, visibility,
 
 A member of a group can have two profiles : 
 
- * **simple user** : has limited privileges; it can only view other users and interact with laboratories.
+ * **user** : has limited privileges; it can only view other users and interact with laboratories.
  * **administrator** : manages the group. So, it can add members to the group, create a subgroup of this group, change the role of a member, add or delete a member
 
+You can add each user one by one by searching their name or email address and give their role.
 It is also possible to add multiple users to a group via a .CSV file, however it must be encoded in UTF-8 and respect the following convention.
 ```bash
 numero;surname;name;email
@@ -39,7 +40,7 @@ It is also possible to import users from another group via the `import from grou
 
 ## Adding laboratories to a group
 ![Screenshot](/images/Teacher/group/Teacher_add_lab.png)
-If you are administrator of a group, you can add any lab to it. This will allow every registered user in this group to see the lab and start their own instance of it.
+If you are administrator of a group, you can add any lab to it. In the sidebar at the left, click on `Labs`. Search for your laboratory by its name and add it. This will allow every registered user in this group to see the lab and start their own instance of it.
 
 ## Delete a group
 ![Screenshot](/images/Teacher/group/Teacher_Group_delete.png)

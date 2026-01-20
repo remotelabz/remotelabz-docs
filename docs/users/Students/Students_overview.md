@@ -15,12 +15,8 @@ The screen is divided in 3 main parts :
 
 
 ## Profile restriction
-A student cannot :
+Permissions for students are as follows :
 
-* create new lab
-* create/modify containers using the sandbox menu
-* manage users 
-* manage groups (create group, modify groups, adding/deleting labs to it)
-
+![Screenshot](/images/Students/Student_permission.png)
 
 Only teachers and administrators can create labs, manage containers, users and groups.

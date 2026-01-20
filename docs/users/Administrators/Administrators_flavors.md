@@ -1,7 +1,7 @@
 #Flavor management
 ![Screenshot](/images/Administrator/Flavor/Administrator_Flavor_Management.png)
 
-In RemoteLabz, administrators can manage the amount of memory (RAM) and possibly disk space allocated to a device through different presets called flavors. By default, five differents flavors are provided with RemoteLabz  :
+In RemoteLabz, administrators can manage the amount of memory (RAM) allocated to a device through different presets called flavors. By default, five different flavors are provided :
  
  * **xx-small-256** : allocate 256 megabytes of RAM.
  * **x-small-512** : allocate 512 megabytes of RAM.
@@ -18,11 +18,10 @@ You can add a new `Flavor` by clicking on the new flavor button.
 ![Screenshot](/images/Administrator/Flavor/Administrator_new_flavor.png) 
 
  * **Name** : name of the new Flavor.
- * **Memory** : memory used.
- * **Disk space** : amount of disk space consumed by the device ( by now, this feature is not yet used).
+ * **Memory** : memory used in megabytes.
 
 ##Flavor edition
-You can also edit flavor by selecting a Flavor and press the `edit` button.It is also possible to delete any Flavor from there.
+You can also edit flavor by selecting a Flavor and press the `edit` button. It is also possible to delete any Flavor from there.
 
 !!!Warning
     Once you have clicked on the `Delete` button, the Flavor will be definitely removed without any confirmation.

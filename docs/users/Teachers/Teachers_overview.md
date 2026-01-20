@@ -2,7 +2,7 @@
 
 After login as a teacher, you will be taken to your profile main page.
 
-![Screenshot](/images/Teacher/Teacher_overview.png)
+![Screenshot](/images/Teacher/overview/Teacher_overview.png)
 
 The screen is divided in 4 main parts :
 
@@ -20,12 +20,13 @@ The screen is divided in 4 main parts :
 
 ## Advanced profile
 
-Since RemoteLabz 2.4.4, teachers may also have profiles with extended permissions which corresponds to the `Editor` role.
+Since RemoteLabz 2.4.4, teachers may also have profiles with extended permissions which corresponds to the `Editor Teacher` role.
+
 ![Screenshot](/images/Teacher/Teacher_edit_Front.png)
 
-It comes with an admin menu, on which can be edited :
+It comes with an admin menu, which add :
 
-* Devices
+* Devices templates
 * Operating systems
 * Lab codes management
 
@@ -33,11 +34,11 @@ It comes with an admin menu, on which can be edited :
 
 
 ## Profile restriction
-In both profiles, a teacher cannot :
 
-* manage users (deleting or modifying a user)
-* manage worker and database 
+Permissions for both roles are as follows :
 
-Only the administrator of the application can add new operating systems and new device templates. The teacher has to ask to his administrator if he need new virtual machine with a specific configuration.
+![Screenshot](/images/Teacher/overview/Teacher_permissions.png)
+
+The `Teacher` has to ask to his administrator if he need new virtual machine with a specific configuration.
 
 

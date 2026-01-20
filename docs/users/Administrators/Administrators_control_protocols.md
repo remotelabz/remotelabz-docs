@@ -4,7 +4,7 @@ The control protocol allow the device user to control his device.
 By default, RemoteLabz comes with three different control protocols type:
 
 * **serial**: allow the device to be controlled through a serial interface.
-* **login** : allow the device to be controlled through a traditional console with login and password
+* **login** : allow the device to be controlled through a traditional console with login and password.
 * **vnc** : allow the device to be controlled through a vnc interface (required for graphical environments).
 
 ## Control Protocol creation

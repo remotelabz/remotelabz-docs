@@ -11,7 +11,7 @@ On the administrator side, you can manage existing code for all user and every c
   
 To create a lab code, go to the lab and click the code button above it. A new form appears where you can choose:
 
- - **Email addresses** on which you can send the code.
+ - **Email addresses** on which you send the code.
  - **Duration** in days, hours and minutes.
  
 ![Screenshot](/images/codes/lab_code_Invite1.png)
@@ -25,7 +25,7 @@ Once created, the laboratory access code will appear on a table below the form. 
 
 If you have already issued another lab code for the requested lab, you can go to admin area and click on codes. 
 
-![Screenshot](/images/codes/lab_code_mgmt_sum.png).
+![Screenshot](/images/codes/lab_code_mgmt_sum.png)
 
 Then you have to select the lab and on it's lab code management page, you can create the lab code. 
 
