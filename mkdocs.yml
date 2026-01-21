@@ -35,11 +35,14 @@ nav:
             - Laboratory Creation: users/Teachers/Teachers_lab_creation.md
             - Laboratory Management: users/Teachers/Teachers_laboratory.md
             - Sandbox: users/Teachers/Teachers_sandbox.md
+            - 'Admin Area':
+                - Operating System Management: users/Teachers/Teachers_operating_system.md
+                - Device Template Management: users/Teachers/Teachers_device_templates.md
             - Group Management: users/Teachers/Teachers_group.md
             - Lab Code Management: users/Teachers/Teachers_codes.md
         - 'Administrators':  
             - Overview: users/Administrators/Administrators_overview.md
-            - Laboratory Creation: users/Teachers/Teachers_lab_creation.md
+            - Laboratory Creation: users/Administrators/Administrator_lab_creation.md
             - Laboratory Management: users/Administrators/Administrators_laboratory.md
             - Group Management: users/Administrators/Administrators_group.md
             - 'Admin Area':

@@ -46,13 +46,13 @@ With the sidebar on the left, you can access to the subject and lab title throug
 
 To edit a laboratory, if you joined the lab you should leave it. This action will destroy your instance and all associated containers.
 
+!!!Warning
+    You can't edit the lab once it has been joined. If users have already joined your lab, to have the new edited lab they should leave it. This will cause the loss of all their data and containers.
+
 Once the laboratory has been left, an `edit` button appears on the top right corner which will lead you to the lab editor.
 From there, you can modify every aspects of the laboratory including its title, topology, practical subject...
 
 You can also delete the lab from there through clicking on the `delete` button.
-
-!!!Warning
-    You can't edit the lab once it has been joined. If users have already joined your lab, to have the new edited lab they should leave it. This will cause the loss of all their data and containers.
 
 ## Lab Export 
 

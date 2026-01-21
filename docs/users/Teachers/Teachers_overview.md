@@ -22,7 +22,7 @@ The screen is divided in 4 main parts :
 
 Since RemoteLabz 2.4.4, teachers may also have profiles with extended permissions which corresponds to the `Editor Teacher` role.
 
-![Screenshot](/images/Teacher/Teacher_edit_Front.png)
+![Screenshot](/images/Teacher/overview/Teacher_editor_overview.png)
 
 It comes with an admin menu, which add :
 

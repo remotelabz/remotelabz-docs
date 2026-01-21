@@ -1,7 +1,7 @@
 # PDU management
 ![Screenshot](/images/PDU/PDU_overview.png)
 
-Since remotelabz 2.4, it is possible to create and manage virtual PDUs. PDU are metered, fully manageable power strips commonly used in datacenters.
+Since RemoteLabz 2.4, it is possible to create and manage virtual PDUs. PDU are metered, fully manageable power strips commonly used in datacenters.
 Each outlet of these device can be assigned to any device in a physical or logical lab.
 
 !!!warning
