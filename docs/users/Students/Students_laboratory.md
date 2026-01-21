@@ -14,7 +14,7 @@ From this panel, as a student, you are allowed to :
 
  - :material-tray-arrow-down: `OpenVPN File` : Download the OpenVPN file associated to the lab. This can be useful to connect through protocol like SSH.
  - `See Lab` : See the topology of the lab.
- - `Leave Lab` : Leave the lab. All device must be stopped, this action will destroy the instance and all device that are associated.
+ - `Leave Lab` : Leave the lab. All devices must be stopped, this action will destroy the instance and all devices that are associated.
 
        For each device, you can : 
 
@@ -27,7 +27,7 @@ Below the instance, you can see the practical subject of the lab if there is one
 !!!Warning
      Once the leave lab button has been clicked, it destroys the lab instance, erasing **ALL MODIFICATIONS** on the lab's devices.
 
-From the instances list tab, you can see all lab instance that you joined. 
+From the instances list tab, you can see all lab instances that you joined. 
 
 ![Screenshot](/images/Students/Student_Instances.png)
 By clicking the `Details` button, you have an overview of your instance as follows :

@@ -1,6 +1,6 @@
 # Profile layout
 
-After login as a teacher, you will be taken to your profile main page.
+After logging in as a teacher, you will be taken to your dashboard.
 
 ![Screenshot](/images/Teacher/overview/Teacher_overview.png)
 

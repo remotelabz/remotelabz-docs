@@ -29,7 +29,7 @@ Physical devices have 2 additional parameters :
 * **IP** : IP address of the device.
 * **Port** : port of the device.
 
-# Device template creation
+## Device template creation
 Once you have clicked on the `New Virtual Device` or `New Physical Device` button, you will be brought to a new screen. 
 ![Screenshot](/images/Administrator/Device_templates/Administrator_device_template_create.png)
 
@@ -40,7 +40,7 @@ If you chose a blank OS as Operating System, additionnal fields should be comple
 
 As you finished adding your parameters, click on `Submit` to add your new device template.
 
-# Device template edition
+## Device template edition
 Once selected, you can also edit the device's name through the `Edit Device` button or delete it through the `Delete Device` button.
 ![Screenshot](/images/Administrator/Device_templates/Administrator_device_template_select.png)
 From there, you can consult informations like the type of the device, device informations, hardware specifications, the associated ISO, control protocols, statistics and the icon of the device.

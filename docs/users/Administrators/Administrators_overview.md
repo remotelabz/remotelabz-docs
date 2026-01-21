@@ -1,6 +1,6 @@
 # Profile layout
 
-After login as an admin, you will be taken to your profile main page.
+After logging in as an admin, you will be taken to your dashboard.
 
 ![Screenshot](/images/Administrator/Administrator_overview.png)
 
@@ -8,10 +8,10 @@ The screen is divided in 4 main parts :
 
 * The **navigation bar** with :
     * Lab Management : to create or stop labs.
-    * Groups : all group that you belong to. You can also create new groups.
+    * Groups : all groups that you belong to. You can also create new groups.
     * Bookings : to book a physical lab.
     * Admin area : to manage almost every aspects of the application.
-    * Settings : to customise your profile.
+    * Settings : to manage your profile.
 * **Your labs** : displays labs that you can access from your groups.
 * **Your bookings** : displays labs that you have booked.
 * **Your groups** : displays groups that you belong to.
@@ -37,7 +37,7 @@ Inside this area, you can manage many elements such as :
 * **Sandbox** : containers, vms can be started from there.New container can also be created from existing containers.
 * **Instances** : allow the administrator to start/stop/leave every lab from there.
 * **Services** : allow the administrator to start/stop critical system services such as : 
-    * Worker service : the service that runs all the VM/Container for remotelabZ 
+    * Worker service : the service that runs all VMs/Containers for remotelabZ 
     * Proxy service : the service that control the private network used by the labs.
     * Messaging service : handles communications between the front and the worker. 
 * **Usage** : give the administrator an overview about which resources are consumed by the worker.

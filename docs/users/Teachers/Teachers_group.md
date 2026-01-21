@@ -54,6 +54,6 @@ Only the owner can change the namespace of a group. To do this, go to group `Set
  - Leave the namespace empty. This will clear the namespace. Your group will remain as it is. If it is in a subgroup, it will became an independant group.
 
 !!! warning
-    This may delete all user (except the owner) or laboratories from the group. 
+    This may delete all users (except the owner) or laboratories from the group. 
 
 

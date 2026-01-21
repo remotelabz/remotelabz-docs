@@ -15,14 +15,14 @@ As soon as you choose to modify an existing template, a new Sandbox lab is creat
 
 ## Sandbox Export
 
+![Screenshot](/images/Teacher/Teacher_sandbox_export.png)
+
 To make an export, you have to :
 
-1. Click on `Sandbox`
-2. Click on the `Modify` button of the device whose image you wants to modify.
-3. Start the device. You are required to start the device at least once in order to perform the operation.
-4. Do your modifications.
-5. Stop the device.
-6. Click on `Export` and choose a name for your new device template. Then click on export device.
+1. Start the device. You are required to start the device at least once in order to perform the operation.
+2. Do your modifications.
+3. Stop the device.
+4. Click on `Export` and choose a name for your new device template. Then click on export device.
 
  After you have clicked on the `Export Device` button, wait until the process is complete. Once done, it leaves the lab automatically and the corresponding new device template and operating system are created. 
 

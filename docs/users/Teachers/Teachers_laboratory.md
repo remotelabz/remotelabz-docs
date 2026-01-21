@@ -14,7 +14,7 @@ To manage an instance, click on the `Details` button.
 
 ![Screenshot](/images/Teacher/Teacher_lab_instance_details.png)
 
-From there, you have access to all informations about the instance, you can :
+From there, you have access to all information about the instance, you can :
 
 - See the owner of the instance
 - Start all, stop all and reset all devices

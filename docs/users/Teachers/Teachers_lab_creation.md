@@ -99,7 +99,7 @@ Close the lab by clicking `Close lab` in the sidebar. You will see the newly cre
 
 ![Screenshot](/images/Teacher/first-lab/Teacher_lab_start.png)
 
-You can start a container by using the green arrow on the right side of the list. 
+You can start a container by using the green arrow :material-play: on the right side of the list. 
 
 1. First, start the Service container
 2. Next, the Ubuntu container.
