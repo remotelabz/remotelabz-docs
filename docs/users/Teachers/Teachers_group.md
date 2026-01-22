@@ -20,7 +20,7 @@ Internal groups can be used to test and develop activities and as soon as the ac
 !!! Tip
     From version 2.4.0, each privileged user of a group (owner or administrator of a group) can add to its group, any laboratories whose he is the author. If a lab is added to a group, each member of any sub-group can also view this lab. But if a laboratory is added only to a sub-group, nobody of its parent group can see this lab.Let 3 groups, Gr1 with the two following sub-group SubGrA and SubGrB. If Lab A is affected to Gr1, so all members of SubGrA and SubGrB can execute Lab A. But if Lab B is affected to SubGrB, only members of SubGrB will execute this Lab B.
 
-In the group setting panel, every parameter including name, subname, visibility, description  can be changed by it's administrator(s). It is also possible to delete the group or change it's namespace from there.
+In the group setting panel, every parameter including name, subname, visibility, description  can be changed by its administrator(s). It is also possible to delete the group or change its namespace from there.
 
 ## Adding user to a group
 

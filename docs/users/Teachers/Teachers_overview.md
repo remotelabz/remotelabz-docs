@@ -13,7 +13,7 @@ The screen is divided in 4 main parts :
     * Sandbox : to create and modify containers.
     * Usage : to view ressource consumption.
     * Instances list : all lab instances you can access in which you can start/stop or leave.
-    * Settings : to customise your profile.
+    * Settings : to manage your profile.
 * **Your labs** : displays labs that you can access from your groups.
 * **Your bookings** : displays labs that you have booked.
 * **Your groups** : displays groups that you belong to.
@@ -24,7 +24,7 @@ Since RemoteLabz 2.4.4, teachers may also have profiles with extended permission
 
 ![Screenshot](/images/Teacher/overview/Teacher_editor_overview.png)
 
-It comes with an admin menu, which add :
+It comes with an admin menu, which adds :
 
 * Devices templates
 * Operating systems

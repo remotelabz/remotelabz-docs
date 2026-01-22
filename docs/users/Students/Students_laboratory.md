@@ -6,7 +6,7 @@ A laboratory is an exercise associated to devices. All devices are configured to
 
 ## Instance Management
 
-In RemoteLabz, once a student join a laboratory, they can manage the newly created instance and it's associated devices through the laboratory management panel.
+In RemoteLabz, once a student join a laboratory, they can manage the newly created instance and its associated devices through the laboratory management panel.
 
 ![Screenshot](/images/Students/Student_Lab.png)
 

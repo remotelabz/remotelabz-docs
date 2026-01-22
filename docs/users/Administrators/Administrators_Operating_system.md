@@ -10,7 +10,7 @@ There is multiple default operating system provided with RemoteLabz.
 ### Operating System
 To create an operating system, you have to click on the `New Operating System` button. You will be brought to a new screen.
 ![Screenshot](/images/Administrator/Operating_system/Administrator_new_operating_system.png)
-From there, you can choose it's parameters such as :  
+From there, you can choose its parameters such as :  
 
  * **Name** :  name of the new operating system.
  * **Architecture** : architecture under which processes will be executed.

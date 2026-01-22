@@ -11,7 +11,7 @@ To do this, go to `Admin area` → `System` → `Worker configuration`.
 Then click on the `+` button and enter the worker IP address.
 ![Screenshot](/images/workers/Worker_add.png)
 
-When done, the new worker is added and you can check it's status on the `Usage` tab.
+When done, the new worker is added and you can check its status on the `Usage` tab.
 
 ## Modify workers
 

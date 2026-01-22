@@ -1,12 +1,11 @@
-#Lab code
+# Lab code
 
-In remotelabz 2.4.4 a user can access a lab by using a specific code issued by his administrator or a teacher.
+In RemoteLabz 2.4.4, a user can access a lab by using a specific code issued by his administrator or a teacher.
 
 !!!warning
     Only an administrator or a teacher can create a lab code.
 
-
-##Lab code use
+## Lab code use
 
 To use a lab code, get to the login page and click on login with code.
 

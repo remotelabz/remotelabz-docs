@@ -27,7 +27,7 @@ If you have already issued another lab code for the requested lab, you can go to
 
 ![Screenshot](/images/codes/lab_code_mgmt_sum.png)
 
-Then you have to select the lab and on it's lab code management page, you can create the lab code. 
+Then you have to select the lab and on its lab code management page, you can create the lab code. 
 
 ![Screenshot](/images/codes/lab_code_Invite_accepted1.png)
 

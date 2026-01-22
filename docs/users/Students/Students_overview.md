@@ -9,7 +9,7 @@ The screen is divided in 3 main parts :
        * Groups : all groups that you belong to.
        * Bookings : to book a physical lab.
        * Instances list : all labs instances in which you can start/stop or leave.
-       * Settings : to customise your profile.
+       * Settings : to manage your profile.
 * **Your labs** : displays labs that you can access from your groups.
 * **Your groups** : displays groups that you belong to.
 
