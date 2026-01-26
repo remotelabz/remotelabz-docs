@@ -41,6 +41,8 @@ On the next screen, you can specify the container's parameters such as the name,
 
 Once done, click on the `Save` button. The container will be created and will appear on the top left side of the screen.
 
+If you want to edit the container, right-click on it.
+
 ![Screenshot](/images/Teacher/first-lab/nodeadd5.png)
 
 To continue our example, we will then repeat the same procedure to add the service container and an Ubuntu container. 

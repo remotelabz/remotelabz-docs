@@ -8,6 +8,10 @@ From this area, you can manage (Start/Stop) RemoteLabz essential services such a
     * **Proxy services** : Manage the RemoteLabz login services
     * **Proxy services** : Manage routes to each laboratory.
 
+ * **System Checks** :
+     * **SSH Connection Status** : Check the SSh connectivity to all workers.
+     * **Certificate Status** : Check the validity of SSL/TLS certificates.
+
 
  * **Remote services** :
      * **Worker services** : Manage the worker services. 
