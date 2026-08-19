@@ -38,13 +38,14 @@ The 5th device, called "Migration" is another Alpine used for configuration.At t
 !!! info "Partition your disk"
     For the worker, the image and iso of each virtual device is stored in `/opt/remotelabz-worker/images`, `/opt/remotelabz-worker/iso`, respectively. Each laboratory stores the user's VM in `/opt/remotelabz-worker/instances` and the container in the lxc default working directory `/var/lib/lxc`
     
-    To avoid storage problem on the system, we recommand to build 2 partitions for :
+    To avoid storage problem on the system, we recommand to build 2 Logical Volumes in the Volume named rlz-vg for :
     
     - `/opt`
     - `/var/lib/lxc`
 
+
 !!! question "How size my partition ?"
-    For example, on a RemoteLabz deploys for 355 users and which uses 2 workers :
+    For example, on a RemoteLabz deploys for 355 users and 570 VM/containers on 2 workers :
 
     - on the first worker, 193 containers use 289 Go (1.4 Go/container) and 56 VMs use 281 Go (5 Go/VM), respectively
     - on the second worker, 286 containers use 327 Go (1,1 Go/container) and 34 VMs use 284 Go (8,3 Go/VM), respectively
@@ -58,7 +59,7 @@ The 5th device, called "Migration" is another Alpine used for configuration.At t
     !!! note
         On the front, the uploaded iso and VM image are stored in the /opt/remotelabz/public/uploads directory
 
-    - on the worker, at least 30 Go
+    - on the worker, at least 35 Go for Linux system and the rest for a Volume group which have to name "rlz-vg". In this volume, you have to create one logical volume for the /opt directory which contains all user instances of VM (Qemu). We recommand to use 60% of your free space for /opt and let the 40% which is automatically use by the container.
 
 
 ## Installation of the requirements
@@ -366,9 +367,9 @@ A `remotelabz-worker` directory is created after the previous command.
     ```bash    
     git clone https://github.com/remotelabz/remotelabz-worker.git --branch 2.4.1 --single-branch
     ```
-    or
+    or for branch Upgrade-2.5
     ```bash    
-    git clone https://github.com/remotelabz/remotelabz-worker.git --branch dev
+    git clone https://github.com/remotelabz/remotelabz-worker.git --branch Upgrade-2.5
     ```
 
 ### Installation of the RemoteLabz worker application
