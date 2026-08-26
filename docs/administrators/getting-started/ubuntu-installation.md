@@ -531,6 +531,8 @@ sudo update-locale LANG=en_US.UTF-8
 apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
 echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
+echo "server=1.1.1.3" >> /etc/dnsmasq.conf
+echo "server=9.9.9.9" >> /etc/dnsmasq.conf
 systemctl stop systemd-resolved
 systemctl disable systemd-resolved
 systemctl disable systemd-networkd
