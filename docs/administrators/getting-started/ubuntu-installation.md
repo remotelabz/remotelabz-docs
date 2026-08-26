@@ -527,7 +527,10 @@ These are example DNS servers; you can replace them with your preferred DNS serv
 Next, type the following command :
 ```bash
 systemctl restart systemd-resolved
-sudo update-locale LANG=en_US.UTF-8
+locale-gen
+update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
 echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
