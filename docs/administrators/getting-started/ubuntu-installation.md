@@ -106,15 +106,15 @@ The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user
     For MySQL, to set the root password to `new_password`
     ```
     sudo mysql -u root -h localhost
-    ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY 'new_password';
+    ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'new_password';
     FLUSH PRIVILEGES;
-    EXITS;
+    EXIT;
     ```
     The remotelabz default user is `user` and its password `Mysql-Pa33wrd\$`. If you want to change to `new_password` for example, you have to do the following:
     ```
-    ALTER USER IF EXISTS 'user'@'localhost' IDENTIFIED BY 'new_password';
+    ALTER USER IF EXISTS 'user'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'new_password';
     FLUSH PRIVILEGES;
-    EXITS;
+    EXIT;
     ```
 
 #### OpenVPN pre-configuration
@@ -518,10 +518,16 @@ First : go to the sandbox menu and start the "Migration" device. Next, in the co
     Add the default route `ip route add default via X.X.X.X`
 
 
+Next, open the following file:
+`vi /etc/systemd/resolved.conf`. In this file, uncomment the DNS= line by removing the # at the beginning, and set it to:
+`DNS=1.1.1.1 9.9.9.9`
+
+These are example DNS servers; you can replace them with your preferred DNS servers.
+
 Next, type the following command :
 ```bash
-sudo rm /etc/resolv.conf
-echo "nameserver 1.1.1.1" > /etc/resolv.conf
+systemctl restart systemd-resolved
+sudo update-locale LANG=en_US.UTF-8
 apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
 echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
@@ -533,9 +539,21 @@ systemctl enable dnsmasq
 
 The line (`systemctl disable systemd-networkd`) is mandatory otherwise your container will not have any IP.
 
-Your "Service" device, which is a container, is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
-On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
-In the device menu, remove the "login" option from the control protocols, as users should not edit this VM.
+Your "Service" device, which is a container, is now ready.
+
+First, stop the "Migration" device. Then, click "Export" and enter "Service" as the New Name. Finally, click the "Export Device" button.
+
+You now have a new operating system and a new device called "Service". If you decide to add this device to your lab, it will act as a DHCP server.
+
+The DHCP server is already configured to automatically assign IP addresses to your devices, using the appropriate network settings to provide them with Internet access.
+
+
+!!! warning
+    In the device menu, remove the "login" option from the control protocols, as users should not edit this VM.
+
+!!! tips
+    You can rename this "Service" device to "DHCP for internet"
+
 
 ![DHCP Service](/images/Administrator/DHCP-service.png)
 
