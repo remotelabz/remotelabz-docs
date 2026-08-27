@@ -23,30 +23,26 @@ RemoteLabz consists of three software components :
  
 - The front web site, called the RemoteLabz's front.
 - The backend server which execute the virtuals machines, called *remotelabz-worker*.
-- The broker service (RabbitMQ) which will manage communication between the front and the workers.
 
 !!! info
     Technically, You can have all these components running in a single host, but since remotelabz-worker has to run an hypervisor (QEMU) which may consume a lot of resources. It is best to use a different server for each components.
    
-
 The front is the only host which may require direct Internet access.In this case, extra attention must be paid regarding the security of the host it's running on.
 For instance, it is highly recommended to install a [fail2ban](https://github.com/fail2ban/fail2ban) service and securing any remote access service like SSH using certificates or strong passwords.
 
+![network_architecture](/images/RemoteLabz-v2.5-Global.png)
 
-![network_architecture](/images/RemoteLabz-Ports.png)
+![network_architecture](/images/RemoteLabz-v2.5-Global-Service.png)
 
 
 !!! example "Ports used (Summary)"
 
     === "Internet to RemoteLabz"
-        - **TCP 80 (443)** : HTTP(S) pages
-        - **TCP 8000** : WebSocket
-        - **UDP 1194** : OpenVPN
+        - **TCP/443** : HTTPS pages
+        - **TCP/80** : OpenVPN
 
-    === "RemoteLabz to RemoteLabz-Worker"
-        - **TCP 8080** : Remotelabz-Worker Internal API
-
-    === "RemoteLabz Worker to RabbitMQ"
-        - **TCP 5672** : AMQP
+    === "REmoteLabz Front and RemoteLabz Worker"
+        - **TCP/5672** : AMQP
+        - **TCP/22** : SSH
 
 

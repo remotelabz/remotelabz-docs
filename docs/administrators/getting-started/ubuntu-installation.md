@@ -6,32 +6,61 @@ This section guides you through the installation of RemoteLabz and its component
 
 Only Ubuntu-based distributions are compatible with Remotelabz.
 
-The first step is to install a ubuntu distro like Ubuntu Server 20.04 LTS https://releases.ubuntu.com/20.04.4/ubuntu-20.04.4-live-server-amd64.iso on
+The first step is to install a ubuntu distro like Ubuntu Server 24.04 LTS on
 
 - only one computer if you want to use the Front and the Worker on the same server
 - 2 computers if you want to separate your Front and your Worker.
 
 !!! note
-    The version 2.5 for Ubuntu 24.04 LTS Server is available on branch Upgrade-2.5
+    The future version 2.5 for Ubuntu 24.04 LTS Server is available on branch Upgrade-2.5
 
 !!! warning
     This application doesn't work neither in a container, nor in WSL
 
 To install both the Front and the Worker on the same device, the minimum requirement is 
 
-- a hard disk of at least 30 Go.
+- a hard disk of at least 30 Go for the system
 - 2 Go of RAM
 - 1 CPU
+- LVM volume management
+- 2 logicals volumes for /opt and /var/lib/lxc. The size depends of the maximum number of VM and containers you want to run and image and iso to store.
 
-This depends of the number of VMs, containers, and, operating system used, you want to run simultaneously. At the end of the installation, 4 devices will be installed and configured :
+At the end of the installation, 4 devices will be installed and configured :
 
 - 3 containers with Debian 11.4, Alpine 3.15, Ubuntu Server 20.04 LTS
 - 1 VM Alpine 3.10
 
 The 5th device, called "Migration" is another Alpine used for configuration.At the end of the installation, a 6th container with a DHCP service must be created.
 
-!!! warning
-    RemoteLabZ require PHP 7.4 to work properly. PHP 8.0 or higher is not supported.To downgrade PHP see [PHP Downgrade](../../../HowTo/PHPDowngrade)
+!!! warning "Requirements"
+    RemoteLabz require PHP 8.4 to work properly.
+
+!!! info "Partition your disk"
+    For the worker, the image and iso of each virtual device is stored in `/opt/remotelabz-worker/images`, `/opt/remotelabz-worker/iso`, respectively. Each laboratory stores the user's VM in `/opt/remotelabz-worker/instances` and the container in the lxc default working directory `/var/lib/lxc`
+    
+    To avoid storage problem on the system, we recommand to build 2 Logical Volumes in the Volume named rlz-vg for :
+    
+    - `/opt`
+    - `/var/lib/lxc`
+
+
+!!! question "How size my partition ?"
+    For example, on a RemoteLabz deploys for 355 users and 570 VM/containers on 2 workers :
+
+    - on the first worker, 193 containers use 289 Go (1.4 Go/container) and 56 VMs use 281 Go (5 Go/VM), respectively
+    - on the second worker, 286 containers use 327 Go (1,1 Go/container) and 34 VMs use 284 Go (8,3 Go/VM), respectively
+
+    All VMs and containers are linux servers.
+
+    For the system, we need at :
+    
+    - on the front, at least 30 Go + space to store the uploaded iso and VM images
+
+    !!! note
+        On the front, the uploaded iso and VM image are stored in the /opt/remotelabz/public/uploads directory
+
+    - on the worker, at least 35 Go for Linux system and the rest for a Volume group which have to name "rlz-vg". In this volume, you have to create one logical volume for the /opt directory which contains all user instances of VM (Qemu). We recommand to use 60% of your free space for /opt and let the 40% which is automatically use by the container.
+
 
 ## Installation of the requirements
 
@@ -53,9 +82,9 @@ You have now a directory `remotelabz` created on your home directory.
     ```bash    
     git clone https://github.com/remotelabz/remotelabz.git --branch 2.4.1 --single-branch
     ```
-    or for development version
+    or for Upgrade-2.5 version
     ```bash    
-    git clone https://github.com/remotelabz/remotelabz.git --branch dev
+    git clone https://github.com/remotelabz/remotelabz.git --branch Upgrade-2.5
     ```
 
 ### Install the requirements
@@ -77,15 +106,15 @@ The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user
     For MySQL, to set the root password to `new_password`
     ```
     sudo mysql -u root -h localhost
-    ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED BY 'new_password';
+    ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'new_password';
     FLUSH PRIVILEGES;
-    EXITS;
+    EXIT;
     ```
     The remotelabz default user is `user` and its password `Mysql-Pa33wrd\$`. If you want to change to `new_password` for example, you have to do the following:
     ```
-    ALTER USER IF EXISTS 'user'@'localhost' IDENTIFIED BY 'new_password';
+    ALTER USER IF EXISTS 'user'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'new_password';
     FLUSH PRIVILEGES;
-    EXITS;
+    EXIT;
     ```
 
 #### OpenVPN pre-configuration
@@ -239,20 +268,73 @@ echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
     In order for the app to work correctly, a key pair is created for JWT. You can find detailed configuration in [the LexikJWTAuthenticationBundle doc](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.rst#generate-the-ssh-keys).
 
 
+### Configure RemoteLabz to use SSL
+
+This section guides you through the configuration of SSL between all service of the RemoteLabz.
+
+#### Configure your Apache 2 with HTTPS
+
+During the installation process, the file `200-remotelabz-ssl.conf` is copied in your `/etc/apache2/sites-available` directory. The certificate is defined as follow :
+```bash
+        SSLCertificateFile	/etc/apache2/RemoteLabz-WebServer.crt
+        #SSLCertificateChainFile /etc/ssl/certs/remotelabz._INTERMEDIATE.cer
+        SSLCertificateKeyFile /etc/apache2/RemoteLabz-WebServer.key
+```
+
+Two case, either you have an official certificate or you have to generate your own certificate.
+##### Official certificate
+
+If you have an official certificate, you have to copy it in your `/etc/apache2` directory and rename it to `RemoteLabz-WebServer.crt` and `RemoteLabz-WebServer.key`. Next, you have to activate this site:
+```bash
+sudo a2ensite 200-remotelabz-ssl.conf
+sudo a2enmod ssl
+sudo service apache2 reload
+```
+
+##### Self-signed certificate
+Execute the script 
+```bash
+cd ~
+sudo remotelabz/bin/install_ssl.sh
+```
+
+!!! tips
+    You can verify your certificate with the following command : 
+    ```bash
+    openssl x509 -noout -text -in /etc/apache2/RemoteLabz-WebServer.crt
+    ```
+
+!!! warning 
+    Don't forget to reload the Apache 2 service
+    ```bash
+    sudo systemctl restart apache2
+    ```
+
 #### Start the RemoteLabz Front
 
-In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/crestic/remotelabz-worker), you need to start **Symfony Messenger** :
+In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/remotelabz/remotelabz-worker), you need to start **Symfony Messenger** :
 
 ```bash
 sudo systemctl enable remotelabz
 sudo systemctl enable remotelabz-proxy
+sudo systemctl enable remotelabz-route-monitor
+sudo systemctl enable remotelabz-clean-notification
+sudo systemctl enable remotelabz-git-version-update
+
 sudo systemctl start remotelabz
 sudo systemctl start remotelabz-proxy
+sudo systemctl start remotelabz-route-monitor
+sudo systemctl start remotelabz-clean-notification
+sudo systemctl start remotelabz-git-version-update
 ```
 
 You can now test your RemoteLabz front with your internet navigator but you will just make connection until the worker is not installed.
 
+!!! warning
+    The front is only listen on TCP/443
+
 !!! info
+    The url : https://Your_IP
     The default credentials are :
 
     - Username : `root@localhost`
@@ -285,9 +367,9 @@ A `remotelabz-worker` directory is created after the previous command.
     ```bash    
     git clone https://github.com/remotelabz/remotelabz-worker.git --branch 2.4.1 --single-branch
     ```
-    or
+    or for branch Upgrade-2.5
     ```bash    
-    git clone https://github.com/remotelabz/remotelabz-worker.git --branch dev
+    git clone https://github.com/remotelabz/remotelabz-worker.git --branch Upgrade-2.5
     ```
 
 ### Installation of the RemoteLabz worker application
@@ -357,6 +439,27 @@ and so on.
     Don't forget to modify your `/opt/remotelabz-worker/.env.local` file. You have to define the following parameters :
     ADM_INTERFACE; FRONT_SERVER_IP; and SSH_USER_PASSWD; SSH_USER_PRIVATEKEY_FILE; SSH_USER_PUBLICKEY_FILE if you have many workers
 
+#### Copy certificate files from the front to the worker
+Copy the two files `~/EasyRSA/RemoteLabz-WebServer.crt` and `~/EasyRSA/RemoteLabz-WebServer.key` to your **worker** in directory `/opt/remotelabz-worker/config/certs`
+
+```bash
+cd ~/EasyRSA
+source /opt/remotelabz/.env.local
+scp ~/EasyRSA/RemoteLabz-WebServer.crt user@${WORKER_SERVER}:~
+sudo scp ~/EasyRSA/RemoteLabz-WebServer.key user@${WORKER_SERVER}:~
+```
+
+On the **worker**
+```bash
+cd ~
+sudo mv RemoteLabz-WebServer.* /opt/remotelabz-worker/config/certs/
+sudo sed -i "s/REMOTELABZ_PROXY_USE_WSS=0/REMOTELABZ_PROXY_USE_WSS=1/g" /opt/remotelabz-worker/.env.local
+sudo service remotelabz-worker restart
+```
+
+!!! warning
+    You need to use the same certificate between your front and the worker. Don't forget to copy them and to change it automatically if your certificate expired.
+
 
 #### Start your RemoteLabz Worker service
 Normally, the service remotelabz-worker is started during the installation phase and it will start automatically when your system boots up.However, if you need to start the service manually :
@@ -415,13 +518,25 @@ First : go to the sandbox menu and start the "Migration" device. Next, in the co
     Add the default route `ip route add default via X.X.X.X`
 
 
+Next, open the following file:
+`vi /etc/systemd/resolved.conf`. In this file, uncomment the DNS= line by removing the # at the beginning, and set it to:
+`DNS=1.1.1.1 9.9.9.9`
+
+These are example DNS servers; you can replace them with your preferred DNS servers.
+
 Next, type the following command :
 ```bash
-sudo rm /etc/resolv.conf
-echo "nameserver 1.1.1.1" > /etc/resolv.conf
+systemctl restart systemd-resolved
+echo 'fr_FR.UTF-8 UTF-8' >> /etc/locale.gen
+locale-gen
+update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 apt-get update; apt-get -y upgrade; apt-get install -y dnsmasq;
 echo "dhcp-range=RANGE_TO_DEFINED" >> /etc/dnsmasq.conf
 echo "dhcp-option=3,GW_TO_DEFINED" >> /etc/dnsmasq.conf
+echo "server=1.1.1.3" >> /etc/dnsmasq.conf
+echo "server=9.9.9.9" >> /etc/dnsmasq.conf
 systemctl stop systemd-resolved
 systemctl disable systemd-resolved
 systemctl disable systemd-networkd
@@ -430,9 +545,21 @@ systemctl enable dnsmasq
 
 The line (`systemctl disable systemd-networkd`) is mandatory otherwise your container will not have any IP.
 
-Your "Service" device, which is a container, is now ready. You have to stop the Migration device, click on Export and type, as a New Name : Service and click on the button "Export Device"
-On your lab, if you add Service device, you will have a DHCP service for all your devices of your lab.
-In the device menu, remove the "login" option from the control protocols, as users should not edit this VM.
+Your "Service" device, which is a container, is now ready.
+
+First, stop the "Migration" device. Then, click "Export" and enter "Service" as the New Name. Finally, click the "Export Device" button.
+
+You now have a new operating system and a new device called "Service". If you decide to add this device to your lab, it will act as a DHCP server.
+
+The DHCP server is already configured to automatically assign IP addresses to your devices, using the appropriate network settings to provide them with Internet access.
+
+
+!!! warning
+    In the device menu, remove the "login" option from the control protocols, as users should not edit this VM.
+
+!!! tips
+    You can rename this "Service" device to "DHCP for internet"
+
 
 ![DHCP Service](/images/Administrator/DHCP-service.png)
 
@@ -448,6 +575,36 @@ If you leave this value to 1, nobody, except the administrator will be able to u
 !!! news
     The tutorial to create a first lab with 1 container and 1 DHCP server : <a href="https://www.youtube.com/watch?v=S0f2-kCIP_k" target="_blank">RemoteLabz first laboratory</a>
 
-## Secure the communication
-If you want to secure all communication between the client, the Remotelabz front and the Remotelabz Worker, you have to follow the instruction of [page SSL](ubuntu-secure.md) Perhaps, you web navigator ne
+### Shibboleth (optional - You have to be registered by Renater)
 
+!!!warning
+    You have to activate HTTPS to use Shibboleth authentication method
+
+```bash
+cd ~
+curl --fail --remote-name https://pkg.switch.ch/switchaai/ubuntu/dists/focal/main/binary-all/misc/switchaai-apt-source_1.0.0~ubuntu20.04.1_all.deb
+sudo apt install ./switchaai-apt-source_1.0.0~ubuntu20.04.1_all.deb
+sudo apt update
+sudo apt install --install-recommends shibboleth
+sudo a2enconf shib
+sudo a2enmod shib
+sudo service apache2 restart
+```
+
+Next step, to finish to configure your Shibboleth Service Provider (SP), you have to modify your `/etc/shibboleth/shibboleth2.xml` file, following the guide from Paragraph 4, depend of your Shibboleth Identity Provider (IdP):
+
+ - [SWITCH Shibboleth Service Provider (SP) 3.1 Configuration Guide](https://www.switch.ch/aai/guides/sp/configuration/){target=_blank}
+ 
+RENATER Shibboleth Service has been moved to the official shibboleth site.
+ - [Official shibboleth site Installation and Configuration Guide](https://shibboleth.atlassian.net/wiki/spaces/SP3/pages/2065335537/Installation){target=_blank}
+
+You can find all the configuration guides on the following site :
+
+- [On Ubuntu 20.04 LTS](https://www.switch.ch/aai/guides/sp/installation/?os=ubuntu20){target=_blank}
+
+To enable Shibboleth site-wide, you need to change the value of `ENABLE_SHIBBOLETH` environment variable :
+
+```bash
+# .env.local
+ENABLE_SHIBBOLETH=1
+```

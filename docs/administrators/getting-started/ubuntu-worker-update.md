@@ -25,20 +25,14 @@ git pull
     ```
 
 Compare your `.env.local` file with the `.env` file to be sure the same parameters are set 
+
 ### General process
 ```bash
-sudo composer update
-sudo php bin/console cache:clear
-sudo chown remotelabz-worker:www-data * -R
-sudo chmod g+w /opt/remotelabz-worker/var -R
-sudo chown :remotelabz-worker /var/lib/lxc
-sudo chmod g+w /var/lib/lxc
-sudo chown remotelabz-worker: /opt/remotelabz-worker/images
-sudo systemctl daemon-reload
-sudo service remotelabz-worker restart
+cd /opt/remotelabz-worker
+sudo bin/remotelabz-worker-update.sh
 ```
 !!! warning
-    When you restart the remotelabz-worker service, all VM and containers restart.
+    When you update, the remotelabz-worker service restarts and all VMs and containers restart.
  
 
 ## From 2.4.3 to version 2.5
@@ -88,8 +82,24 @@ kernel.pty.max = 10000
 
 Don't forget to read again the sysctl file `sudo sysctl -f /etc/sysctl.conf`
 
+Add new directory to store the iso `sudo mkdir /opt/remotelabz-worker/iso/`
 
-And now you can follow the general process
+And now you can follow the general update process
+
+### SSH connexion from workers to front
+Copy the public key of all workers to the front.
+
+```bash
+sudo -u remotelabz-worker ssh-copy-id -i /home/remotelabz-worker/.ssh/myremotelabzkey.pub remotelabz@Front-IP
+```
+
+You can test the front has your key.
+```bash
+sudo -u remotelabz-worker ssh -i /home/remotelabz-worker/.ssh/myremotelabzkey remotelabz@Front-IP
+```
+
+### Login to container
+You have to install `pamtester` in all your container to a user can log in. The Remotelabz Worker now use a specific script with ttyd to improve the login process.
 
 ## From 2.4.2.6 and above to version 2.4.3
 When you link a worker to the front, don't forget to add the following lines on the `/opt/remotelabz-worker/config/packages/messenger.yaml` file, in the part 
