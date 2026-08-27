@@ -527,6 +527,7 @@ These are example DNS servers; you can replace them with your preferred DNS serv
 Next, type the following command :
 ```bash
 systemctl restart systemd-resolved
+echo 'fr_FR.UTF-8 UTF-8' >> /etc/locale.gen
 locale-gen
 update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
