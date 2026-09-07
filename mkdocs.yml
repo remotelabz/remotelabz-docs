@@ -18,6 +18,7 @@ nav:
         - What is RemoteLabz ?: index.md
         - 'Installation':
                 - Installation: administrators/getting-started/ubuntu-installation.md
+                - Installation for Ubuntu 26: administrators/getting-started/ubuntu-installation-2.md
                 - Configuration: administrators/getting-started/ubuntu-configuration.md
         - 'Update':
              - Update Front: administrators/getting-started/ubuntu-front-update.md
@@ -60,6 +61,7 @@ nav:
                - Sandbox: users/Administrators/Administrators_sandbox.md
                - PDU management: users/Administrators/Administrators_PDU.md
                - Instance Management: users/Administrators/Administrators_Instance_management.md
+               - Scheduled Actions: users/Administrators/Administrator_scheduled_actions.md
                - Lab Code management: users/Administrators/Administrators_codes.md
                - 'System':
                    - Worker Management: users/Administrators/Administrators_Workers.md
