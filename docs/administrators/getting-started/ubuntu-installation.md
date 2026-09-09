@@ -36,30 +36,26 @@ The 5th device, called "Migration" is another Alpine used for configuration.At t
     RemoteLabz require PHP 8.4 to work properly.
 
 !!! info "Partition your disk"
-    For the worker, the image and iso of each virtual device is stored in `/opt/remotelabz-worker/images`, `/opt/remotelabz-worker/iso`, respectively. Each laboratory stores the user's VM in `/opt/remotelabz-worker/instances` and the container in the lxc default working directory `/var/lib/lxc`
-    
-    To avoid storage problem on the system, we recommand to build 2 Logical Volumes in the Volume named rlz-vg for :
-    
-    - `/opt`
-    - `/var/lib/lxc`
-
-
-!!! question "How size my partition ?"
     For example, on a RemoteLabz deploys for 355 users and 570 VM/containers on 2 workers :
 
     - on the first worker, 193 containers use 289 Go (1.4 Go/container) and 56 VMs use 281 Go (5 Go/VM), respectively
     - on the second worker, 286 containers use 327 Go (1,1 Go/container) and 34 VMs use 284 Go (8,3 Go/VM), respectively
 
-    All VMs and containers are linux servers.
+    In this example, all VMs and containers are linux servers.
+   
+    Worker Setup disk partition guide:
 
-    For the system, we need at :
-    
-    - on the front, at least 30 Go + space to store the uploaded iso and VM images
+    1. Volume Groupe (VG) for Linux System: Allocate at least 35 GB for the OS in a logical volume (LV) 'ubuntu-lv' in a volume group 'ubuntu-vg'. This is the default name used by Ubuntu when you install it.
+    2. Volume Group (VG): Assign all remaining disk space to a new VG named 'rlz-vg'. In this VG :
+        1. Create a new LV named 'rlz-lg' with 60% of your space for the /opt directory (hosting Qemu VM instances).
+        2. Create a new LV named 'lib-lxc' of 100 GB for the /var/lib/lxc directory (hosting LXC instances).
+        3. The last remaining 40% of free space will automatically allocated for user containers instance.
+
+
+    For the worker, the image and iso of each virtual device is stored in `/opt/remotelabz-worker/images`, `/opt/remotelabz-worker/iso`, respectively. Each laboratory stores the user's VM in `/opt/remotelabz-worker/instances` and the container in the lxc default working directory `/var/lib/lxc`
 
     !!! note
         On the front, the uploaded iso and VM image are stored in the /opt/remotelabz/public/uploads directory
-
-    - on the worker, at least 35 Go for Linux system and the rest for a Volume group which have to name "rlz-vg". In this volume, you have to create one logical volume for the /opt directory which contains all user instances of VM (Qemu). We recommand to use 60% of your free space for /opt and let the 40% which is automatically use by the container.
 
 
 ## Installation of the requirements
