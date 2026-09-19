@@ -41,7 +41,7 @@ For instance, it is highly recommended to install a [fail2ban](https://github.co
         - **TCP/443** : HTTPS pages
         - **TCP/80** : OpenVPN
 
-    === "REmoteLabz Front and RemoteLabz Worker"
+    === "RemoteLabz Front and RemoteLabz Worker"
         - **TCP/5672** : AMQP
         - **TCP/22** : SSH
 
