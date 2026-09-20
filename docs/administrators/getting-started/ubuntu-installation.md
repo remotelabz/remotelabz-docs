@@ -1,18 +1,21 @@
 # RemoteLabz's installation guide
 
-This section guides you through the installation of RemoteLabz and its components on an Ubuntu system. We assume you have already installed an Ubuntu Server 20.04 LTS. For now, we support only this version of Ubuntu.
+!!! warning 
+    Not use the master branch of RemoteLabz, it's too old.
+
+This section guides you through the installation of RemoteLabz and its components on an Ubuntu system. We assume you have already installed an Ubuntu Server 26.04 LTS. We support only this version of Ubuntu.
 
 ## Requirements
 
 Only Ubuntu-based distributions are compatible with Remotelabz.
 
-The first step is to install a ubuntu distro like Ubuntu Server 24.04 LTS on
+The first step is to install a ubuntu distro like Ubuntu Server 26.04 LTS on
 
 - only one computer if you want to use the Front and the Worker on the same server
 - 2 computers if you want to separate your Front and your Worker.
 
 !!! note
-    The future version 2.5 for Ubuntu 24.04 LTS Server is available on branch Upgrade-2.5
+    The version 2.5 beta for Ubuntu 26.04 LTS Server is available on branch dev from August 21, 2026
 
 !!! warning
     This application doesn't work neither in a container, nor in WSL
@@ -31,9 +34,6 @@ At the end of the installation, 4 devices will be installed and configured :
 - 1 VM Alpine 3.10
 
 The 5th device, called "Migration" is another Alpine used for configuration.At the end of the installation, a 6th container with a DHCP service must be created.
-
-!!! warning "Requirements"
-    RemoteLabz require PHP 8.4 to work properly.
 
 !!! info "Partition your disk"
     For example, on a RemoteLabz deploys for 355 users and 570 VM/containers on 2 workers :

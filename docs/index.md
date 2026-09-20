@@ -17,6 +17,8 @@ The first version, created in 2009, was coded in J2EE, allowing taking control o
 
 In 2017, a 2nd version was completely rewritten aiming to comply to actual IT training requirements such as having the possibility to carry out practical work in a pre-configured environment and without risking any damages to the user's personal computer or network resources.
 
+From 2023, it's use for all computer science, development and cybersecurity teaching in Computer Science Master (https://master-reseaux-telecom-reims.fr/) and from 2024 with bachelor students.
+
 ## Architecture
 
 RemoteLabz consists of three software components :
