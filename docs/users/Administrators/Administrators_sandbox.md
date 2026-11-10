@@ -1,26 +1,32 @@
+# Sandbox
 
-![Screenshot](/images/Administrator/Sandbox.png)
+The `Sandbox` menu allows you to modify the template of a device.
 
+![Screenshot](/images/Teacher/Teacher_Sandbox.png)
 
-To modify the template of a device, we have the `Device Sandbox` menu. As soon as you choose to modify an existing template, a new lab Sandbox is created.
+## Sandbox modification
 
-To make an export, you have to :
+These templates are the devices used when creating a virtual laboratory.
+As soon as you choose to modify an existing template, a new Sandbox lab is created. In this lab, you will only see the device on which you want to make modifications, along with a DHCP device.
 
-1. Click on `Device Sandbox`
-2. Click on the Modify button of the device whose image you wants to modify.
-3. Start the device.
+1. Start the DHCP_Service device first, to start a DHCP service for your lab.
+2. Next, start the device you want to modify.
+
+## Sandbox export
+
+To make an export, you have to:
+
+1. Click on `Sandbox`.
+2. Click on the `Modify` button of the device whose image you want to modify.
+3. Start the device. You are required to start the device at least once in order to perform the operation.
 4. Do your modifications.
 5. Stop the device.
-6. Click on Export and choose a name for your new device template.Then click on export device.
+6. Click on `Export`, choose a name for your new device template, then click on `Export device`.
 
-After you've clicked on the export device button, wait until the process is complete.Once done, it leave the lab automatically and the corresponding new device template and Operating System are created. 
+After you have clicked on the `Export Device` button, wait until the process is complete. Once done, the process automatically leaves the lab and the corresponding new device template and operating system are created.
 
 !!! warning
-    Only Teachers and Administrator can access this menu and modify an existing default image.
+    Only teachers and administrators can access this menu and modify an existing default image.
 
 !!! info
-    It's recommended to process a manual shutdown of your device to be sure that the writing cache disk is flushed.
-
-
-
-
+    It is recommended to perform a manual shutdown of your device to be sure that the write cache is flushed.

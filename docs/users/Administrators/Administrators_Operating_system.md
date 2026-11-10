@@ -1,37 +1,76 @@
-#Operating system management
-From this area, you can manage the operating system linked on a device template.
-![Screenshot](/images/Administrator/Operating_system/Administrator_OperatingSystem.png)
-There is multiple default operating system provided with RemoteLabz.
+# Operating System Management
 
-!!! Tips
-    The operating system can be hosted through a local image (link icon) or a link where RemoteLabz can retrieve the image (File icon). 
+From this area, you can manage the operating systems linked to a device template.
 
+![Screenshot](/images/Administrator/Operating_system/Administrator_operating_system.png)
 
-##Operating system creation
-Once you've clicked on the `new operating system` button, you will be brought to a new screen.
-![Screenshot](/images/Administrator/Operating_system/Administrator_OperatingSystem_add.png)
-from there you can choose it's parameters such as :  
+There are multiple default operating systems provided with RemoteLabz.
 
- * Name : the name of the new operating system
- * Image URL : The URL from where the image can be retrieved (link to a download server)
- * Image filename : the name of the local image.Use `Upload an image file` if not already exported  ( local file).
- * Hypervisor: the hypervisor where the image will run.
- * Upload an image file : Select the image to be uploaded from your local computer ( local file).
+!!! tip
+    The operating system can be hosted through a local image :material-upload: or a link where RemoteLabz can retrieve the image :material-link-variant:.
 
-!!! warning 
-    You can only provide an image URL (link) or a file through the image file field, but not both !
+## Operating System creation
 
-!!! Tips
-    A new operating system is generated when exporting a device through the sandbox menu.
+### Operating System
 
+To create an operating system, you have to click on the `New Operating System` button. You will be brought to a new screen.
 
-##Operating system edition
-Once selected, you can also edit the Operating System's name through the `edit` button or delete it through the `Delete` button.
-![Screenshot](/images/Administrator/Operating_system/Administrator_OperatingSystem_selected.png)
+![Screenshot](/images/Administrator/Operating_system/Administrator_new_operating_system.png)
 
-Once you have pressed the `edit` button,you will be able to edit the Operating System through this screen. 
+From there, you can choose its parameters such as:
 
-![Screenshot](/images/Administrator/Operating_system/Administrator_OperatingSystem_Edit.png)
+* **Name**: name of the new operating system.
+* **Architecture**: architecture under which processes will be executed.
+* **Hypervisor**: hypervisor where the image will run.
+* **Description**: optional description of the operating system.
 
-Then click on the submit button to validate your changes.
+According to the hypervisor type, other fields must be completed:
 
+* **Template Name**: if the hypervisor type is LXC, a template name should be specified.
+* **Image Source Type**: if the hypervisor type is QEMU, it is the source of the image, which can be an uploaded file (local file), an URL (link to a download server) or a filename.
+
+!!! warning
+    You can only provide an image URL (link) or a file through the image file field, but not both!
+
+### Blank OS
+
+You can create a blank operating system by clicking on the `Blank OS` button.
+
+![Screenshot](/images/Administrator/Operating_system/Administrator_blank_operating_system.png)
+
+* **OS Name**: name of the operating system.
+* **Disk Flavor**: optional disk size in gigabytes.
+* **Description**: optional description of the operating system.
+
+This blank OS will be created without any disk image, which is useful for testing purposes.
+
+!!! warning
+    A blank OS should only be linked to one VM.
+
+### LXC container
+
+You can also create an LXC container: click on `New LXC container`. You have to follow these steps:
+
+* **Step 1**: select an OS among 25 Linux distributions. Images are downloaded from the official Linux Containers project repository.
+
+![Screenshot](/images/Administrator/Operating_system/Administrator_operating_system_lxc1.png)
+
+* **Step 2**: choose a version for the OS.
+
+![Screenshot](/images/Administrator/Operating_system/Administrator_operating_system_lxc2.png)
+
+* **Step 3**: confirm your choice.
+
+![Screenshot](/images/Administrator/Operating_system/Administrator_operating_system_lxc3.png)
+
+## Operating System edition
+
+Once selected, you can also edit the Operating System's name through the `Edit Operating System` button, or delete it through the `Delete Operating System` button.
+
+![Screenshot](/images/Administrator/Operating_system/Administrator_operating_system_select.png)
+
+After you have pressed the `Edit Operating System` button, you will be able to edit the Operating System through this screen.
+
+![Screenshot](/images/Administrator/Operating_system/Administrator_operating_system_edit1.png)
+
+Click on the `Submit` button to validate your changes.
