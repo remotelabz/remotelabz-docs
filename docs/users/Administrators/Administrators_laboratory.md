@@ -1,91 +1,88 @@
-# laboratory management
+# Laboratory management
 
-##basic concepts
+## Basic concepts
 
-A laboratory, also called in this documentation an activity, is an exercise associated to devices. All devices are configured to the exercise but can be reused to other activities.
+A laboratory, also called in this documentation an activity, is an exercise associated with devices. All devices are configured for the exercise, but they can be reused for other activities.
 
-##Instance management
+## Instance management
 
-In RemoteLabz, once a laboratory is started, the newly created instance and it's associated containers can be managed through the laboratory management panel.
+In RemoteLabz, when you join a lab, you create an instance of this lab. You can manage its associated containers through the laboratory management panel.
 
-![Screenshot](/images/Administrator/Administrator_Instances.png)
+![Screenshot](/images/Administrator/Administrator_instance_management.png)
 
-This panel allow to :
+To manage an instance, click on the `Details` button.
 
- - Start/Stop each containers of the lab through the start/stop button
- - have direct console access to the containers through the lab console button
- - See the startup log for each containers
- - leave the lab.Only possible when all containers are stopped.It destroy the instance completely.
- - Download the lab's associated OpenVPN file (useful to connect through protocol like SSH for instance)
- - See the lab topology through the see lab button. This will open the editor panel allowing to see the lab topology, subject and associated exercises.
+![Screenshot](/images/Teacher/Teacher_lab_instance_details.png)
 
-!!!Warning
-     Once the leave lab button has been clicked, it destroy the lab instance erasing ALL MODIFICATIONS on the lab's containers.
+From there, you have access to all the information about the instance. You can:
 
+- See the owner of the instance
+- Start all, stop all and reset all devices
+- Start, stop or reset one device
+- Leave the lab
 
-##Lab Topology
+!!! warning
+    Once the leave lab button has been clicked, the lab instance is destroyed and **ALL MODIFICATIONS** made on the lab's containers are erased.
 
-![Screenshot](/images/Administrator/labtopology.png)
+## Lab topology
 
-A laboratory needs basically three elements:
+![Screenshot](/images/Teacher/labtopology.png)
 
- - Your own containers
- - A switch to interconnect them 
- - A service device: It is a container configured with a DHCP server that gives internet addresses to your machines.Always start it first.
+A laboratory basically needs three elements:
 
-You can access to the Subject and lab title through this screen as well.
- 
-!!!Warning
-    Only teachers and administrators can create a laboratory using the "new lab" button.
+- **Service Device**: to give your lab internet connectivity through a DHCP server. It should always be started first.
+- **Switch**: to interconnect all the containers in a local network.
+- **Containers**: your own containers.
 
-##Lab edition
+With the sidebar on the left, you can also access the subject and lab title through this screen.
 
-![Screenshot](/images/Administrator/Administrator_Lab_edition.png)
+!!! warning
+    Only teachers and administrators can create a laboratory using the `new lab` button.
 
-Once the laboratory has been left, an edit lab button appears which will lead you to the lab editor.
-From there, you can modify every aspects of the laboratory (including it's topology, Practical subject, title...)
+## Lab edition
 
-You can also delete the lab from there through clicking on the `delete` button.
+![Screenshot](/images/Teacher/Teacher_Lab_edition.png)
 
-!!!Warning
-    You can't edit the lab once it has been joined.
+To edit a laboratory, if you joined the lab you should leave it first. This action will destroy your instance and all associated containers.
 
-##Lab export
+!!! warning
+    You can't edit a lab once it has been joined. If users have already joined your lab, they must leave it to get the newly edited lab. This will cause the loss of all their data and containers.
 
-It is also possible to save the lab topology on your computer.This can be accomplished through the `export` button.You can import it later using the `import lab` button on the lab's management page.
+Once the laboratory has been left, an `edit` button appears on the top right corner, which will lead you to the lab editor.
+From there, you can modify every aspect of the laboratory, including its title, topology, practical subject and so on.
 
-!!!Warning
-    This save only the topology, but not the lab's containers !
+You can also delete the lab from there by clicking on the `delete` button.
 
-##Lab creation
-![Screenshot](/images/Administrator/Administrator_lab_creation.png)
+## Lab export
 
-It is possible to create a new lab on remotelabz with the `new lab` button that will appear once you get to the lab section.
+It is also possible to save the lab topology on your computer. This can be accomplished through the `export` button.
+
+A `tar.gz` file with the lab's JSON file and the qcow2 image of the container will be downloaded. You can then import the lab.
+
+!!! warning
+    This only saves the topology, not the lab's data on the containers!
+
+## Lab creation
+
+![Screenshot](/images/Teacher/Teacher_lab_tab.png)
+
+It is possible to create a new lab on RemoteLabz with the `New Virtual Lab` and `New Physical Lab` buttons that will appear once you get to the lab section.
 
 You can also import a previously exported lab from there through the `import` button.
- 
-##Remote access.
 
-In order to  access to your lab from your workstation (through ssh for instance), you need to connect through RemoteLabz VPN.
+You can have more detailed information in the [Laboratory Creation](Administrator_lab_creation.md) section.
+
+## Remote access
+
+In order to access your lab from your workstation (through SSH, for instance), you need to connect through the RemoteLabz VPN.
 
 To do this, you need to:
 
 1. download a client like <a href="https://openvpn.net/client/">VPNconnect</a> and then install it.
-2. click on the OpenVPN file button.An .ovpn file will be downloaded.
+2. click on the OpenVPN file button. An `.ovpn` file will be downloaded.
 3. double-click on the downloaded file and VPNConnect will install it automatically.
 4. hit the connect button.
 
-If the client display this, you are connected.
+If the client displays this, you are connected.
 
-<img src="/images/Administrator/VPN_Connect.png" height=600px width=300px>
-
-
-
-
-
-
-
-
-
-
-
+![Screenshot](/images/Teacher/VPN_Connect.png)

@@ -17,9 +17,8 @@ The front can be a virtual machine and it will be the only host with an access f
 !!! example "Ports used (Summary)"
 
     === "Internet to RemoteLabz"
-        - **TCP 80 (443)** : HTTP(S) pages
-        - **TCP 8000** : WebSocket
-        - **UDP 1194** : OpenVPN
+        - **TCP 443** : HTTP(S) pages
+        - **TCP 80** : OpenVPN
 
     === "RemoteLabz to RemoteLabz-Worker"
         - **TCP 8080** : Remotelabz-Worker Internal API

@@ -1,65 +1,58 @@
-# laboratory management
+# Laboratory management
 
-##basic concepts
+## Basic concepts
 
-A laboratory, also called in this documentation an activity, is an exercise associated to devices. All devices are configured to the exercise but can be reused to other activities.
+A laboratory is an exercise associated with devices. All devices are configured for the exercise, but they can be reused for other activities.
 
-##Instance management
+## Instance management
 
-In RemoteLabz, once a student start a laboratory, He can manage the newly created instance and it's associated containers through the laboratory management panel.
+In RemoteLabz, once a student joins a laboratory, they create an instance of this lab. They can manage this instance and its associated devices through the laboratory management panel.
 
-![Screenshot](/images/Students/Students_Lab.png)
+![Screenshot](/images/Students/Student_Lab.png)
 
-This panel allow him to :
+From this panel, as a student, you are allowed to:
 
- - Start/Stop each containers of the lab through the start/stop button
- - have direct console access to the containers through the lab console button
- - See the startup log for each containers
- - leave the lab.Only possible when all containers are stopped.It destroy the instance completely.
- - Download the lab's associated OpenVPN file (useful to connect through protocol like SSH for instance)
- - See the lab topology through the see lab button. This will open the editor panel allowing him to see the lab topology, subject and associated exercises.
+- :material-tray-arrow-down: `OpenVPN File`: download the OpenVPN file associated with the lab. This is useful to connect through a protocol such as SSH.
+- `See Lab`: see the topology of the lab.
+- `Leave Lab`: leave the lab. All devices must be stopped. This action will destroy the instance and all the devices associated with it.
 
-!!!Warning
-     Once the leave lab button has been clicked, it destroy the lab instance erasing ALL MODIFICATIONS on the lab's containers.
+For each device, you can:
 
+- `start/stop`: start and stop the device.
+- `> Show logs`: look at the startup and shutdown log of the device.
+- `Lab Console`: have a direct console access to the device. The network attributed to your laboratory and the gateway will be indicated.
 
+Below the instance, you can see the practical subject of the lab if there is one.
 
-##lab topology
+!!! warning
+    Once the leave lab button has been clicked, the lab instance is destroyed and **ALL MODIFICATIONS** made on the lab's devices are erased.
 
-![Screenshot](/images/Students/labtopology.png)
+From the instances list tab, you can see all the lab instances that you have joined.
 
-A laboratory needs basically three elements:
+![Screenshot](/images/Students/Student_Instances.png)
+By clicking the `Details` button, you get an overview of your instance as follows:
 
- - Your own containers
- - A switch to interconnect them 
- - A service device: It is a container configured with a DHCP server that gives internet addresses to your machines.Always start it first.
+![Screenshot](/images/Students/Student_Instances_Details.png)
 
-You can access to the Subject and lab title through this screen as well.
- 
-!!!Warning
-    Only teachers and administrators can create a laboratory using the "new lab" button.
+You can manage your devices and access information such as the network attributed to the lab instance.
 
+## Lab topology
 
+![Screenshot](/images/Students/Student_lab_topology.png)
 
+You can also see the topology of the lab and access the practical subject and lab details through this screen.
 
+## Remote access
 
-
-
-##Remote access.
-
-In order to  access to your lab from your workstation (through ssh for instance), you need to connect through RemoteLabz VPN.
+In order to access your lab from your workstation (through SSH, for instance), you need to connect through the RemoteLabz VPN.
 
 To do this, you need to:
 
 1. download a client like <a href="https://openvpn.net/client/">VPNconnect</a> and then install it.
-2. click on the OpenVPN file button.An .ovpn file will be downloaded.
+2. click on the OpenVPN file button. An `.ovpn` file will be downloaded.
 3. double-click on the downloaded file and VPNConnect will install it automatically.
 4. hit the connect button.
 
-If the client display this, you are connected.
+If the client displays this, you are connected.
 
-<img src="/images/Students/VPN_Connect.png" height=600px width=300px>
-
-
-
-
+![Screenshot](/images/Students/VPN_Connect.png)
