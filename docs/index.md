@@ -17,6 +17,8 @@ The first version, created in 2009, was coded in J2EE, allowing taking control o
 
 In 2017, a 2nd version was completely rewritten aiming to comply to actual IT training requirements such as having the possibility to carry out practical work in a pre-configured environment and without risking any damages to the user's personal computer or network resources.
 
+From 2023, it's use for all computer science, development and cybersecurity teaching in Computer Science Master (https://master-reseaux-telecom-reims.fr/) and from 2024 with bachelor students.
+
 ## Architecture
 
 RemoteLabz consists of three software components :
@@ -41,7 +43,7 @@ For instance, it is highly recommended to install a [fail2ban](https://github.co
         - **TCP/443** : HTTPS pages
         - **TCP/80** : OpenVPN
 
-    === "REmoteLabz Front and RemoteLabz Worker"
+    === "RemoteLabz Front and RemoteLabz Worker"
         - **TCP/5672** : AMQP
         - **TCP/22** : SSH
 

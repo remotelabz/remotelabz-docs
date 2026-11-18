@@ -1,0 +1,33 @@
+# ISO management
+
+In this area, you can manage all your ISO images.
+
+![Screenshot](/images/Administrator/ISO/Administrator_iso.png)
+
+!!! tip
+    The ISO image can be hosted through a local image :material-upload: or a link where RemoteLabz can retrieve the image :material-link-variant:.
+
+## ISO creation
+
+![Screenshot](/images/Administrator/ISO/Administrator_iso_create.png)
+
+To create a new ISO image, you have to fill the form with:
+
+* **Name**: name of your ISO image.
+* **Architecture**: architecture to select, for which this ISO will be used.
+* **File Source Type**: upload from a file (local file) or from an image URL (remote file).
+* **Description**: optional description of your ISO image.
+
+## ISO edition
+
+After selecting an ISO image, you can edit it through the `Edit ISO` button, or delete it with the `Delete ISO` button.
+
+![Screenshot](/images/Administrator/ISO/Administrator_iso_select.png)
+
+You have access to information such as the source and additional details.
+
+Once you have pressed the `Edit ISO` button, you will be able to edit the ISO through this screen.
+
+![Screenshot](/images/Administrator/ISO/Administrator_iso_edit.png)
+
+Then, click on the `Submit` button to validate your changes.

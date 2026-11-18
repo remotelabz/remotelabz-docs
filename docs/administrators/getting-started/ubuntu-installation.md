@@ -1,21 +1,26 @@
 # RemoteLabz's installation guide
 
-This section guides you through the installation of RemoteLabz and its components on an Ubuntu system. We assume you have already installed an Ubuntu Server 20.04 LTS. For now, we support only this version of Ubuntu.
+!!! warning 
+    Do not use the master branch of RemoteLabz, it's too old.
+
+This section guides you through the installation of RemoteLabz and its components (Front and Worker) on an Ubuntu Server 26.04 LTS system. We only supports this version of Ubuntu.
+
+If you have not installed Ubuntu yet, start with [Ubuntu Server 26.04 LTS](https://ubuntu.com/download/server). You can install it from this link [ubuntu-26.04.1-live-server-amd64.iso](https://releases.ubuntu.com/resolute/ubuntu-26.04.1-live-server-amd64.iso).
 
 ## Requirements
 
-Only Ubuntu-based distributions are compatible with Remotelabz.
+Only Ubuntu-based distributions are compatible with Remotelabz. This application doesn't work neither in a container, nor in WSL
 
-The first step is to install a ubuntu distro like Ubuntu Server 24.04 LTS on
+The first step is to install a ubuntu distro like Ubuntu Server 26.04 LTS.
+There is two deployment modes :
 
-- only one computer if you want to use the Front and the Worker on the same server
-- 2 computers if you want to separate your Front and your Worker.
+- **Single server :** only one computer if you want to use the Front and the Worker on the same server
+- **Multi-server :** if you want to separate your Front and your Worker.
 
 !!! note
-    The future version 2.5 for Ubuntu 24.04 LTS Server is available on branch Upgrade-2.5
+    The version 2.5 beta for Ubuntu 26.04 LTS Server is available on branch dev from August 21, 2026
 
-!!! warning
-    This application doesn't work neither in a container, nor in WSL
+### Hardware
 
 To install both the Front and the Worker on the same device, the minimum requirement is 
 
@@ -25,54 +30,126 @@ To install both the Front and the Worker on the same device, the minimum require
 - LVM volume management
 - 2 logicals volumes for /opt and /var/lib/lxc. The size depends of the maximum number of VM and containers you want to run and image and iso to store.
 
-At the end of the installation, 4 devices will be installed and configured :
+### Device installed
 
-- 3 containers with Debian 11.4, Alpine 3.15, Ubuntu Server 20.04 LTS
-- 1 VM Alpine 3.10
+At the end of the installation, the following devices will be available in RemoteLabz:
 
-The 5th device, called "Migration" is another Alpine used for configuration.At the end of the installation, a 6th container with a DHCP service must be created.
+| # | Device        | Type      | Operating system       | Status at the end of the installation |
+|---|---------------|-----------|------------------------|----------------------------------------|
+| 1 | Debian    | container | Debian 11.4            | installed and configured               |
+| 2 | Alpine-Stable    | container | Alpine 3.15            | installed and configured               |
+| 3 | Ubuntu     | container | Ubuntu Server 24.04 LTS | installed and configured               |
+| 4 | Linux Alpine            | VM        | Alpine 3.10            | installed and configured               |
+| 5 | "Migration"   | container | Alpine                 | provided by the installation; used to build the DHCP service container (step 7) |
+| 6 | "Service"     | container | Alpine + dnsmasq       | **not installed by the script** — created manually, see step 7 |
 
-!!! warning "Requirements"
-    RemoteLabz require PHP 8.4 to work properly.
+## Disk partition for the worker
+
+### Storage layout 
+
+![Disk Partition](/images/Administrator/disk_partition.png){ style="display: block; margin: 0 auto;" }
+
+Two **volume groups** (VG) are created on the disk:
+
+| VG | Role | Content |
+|---|---|---|
+| `ubuntu-vg` | System (Ubuntu default) | LV `ubuntu-lv` ≥ 35 GB → `/` |
+| `rlz-vg` | Remotelabz workloads | `lib-lxc`, `rlz-lv`, thin pool `rlz-lxc-pool` |
+
+The `rlz-lxc-pool` thin pool aggregates the space intended for **user LXC instances**. The logical volumes for these instances (`lxc_<uuid>`) are created within it **on the fly**, at the time each instance starts and at the requested size. Without physical pre-allocation, only the space actually written to consumes disk capacity.
+
+### Logical volumes overview
+
+| LV | VG | Type | Size | Mount point | Usage |
+|---|---|---|---|---|---|
+| `ubuntu-lv` | `ubuntu-vg` | linear | ≥ 35 GB | `/` | Ubuntu system |
+| `lib-lxc` | `rlz-vg` | linear | 100 GB (fixed) | `/var/lib/lxc` | Reference LXC templates/containers |
+| `rlz-lv` | `rlz-vg` | linear | 60% of remaining free space | `/opt` | QEMU VMs |
+| `rlz-lxc-pool` | `rlz-vg` | **thin pool** | all remaining free space | — | Pool for *thin* volumes used by LXC instances |
+| `lxc_<uuid>` | `rlz-vg` | thin (within `rlz-lxc-pool`) | size based on flavor, or `DEFAULT_MIN_DISKSPACE_LXC` | `/var/lib/lxc/<uuid>/rootfs` | Rootfs for a user LXC instance |
+
+> Instance LVs (`lxc_<uuid>`) are not part of the initial installation: the worker
+> creates and deletes them dynamically (`lxc_setup_disk()` / `lxc_remove_disk()`
+> in `InstanceManager`).
 
 !!! info "Partition your disk"
-    For the worker, the image and iso of each virtual device is stored in `/opt/remotelabz-worker/images`, `/opt/remotelabz-worker/iso`, respectively. Each laboratory stores the user's VM in `/opt/remotelabz-worker/instances` and the container in the lxc default working directory `/var/lib/lxc`
-    
-    To avoid storage problem on the system, we recommand to build 2 Logical Volumes in the Volume named rlz-vg for :
-    
-    - `/opt`
-    - `/var/lib/lxc`
-
-
-!!! question "How size my partition ?"
     For example, on a RemoteLabz deploys for 355 users and 570 VM/containers on 2 workers :
 
     - on the first worker, 193 containers use 289 Go (1.4 Go/container) and 56 VMs use 281 Go (5 Go/VM), respectively
     - on the second worker, 286 containers use 327 Go (1,1 Go/container) and 34 VMs use 284 Go (8,3 Go/VM), respectively
 
-    All VMs and containers are linux servers.
+    In this example, all VMs and containers are linux servers.
 
-    For the system, we need at :
-    
-    - on the front, at least 30 Go + space to store the uploaded iso and VM images
 
     !!! note
         On the front, the uploaded iso and VM image are stored in the /opt/remotelabz/public/uploads directory
 
-    - on the worker, at least 35 Go for Linux system and the rest for a Volume group which have to name "rlz-vg". In this volume, you have to create one logical volume for the /opt directory which contains all user instances of VM (Qemu). We recommand to use 60% of your free space for /opt and let the 40% which is automatically use by the container.
+
+### Implementation
+
+#### `ubuntu-vg` / `ubuntu-lv` (≥ 35 GB)
+
+These names are the defaults produced by the Ubuntu installer in guided LVM mode. To guarantee at least 35 GB for the system, select the LVM option during partitioning, then adjust the size of the `ubuntu-lv` volume in the installer (`/` ≥ 35 GB).
+
+#### Creating `rlz-vg`, its LVs and the thin pool
+
+```bash
+# Create the VG using all the remaining disk space
+vgcreate rlz-vg /dev/<partition_or_disk>
+
+# 1) lib-lxc: fixed 100 GB for LXC containers (templates / references)
+lvcreate -L 100G -n lib-lxc rlz-vg
+
+# 2) rlz-lv: 60% of the space STILL free (computed after lib-lxc)
+lvcreate -l 60%FREE -n rlz-lv rlz-vg
+
+# 3) rlz-lxc-pool: thin pool for LXC instances, using the remaining space.
+#    About 5% is kept free in the VG for the pool metadata and for extensions.
+lvcreate -l 95%FREE --thinpool rlz-lxc-pool rlz-vg
+```
+
+!!!note 
+    `-l 60%FREE` and `-l 95%FREE` refer to the free space at the time the command is run.
+
+#### Formatting and mounting
+
+Only the "standard" LVs are formatted and mounted at installation time. Instance LVs are formatted (`mkfs.ext4`) and mounted by the worker when each instance starts.
+
+```bash
+mkfs.ext4 /dev/rlz-vg/rlz-lv
+mkfs.ext4 /dev/rlz-vg/lib-lxc
+
+mkdir -p /opt /var/lib/lxc
+mount /dev/rlz-vg/rlz-lv /opt
+mount /dev/rlz-vg/lib-lxc /var/lib/lxc
+```
+
+Persistence in `/etc/fstab` (stable identifiers, not the VG name):
+
+```
+/dev/mapper/rlz--vg-rlz--lv         /opt            ext4  defaults  0 2
+/dev/mapper/rlz--vg-lib--lxc        /var/lib/lxc    ext4  defaults  0 2
+```
+
+#### Verification
+
+```bash
+vgs                                                    # free/used space per VG
+lvs -a -o +lv_size,data_percent,metadata_percent       # LV details and pool usage
+df -h /opt /var/lib/lxc                                # actual mounts
+```
 
 
-## Installation of the requirements
-
-!!! news
-    The tutorial of this part : <a href="https://www.youtube.com/watch?v=tc-X8UDvuss" target="_blank">RemoteLabz Installation Part1</a>
-
-
+## Installation of the front
+ 
 ### Retrieve the RemoteLabz Front source
-A remotelabz directory will be created on your home directory.
+
+Clone the repository in your home directory, as your regular user (do **not** use `sudo git clone`, otherwise the sources become root-owned):
+
 ```bash
 cd ~
-git clone https://github.com/remotelabz/remotelabz.git --branch master
+git clone https://github.com/remotelabz/remotelabz.git --branch dev
+cd remotelabz
 ```
 
 You have now a directory `remotelabz` created on your home directory.
@@ -82,94 +159,65 @@ You have now a directory `remotelabz` created on your home directory.
     ```bash    
     git clone https://github.com/remotelabz/remotelabz.git --branch 2.4.1 --single-branch
     ```
-    or for Upgrade-2.5 version
+    or for version 2.5.0 beta version
     ```bash    
-    git clone https://github.com/remotelabz/remotelabz.git --branch Upgrade-2.5
+    git clone https://github.com/remotelabz/remotelabz.git --branch dev
     ```
 
-### Install the requirements
-```bash
-cd remotelabz
-sudo ./bin/install_requirement.sh
-```
-
-After this process, you have to take into account the following information :
-
-#### RabbitMQ and MySQL pre-configurations
-The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user "user" is created with password "Mysql-Pa33wrd\$". It is recommended to change it once you have ensured that RemoteLabz is working fine.
-
-!!! Tips
-    During the `install_requirement.sh` process, a `remotelabz-amqp` user is created in RabbitMQ with the password `password-amqp`. If you want to change the password of an existing user `remotelabz-amqp` of your RabbitMQ, you have to type the following command :
-    ```
-    sudo rabbitmqctl change_password 'remotelabz-amqp' 'new_password'
-    ```
-    For MySQL, to set the root password to `new_password`
-    ```
-    sudo mysql -u root -h localhost
-    ALTER USER IF EXISTS 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'new_password';
-    FLUSH PRIVILEGES;
-    EXIT;
-    ```
-    The remotelabz default user is `user` and its password `Mysql-Pa33wrd\$`. If you want to change to `new_password` for example, you have to do the following:
-    ```
-    ALTER USER IF EXISTS 'user'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'new_password';
-    FLUSH PRIVILEGES;
-    EXIT;
-    ```
-
-#### OpenVPN pre-configuration
-The default passphrase used during the `install_requirement.sh` process is `R3mot3!abz-0penVPN-CA2020`. You can find this value in your `.env` file
+### Run the installation script
 
 ```bash
-SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
+sudo bin/install.sh
 ```
-If you decide to change it, don't forget to do this in the `/opt/remotelabz/.env.local`.
+
+The installation is interactive. Choose the option that best fits your needs:
+
+![Install Options](/images/Administrator/Install_options.png){ style="display: block; margin: 0 auto;" }
+
+For a complete installation, choose the first option: `Full automatic installation`. This installs all dependencies as well as the RemoteLabz application itself.
+
+If you chose the full automatic installation some answers will be requested by the script:
+
+| Prompt | What to answer |
+|--------|----------------|
+| **Public IP address** | The script suggests the public IP it detected automatically. If it is correct, type `y`. Otherwise type `n` and enter the correct address. |
+| **Deployment type** | Single server (Front and Worker on the same machine): `y`. Two separate servers: `n`. |
+| **Configuration file** | The script opens `/opt/remotelabz/.env.local` in your editor. Check the fields listed below, save with `Ctrl+O`, exit with `Ctrl+X`. |
+| **Summary** | The script displays a summary of the configuration. If it is correct, type `y`. Otherwise abort, edit `/opt/remotelabz/.env.local` by hand, and re-run the installation. |
+
+The script then performs the remaining steps automatically, including **system configuration** (keyboard language and layout) and the **SSL certificate** setup (you are asked whether the certificate is self-signed).
+
+When the installation is complete, the web interface will be available at `https://<IP_ADDRESS>`.
+
+!!! info
+    The default credentials are:
+
+    - Username: `root@localhost`
+    - Password: `admin`
 
 !!! warning
-    The last line `push "route 10.11.0.0 255.255.0.0"` in your `/etc/openvpn/server/server.conf` must be modified if you modify, in your `.env.local` file, the parameters of the two next lines 
-    ```BASE_NETWORK=10.11.0.0
-    BASE_NETWORK_NETMASK=255.255.0.0```
-    This network will be the network used for your laboratory. Your user must have a route on its workstation to join, via his VPN, his laboratory. Be careful, this network must be different of your home network.
+    These default credentials are only intended for the initial configuration. **Change them immediately** from the web interface before using RemoteLabz in production.
 
-### Configure the mail (Exim4)
-1. Configure the /etc/aliases to redirect all mail to root to an existing user of your OS
-2. Check the aliases with the command `exim -brw root`
-3. Edit the file `/etc/exim4/exim4.conf.template` and locate the part "Rewrite configuration" until you have an output like the following example :
-```bash
-######################################################################
-#                      REWRITE CONFIGURATION                         #
-######################################################################
+### Default passwords created by the installer
 
-begin rewrite
+The installer creates several services with default credentials. You are expected to change them :
 
-user@* myemail@domain.com FfrsTtcb
-root@* myemail@domain.com FfrsTtcb
-```
-4. Update your exim configuration with command `sudo update-exim4.conf`, following the command `sudo service exim4 restart`
-5. Check if all addresses are rewritten with the command `exim -brw root`
+| Service  | User             | Default password        |
+|----------|------------------|-------------------------|
+| MySQL    | `root`           | `RemoteLabz-2022$`      |
+| MySQL    | `user`           | `Mysql-Pa33wrd$`        |
+| RabbitMQ | `remotelabz-amqp`| `password-amqp`         |
+| OpenVPN  | CA key passphrase| `R3mot3!abz-0penVPN-CA2020` |
+| Web UI   | `root@localhost` | `admin`                 |
 
-## Install of the Front
+!!! warning
+    **Change all of these passwords before putting RemoteLabz in production.** They are documented here because you will need them while the system is still being configured.
 
-!!! news
-    The tutorial of this part : <a href="https://www.youtube.com/watch?v=9Kzn3Z65Avk" target="_blank">RemoteLabz Installation Part2</a>
-
-The install process will create the directory `/opt/remotelabz`.
-
-While you're in RemoteLabz root directory :
-
-``` bash
-cd ~/remotelabz
-sudo ./bin/install
-```
-The install process may take around 5 minutes
-
-After this process, you have to take into account the following information :
-
-#### RabbitMQ and MySQL pre-configurations
+#### RabbitMQ and MySQL configurations
 The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user "user" is created with password "Mysql-Pa33wrd\$". It is recommended to change it once you have ensured that RemoteLabz is working fine.
 
 !!! Tips
-    During the `install_requirement.sh` process, a `remotelabz-amqp` user is created in RabbitMQ with the password `password-amqp`. If you want to change the password of an existing user `remotelabz-amqp` of your RabbitMQ, you have to type the following command :
+    During the installation process, a `remotelabz-amqp` user is created in RabbitMQ with the password `password-amqp`. If you want to change the password of an existing user `remotelabz-amqp` of your RabbitMQ, you have to type the following command :
     ```
     sudo rabbitmqctl change_password 'remotelabz-amqp' 'new_password'
     ```
@@ -194,173 +242,65 @@ The MySQL is configured with the root password : "RemoteLabz-2022\$", and a user
     chmod g+rx /etc/openvpn/server -R
     ```
 
-#### OpenVPN pre-configuration
-The default passphrase used during the `install_requirement.sh` process is `R3mot3!abz-0penVPN-CA2020`. You can find this value in your `.env` file
 
-```bash
-SSL_CA_KEY_PASSPHRASE="R3mot3!abz-0penVPN-CA2020"
-```
-If you decided to change it during the installation process, don't forget to do this in the `/opt/remotelabz/.env.local`.
+### Configure the system mail (Exim4)
 
-!!! warning
-    The last line `push "route 10.11.0.0 255.255.0.0"` in your `/etc/openvpn/server/server.conf` must be modified if you modify, in your `.env.local` file, the parameters of the two next lines 
-    ```BASE_NETWORK=10.11.0.0
-    BASE_NETWORK_NETMASK=255.255.0.0```
-    This network will be the network used for your laboratory. Your user must have a route on its workstation to join, via his VPN, his laboratory. Be careful, this network must be different of your home network.
+RemoteLabz uses the system mailer to send notifications. By default these emails are addressed to `root` and to the local `remotelabz` account, which means they are simply discarded. Configure Exim4 so that all application emails are redirected to a real mailbox you read.
 
-
-!!! Tips 
-    For developper, if you want to contribute to the project and not have any rights issues with VScode and your sources installed on your home, you have to link the default installation directory to your remotelabz directory in your home.
+1. Edit `/etc/aliases` and redirect the relevant local accounts to an existing user or to your real address:
 
     ```bash
-    cd ~/remotelabz
-    sudo cp /opt/remotelabz/.* . -Rf
-    sudo cp /opt/remotelabz/* . -Rf
-    sudo rm /opt/remotelabz -Rf
-    sudo ln -s `pwd` /opt/remotelabz
-    sudo chown $USER:www-data .* -R
-    sudo chown remotelabz:www-data * -R
-    sudo usermod -aG sudo $USER
-    sudo chmod g+w * -R
+    sudo nano /etc/aliases
     ```
 
-
-#### Configure the RemoteLabz database
-Run the `remotelabz-ctl` configuration utility to setup your database :
-
-```bash
-cd /opt/remotelabz
-sudo remotelabz-ctl reconfigure database
-```
-
-Don't forget to edit your `/opt/remotelabz/.env.local` :
-
-!!! warning
-    Don't forget to modify the line `PUBLIC_ADDRESS="your-url-or-ip-of-your-front"`
-
-#### Generate API keys
-At the root of your RemoteLabz directory:
-
-```bash
-cd /opt/remotelabz
-sudo mkdir -p config/jwt
-sudo openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-#Your can use as passphrase "JWTTok3n"
-sudo openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
-sudo chown remotelabz:www-data * -R
-sudo chmod g+w /opt/remotelabz/var -R
-sudo chmod g+w /opt/remotelabz/public/uploads -R
-sudo chmod g+w config/templates
-sudo chmod g+r config/jwt/private.pem
-
-# Replace 'yourpassphrase' by your actual passphrase
-echo "JWT_PASSPHRASE=\"JWTTok3n\"" | sudo tee -a .env.local
-```
-
-!!! warning
-    Avoid special character in the JWT, otherwise you will have some errors
-
-!!! warning
-    You have to configure the variable DEPLOY_SINGLE_SERVER in your .env.local . Set to the value 1 if you deploy the RemoteLabz on only one server and set to 0 otherwise. The default value is 1 because we assume you deploy the front and the worker on the same server.
-
-
-!!! tips
-    In order for the app to work correctly, a key pair is created for JWT. You can find detailed configuration in [the LexikJWTAuthenticationBundle doc](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.rst#generate-the-ssh-keys).
-
-
-### Configure RemoteLabz to use SSL
-
-This section guides you through the configuration of SSL between all service of the RemoteLabz.
-
-#### Configure your Apache 2 with HTTPS
-
-During the installation process, the file `200-remotelabz-ssl.conf` is copied in your `/etc/apache2/sites-available` directory. The certificate is defined as follow :
-```bash
-        SSLCertificateFile	/etc/apache2/RemoteLabz-WebServer.crt
-        #SSLCertificateChainFile /etc/ssl/certs/remotelabz._INTERMEDIATE.cer
-        SSLCertificateKeyFile /etc/apache2/RemoteLabz-WebServer.key
-```
-
-Two case, either you have an official certificate or you have to generate your own certificate.
-##### Official certificate
-
-If you have an official certificate, you have to copy it in your `/etc/apache2` directory and rename it to `RemoteLabz-WebServer.crt` and `RemoteLabz-WebServer.key`. Next, you have to activate this site:
-```bash
-sudo a2ensite 200-remotelabz-ssl.conf
-sudo a2enmod ssl
-sudo service apache2 reload
-```
-
-##### Self-signed certificate
-Execute the script 
-```bash
-cd ~
-sudo remotelabz/bin/install_ssl.sh
-```
-
-!!! tips
-    You can verify your certificate with the following command : 
     ```bash
-    openssl x509 -noout -text -in /etc/apache2/RemoteLabz-WebServer.crt
+    root:      yourname
+    remotelabz: yourname
     ```
 
-!!! warning 
-    Don't forget to reload the Apache 2 service
+2. Edit `/etc/exim4/exim4.conf.template` and locate the *REWRITE CONFIGURATION* section. Add one rule per local address so that the message is forwarded to your real mailbox:
+
     ```bash
-    sudo systemctl restart apache2
+    ######################################################################
+    #                      REWRITE CONFIGURATION                         #
+    ######################################################################
+
+    begin rewrite
+
+    user@* myemail@domain.com FfrsTtcb
+    root@* myemail@domain.com FfrsTtcb
     ```
 
-#### Start the RemoteLabz Front
+    Replace `user@*` by the local account that sends the mail (e.g. `remotelabz@*`) and `myemail@domain.com` by your real mailbox.
 
-In order to be able to control instances on [the worker](https://gitlab.remotelabz.com/remotelabz/remotelabz-worker), you need to start **Symfony Messenger** :
+3. Rebuild the Exim4 configuration and restart the service:
 
-```bash
-sudo systemctl enable remotelabz
-sudo systemctl enable remotelabz-proxy
-sudo systemctl enable remotelabz-route-monitor
-sudo systemctl enable remotelabz-clean-notification
-sudo systemctl enable remotelabz-git-version-update
+    ```bash
+    sudo update-exim4.conf
+    sudo service exim4 restart
+    ```
 
-sudo systemctl start remotelabz
-sudo systemctl start remotelabz-proxy
-sudo systemctl start remotelabz-route-monitor
-sudo systemctl start remotelabz-clean-notification
-sudo systemctl start remotelabz-git-version-update
-```
+4. Verify that the addresses are rewritten as expected:
 
-You can now test your RemoteLabz front with your internet navigator but you will just make connection until the worker is not installed.
+    ```bash
+    sudo exim -brw root
+    ```
 
-!!! warning
-    The front is only listen on TCP/443
+    The command should display `myemail@domain.com` for the rewritten addresses.
 
-!!! info
-    The url : https://Your_IP
-    The default credentials are :
-
-    - Username : `root@localhost`
-    - Password : `admin`
-
-    You may change those values by using the web interface.
-
-
-!!! warning
-    When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommend you to use a service like `ntp` to keep your machines synchronized.
-
-!!! warning
-    Now you have to install RemoteLabz Worker
+---
 
 ## Installation of the Worker
 
-!!! news
-    The tutorial of this part : <a href="https://www.youtube.com/watch?v=8xgBZaWVvQk" target="_blank">RemoteLabz Installation Part3</a>
-
 ### Retrieve the RemoteLabz Worker source 
-A remotelabz directory will be created on your home directory.
+
+A `remotelabz-worker` directory will be created in your home directory:
+
 ```bash
 cd ~
-git clone https://github.com/remotelabz/remotelabz-worker.git --branch master
+git clone https://github.com/remotelabz/remotelabz-worker.git --branch dev
+cd remotelabz-worker
 ```
-A `remotelabz-worker` directory is created after the previous command.
 
 !!! tips
     If you want to install only a specific version, you have to do the following instruction, for version 2.4.1 for example.
@@ -372,84 +312,74 @@ A `remotelabz-worker` directory is created after the previous command.
     git clone https://github.com/remotelabz/remotelabz-worker.git --branch Upgrade-2.5
     ```
 
-### Installation of the RemoteLabz worker application
+### Configure the worker queue
+
+Before running the workers installation, edit the messenger.yaml in the remotelabz-worker directory :
+
 ```bash
-cd ~/remotelabz-worker
-cp .env .env.local
+sudo nano config/packages/messenger.yaml
 ```
 
-You should modify the `~/remotelabz-worker/.env.local` file according to your environment before starting the worker installation.
+In the section below, replace the default binding key with your Worker's IP:
 
-Next, type 
-```bash
-sudo ./install
-```
-
-!!! tips
-    For developper, if you want to contribute to the project and not have any rights issues with VScode and your sources installed on your home, you have to link the default installation directory to your remotelabz directory in your home.
-    ```bash
-    cd ~/remotelabz-worker
-    sudo cp /opt/remotelabz-worker/.* . -Rf
-    sudo cp /opt/remotelabz-worker/* . -Rf
-    sudo rm /opt/remotelabz-worker -Rf
-    sudo ln -s `pwd` /opt/remotelabz-worker
-    sudo chown $USER:www-data .* -R
-    sudo chown remotelabz-worker:www-data * -R
-    sudo usermod -aG sudo $USER
-    sudo chmod g+w * -R
-    ```
-
-
-### Configuration of the Worker
-
-!!! news
-    The tutorial of this part : <a href="https://www.youtube.com/watch?v=Z_vaBbaMNkw" target="_blank">RemoteLabz Installation Part4</a>
-
-You have to configure the worker IP on the web interface of the front by clicking on the button + and type its IP. If you use only one server for the front and the worker, you can put 127.0.0.1 .
-
-![Add a worker](/images/Administrator/AddWorker.png)
-
-On your worker, in the file `/opt/remotelabz-worker/config/packages/messenger.yaml`, you had now the following lines 
-
-
-```bash
-    messages_worker1:
-        binding_keys: [Worker_1_IP]
-```
-in the following section
-```bash
+```yaml
 framework:
     messenger:
         transports:
             async: '%env(MESSENGER_TRANSPORT_DSN)%'
-            worker: 
+            worker:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     queues:
+                        messages_worker1:
+                            binding_keys: [Worker_1_IP]
 ```
 
-If you add another worker, you will have another additional lines,
+### Run the installation script
+
 ```bash
-    messages_worker2:
-        binding_keys: [Worker_2_IP]
+cd remotelabz-worker
+sudo bin/install.sh
 ```
-and so on.
 
-!!! warning
-    Don't forget to modify your `/opt/remotelabz-worker/.env.local` file. You have to define the following parameters :
-    ADM_INTERFACE; FRONT_SERVER_IP; and SSH_USER_PASSWD; SSH_USER_PRIVATEKEY_FILE; SSH_USER_PUBLICKEY_FILE if you have many workers
+As with the Front, you will be asked for various pieces of information:
 
-#### Copy certificate files from the front to the worker
+| Prompt | What to answer |
+|--------|----------------|
+| **Deployment type** | Single server or multi-server configuration. |
+| **Network interfaces** | Administration interface (e.g. `enp0s8`). Data interface: press Enter if it is the same as the administration interface. |
+| **IP addresses** | Worker IP: in single-server mode, it is identical to the Front's IP. In multi-server mode, enter the Worker's own IP. Also: the interface used for Internet access, and the Front's IP address. |
+| **Data network configuration** | Data network, internal data IP and data network gateway. Default values can be kept by pressing Enter. |
+| **VPN configuration** | Worker on the same server as the Front: `y`. Otherwise: `n`. |
+| **SSH configuration** | Change the password of the `remotelabz-worker` user, or press Enter to keep the default password (then change it later — see step 8). |
+| **Secure WebSocket (WSS)** | Type `y` to enable WSS. |
+| **Email configuration** | Enter the contact email address, or press Enter to keep the default. |
+| **End of configuration** | The `.env.local` file is generated and can be edited manually afterward if needed. |
+
+
+### Copy certificate files from the front to the worker
+
 Copy the two files `~/EasyRSA/RemoteLabz-WebServer.crt` and `~/EasyRSA/RemoteLabz-WebServer.key` to your **worker** in directory `/opt/remotelabz-worker/config/certs`
 
-```bash
-cd ~/EasyRSA
-source /opt/remotelabz/.env.local
-scp ~/EasyRSA/RemoteLabz-WebServer.crt user@${WORKER_SERVER}:~
-sudo scp ~/EasyRSA/RemoteLabz-WebServer.key user@${WORKER_SERVER}:~
-```
+#### From the front 
+=== "Single server"
 
-On the **worker**
+    ```bash
+    cd ~/EasyRSA
+    scp RemoteLabz-WebServer.crt user@127.0.0.1:~
+    sudo scp RemoteLabz-WebServer.key user@127.0.0.1:~
+    ```
+
+=== "Multi server"
+
+    ```bash
+    cd ~/EasyRSA
+    scp ~/EasyRSA/RemoteLabz-WebServer.crt user@${WORKER_SERVER}:~
+    sudo scp ~/EasyRSA/RemoteLabz-WebServer.key user@${WORKER_SERVER}:~
+    ```
+
+#### On the worker
+
 ```bash
 cd ~
 sudo mv RemoteLabz-WebServer.* /opt/remotelabz-worker/config/certs/
@@ -461,7 +391,7 @@ sudo service remotelabz-worker restart
     You need to use the same certificate between your front and the worker. Don't forget to copy them and to change it automatically if your certificate expired.
 
 
-#### Start your RemoteLabz Worker service
+### Start your RemoteLabz Worker service
 Normally, the service remotelabz-worker is started during the installation phase and it will start automatically when your system boots up.However, if you need to start the service manually :
 
 ```bash
@@ -483,40 +413,28 @@ You can check the worker's log in `/opt/remotelabz-worker/var/log/prod.log`
 !!! warning
     When consuming messages, a timestamp is used to determine which messages the messenger worker is able to consume. Therefore, each machines needs to be time-synchronized. We recommend you to use a service like `ntp` to keep your machines synchronized.
 
-If you have an error 500, do the following :
-```bash
-cd /opt/remotelabz
-sudo chown -R www-data:www-data config/jwt
-sudo chown -R www-data:www-data var
-```
-
-## Configure your RemoteLabz
-
-    ### Check permission on log files
-
-On the Front :
-```bash
-sudo chown -R remotelabz:www-data /opt/remotelabz/var
-sudo chmod ug+w -R /opt/remotelabz/var
-```
-
-On the Worker :
-```bash
-sudo chown -R remotelabz-worker:www-data /opt/remotelabz-worker/var
-sudo chmod ug+w -R /opt/remotelabz-worker/var
-```
-
 ### Add a DHCP Service for your laboratory
-In the device list, you will find a device with the name "Migration". This container will be used to configure, via the Sandbox function, a new container, called "Service" to provide a DHCP service to your laboratory. Each laboratory has its own DHCP service and its own network, so the RemoteLabz needs to configure this generic container to offer IP on the right network. For each lab, if you add the DHCP service container, it will be configured with the IP : IP_Gateway - 1. 
-For example, if your attributed network is 10.10.10.0/27, your gateway will be 10.10.10.30 and you DHCP service container will have the IP 10.10.10.29 .
 
-First : go to the sandbox menu and start the "Migration" device. Next, in the console of the started device, configure the network of the device (show the log, with "Show logs" button to know it) 
+Each laboratory has its own network and needs its own DHCP service. RemoteLabz provides a generic container, called **"Migration"**, that you configure once and then export as a reusable device template, called **"Service"**. When you add a "Service" device to a lab, it is automatically configured on that lab's network with the IP **gateway − 1**.
 
-!!! tips
-    Add an IP address `ip addr add X.X.X.X/M dev eth0`
+> **Example:** if the network attributed to your lab is `10.10.10.0/27`, the gateway will be `10.10.10.30` and the DHCP service container will receive the IP `10.10.10.29`. The DHCP range below hands out addresses from `10.10.10.10` to `10.10.10.28`, keeping the first addresses and the gateway free.
 
-    Add the default route `ip route add default via X.X.X.X`
+#### Start the "Migration" device
 
+1. Open the **Sandbox** menu in the web interface.
+2. Start the **Migration** device.
+3. Open its console. Use the **Show logs** button to display the network parameters attributed to the device.
+
+#### Configure the network inside the container
+
+In the console of the Migration device, set the IP address and the default route that match your lab's network. (Adjust the addresses to your own lab network.)
+
+```bash
+ip addr add 10.10.10.29/27 dev eth0
+ip route add default via 10.10.10.30
+```
+
+#### Install and configure dnsmasq
 
 Next, open the following file:
 `vi /etc/systemd/resolved.conf`. In this file, uncomment the DNS= line by removing the # at the beginning, and set it to:
@@ -543,25 +461,23 @@ systemctl disable systemd-networkd
 systemctl enable dnsmasq
 ```
 
-The line (`systemctl disable systemd-networkd`) is mandatory otherwise your container will not have any IP.
+!!! warning
+    The command `systemctl disable systemd-networkd` is **mandatory**: otherwise the container will not keep an IP address. This only applies inside the Migration container, not to your host.
 
 Your "Service" device, which is a container, is now ready.
 
+#### Export the container as a device template
+
+1. Stop the Migration device.
+2. Click **Export**, type **`Service`** as the new name, and click **Export Device**.
+3. In the device menu, **remove the "login" option** from the control protocols: users must not be able to edit this container.
+4. From now on, whenever you add a **Service** device to a lab, that lab gets its own DHCP service for all of its devices.
 First, stop the "Migration" device. Then, click "Export" and enter "Service" as the New Name. Finally, click the "Export Device" button.
-
-You now have a new operating system and a new device called "Service". If you decide to add this device to your lab, it will act as a DHCP server.
-
-The DHCP server is already configured to automatically assign IP addresses to your devices, using the appropriate network settings to provide them with Internet access.
-
-
-!!! warning
-    In the device menu, remove the "login" option from the control protocols, as users should not edit this VM.
-
-!!! tips
-    You can rename this "Service" device to "DHCP for internet"
 
 
 ![DHCP Service](/images/Administrator/DHCP-service.png)
+
+#### Leave maintenance mode
 
 The installation is finished and RemoteLabz application must be working now. In order to be fully usable, you'll have to change the parameter in the `/opt/remotelabz/.env.local` according to the following :
 
@@ -569,6 +485,23 @@ The installation is finished and RemoteLabz application must be working now. In 
 APP_MAINTENANCE=0
 ```
 If you leave this value to 1, nobody, except the administrator will be able to use the application.
+
+---
+
+## Verify the installation
+
+Run through this checklist. When every item is green, your installation is complete.
+
+- [ ] `sudo systemctl status remotelabz` and `sudo systemctl status remotelabz-proxy` are active on the Front.
+- [ ] `sudo systemctl status remotelabz-worker` is active on the Worker.
+- [ ] The web interface loads at `https://<IP_ADDRESS>`.
+- [ ] The Worker appears in the Front's worker list, with its IP (or `127.0.0.1` in single-server mode).
+- [ ] A sandbox instance of a provided device (e.g. the Debian container) starts and answers on its console.
+
+- [ ] `timedatectl status` shows synchronized time on every machine.
+- [ ] `APP_MAINTENANCE=0` is set in `/opt/remotelabz/.env.local`.
+
+---
 
 ## Create your first lab
 
@@ -607,4 +540,36 @@ To enable Shibboleth site-wide, you need to change the value of `ENABLE_SHIBBOLE
 ```bash
 # .env.local
 ENABLE_SHIBBOLETH=1
+```
+
+## Developer shortcut (sources in the home directory)
+
+If you want to contribute to the project and avoid permission issues with VS Code when the sources live in `/opt`, link the default installation directory to your home directory. 
+
+Front:
+
+```bash
+cd ~/remotelabz
+sudo cp /opt/remotelabz/.* . -Rf
+sudo cp /opt/remotelabz/* . -Rf
+sudo rm /opt/remotelabz -Rf
+sudo ln -s `pwd` /opt/remotelabz
+sudo chown $USER:www-data .* -R
+sudo chown remotelabz:www-data * -R
+sudo usermod -aG sudo $USER
+sudo chmod g+w * -R
+```
+
+Worker:
+
+```bash
+cd ~/remotelabz-worker
+sudo cp /opt/remotelabz-worker/.* . -Rf
+sudo cp /opt/remotelabz-worker/* . -Rf
+sudo rm /opt/remotelabz-worker -Rf
+sudo ln -s `pwd` /opt/remotelabz-worker
+sudo chown $USER:www-data .* -R
+sudo chown remotelabz-worker:www-data * -R
+sudo usermod -aG sudo $USER
+sudo chmod g+w * -R
 ```
